@@ -1,14 +1,13 @@
 package epic.easystock.client;
 
-import epic.easystock.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -16,6 +15,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import epic.easystock.shared.FieldVerifier;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -32,9 +33,14 @@ public class EasyStockWebProject implements EntryPoint {
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
 	 */
-	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
-
+	private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
+	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
+	
+	private LoginInfo loginInfo = null;
+	private VerticalPanel loginPanel = new VerticalPanel();
+	private Label loginLabel = new Label("Please sign in to your Google Account to access the StockWatcher application.");
+	private Anchor signInLink = new Anchor("Sign In");
+	
 	/**
 	 * This is the entry point method.
 	 */
@@ -84,29 +90,18 @@ public class EasyStockWebProject implements EntryPoint {
 				sendButton.setFocus(true);
 			}
 		});
-
-		// Create a handler for the sendButton and nameField
+		
 		class MyHandler implements ClickHandler, KeyUpHandler {
-			/**
-			 * Fired when the user clicks on the sendButton.
-			 */
 			public void onClick(ClickEvent event) {
-				sendNameToServer();
+				xpto();
 			}
 
-			/**
-			 * Fired when the user types in the nameField.
-			 */
+			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					sendNameToServer();
-				}
+				xpto();
 			}
-
-			/**
-			 * Send the name from the nameField to the server and wait for a response.
-			 */
-			private void sendNameToServer() {
+			
+			private void xpto(){
 				// First, we validate the input.
 				errorLabel.setText("");
 				String textToServer = nameField.getText();
@@ -114,39 +109,105 @@ public class EasyStockWebProject implements EntryPoint {
 					errorLabel.setText("Please enter at least four characters");
 					return;
 				}
-
+				
 				// Then, we send the input to the server.
 				sendButton.setEnabled(false);
 				textToServerLabel.setText(textToServer);
 				serverResponseLabel.setText("");
-				greetingService.greetServer(textToServer,
-						new AsyncCallback<String>() {
-							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								dialogBox
-										.setText("Remote Procedure Call - Failure");
-								serverResponseLabel
-										.addStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(SERVER_ERROR);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
-
-							public void onSuccess(String result) {
-								dialogBox.setText("Remote Procedure Call");
-								serverResponseLabel
-										.removeStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(result);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
-						});
+				// Check login status using login service.
+				LoginServiceAsync loginService = GWT.create(LoginService.class);
+				loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
+					public void onFailure(Throwable error) {
+						//Show the RPC error message to the user
+						dialogBox.setText("Remote Procedure Call - Failure");
+						serverResponseLabel.addStyleName("serverResponseLabelError");
+						serverResponseLabel.setHTML(SERVER_ERROR);
+						dialogBox.center();
+						closeButton.setFocus(true);
+					}
+	
+					public void onSuccess(LoginInfo result) {
+						loginInfo = result;
+						if(loginInfo.isLoggedIn()) {
+							dialogBox.setText("Remote Procedure Call");
+							serverResponseLabel.removeStyleName("serverResponseLabelError");
+							serverResponseLabel.setHTML(result.getEmailAddress());//FIXME
+							dialogBox.center();
+							closeButton.setFocus(true);
+						} else {
+							// Assemble login panel.
+							signInLink.setHref(loginInfo.getLoginUrl());
+							loginPanel.add(loginLabel);
+							loginPanel.add(signInLink);
+							RootPanel.get("stockList").add(loginPanel);
+						}
+					}
+				});	
 			}
 		}
-
 		// Add a handler to send the name to the server
 		MyHandler handler = new MyHandler();
 		sendButton.addClickHandler(handler);
 		nameField.addKeyUpHandler(handler);
+		
+//		// Create a handler for the sendButton and nameField
+//		class MyHandler implements ClickHandler, KeyUpHandler {
+//			/**
+//			 * Fired when the user clicks on the sendButton.
+//			 */
+//			public void onClick(ClickEvent event) {
+//				sendNameToServer();
+//			}
+//			
+//			/**
+//			 * Fired when the user types in the nameField.
+//			 */
+//			public void onKeyUp(KeyUpEvent event) {
+//				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+//					sendNameToServer();
+//				}
+//			}
+//			
+//			/**
+//			 * Send the name from the nameField to the server and wait for a response.
+//			 */
+//			private void sendNameToServer() {
+//				// First, we validate the input.
+//				errorLabel.setText("");
+//				String textToServer = nameField.getText();
+//				if (!FieldVerifier.isValidName(textToServer)) {
+//					errorLabel.setText("Please enter at least four characters");
+//					return;
+//				}
+//				
+//				// Then, we send the input to the server.
+//				sendButton.setEnabled(false);
+//				textToServerLabel.setText(textToServer);
+//				serverResponseLabel.setText("");
+//				greetingService.greetServer(textToServer, new AsyncCallback<String>() {
+//					public void onFailure(Throwable caught) {
+//						// Show the RPC error message to the user
+//						dialogBox.setText("Remote Procedure Call - Failure");
+//						serverResponseLabel.addStyleName("serverResponseLabelError");
+//						serverResponseLabel.setHTML(SERVER_ERROR);
+//						dialogBox.center();
+//						closeButton.setFocus(true);
+//					}
+//					
+//					public void onSuccess(String result) {
+//						dialogBox.setText("Remote Procedure Call");
+//						serverResponseLabel.removeStyleName("serverResponseLabelError");
+//						serverResponseLabel.setHTML(result);
+//						dialogBox.center();
+//						closeButton.setFocus(true);
+//					}
+//				});
+//			}
+//		}
+//		
+//		// Add a handler to send the name to the server
+//		MyHandler handler = new MyHandler();
+//		sendButton.addClickHandler(handler);
+//		nameField.addKeyUpHandler(handler);
 	}
 }
