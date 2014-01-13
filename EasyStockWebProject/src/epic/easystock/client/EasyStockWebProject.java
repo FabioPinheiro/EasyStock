@@ -16,6 +16,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import epic.easystock.client.service.GreetingService;
+import epic.easystock.client.service.GreetingServiceAsync;
+import epic.easystock.client.service.LoginInfo;
+import epic.easystock.client.service.LoginService;
+import epic.easystock.client.service.LoginServiceAsync;
 import epic.easystock.shared.FieldVerifier;
 
 /**
@@ -81,7 +86,7 @@ public class EasyStockWebProject implements EntryPoint {
 		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
 		dialogVPanel.add(closeButton);
 		dialogBox.setWidget(dialogVPanel);
-
+		System.out.print("$$$$$$$$$$$$$$$$$$$$$$");
 		// Add a handler to close the DialogBox
 		closeButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -119,6 +124,7 @@ public class EasyStockWebProject implements EntryPoint {
 				loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 					public void onFailure(Throwable error) {
 						//Show the RPC error message to the user
+						System.out.print("onFailure(Throwable error \n");
 						dialogBox.setText("Remote Procedure Call - Failure");
 						serverResponseLabel.addStyleName("serverResponseLabelError");
 						serverResponseLabel.setHTML(SERVER_ERROR);
@@ -127,6 +133,7 @@ public class EasyStockWebProject implements EntryPoint {
 					}
 	
 					public void onSuccess(LoginInfo result) {
+						System.out.print("onSuccess\n");
 						loginInfo = result;
 						if(loginInfo.isLoggedIn()) {
 							dialogBox.setText("Remote Procedure Call");
@@ -139,7 +146,7 @@ public class EasyStockWebProject implements EntryPoint {
 							signInLink.setHref(loginInfo.getLoginUrl());
 							loginPanel.add(loginLabel);
 							loginPanel.add(signInLink);
-							RootPanel.get("stockList").add(loginPanel);
+							RootPanel.get("loginRoot").add(loginPanel);
 						}
 					}
 				});	

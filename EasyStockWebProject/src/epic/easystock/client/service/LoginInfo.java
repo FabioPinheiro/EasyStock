@@ -1,4 +1,4 @@
-package epic.easystock.client;
+package epic.easystock.client.service;
 
 import java.io.Serializable;
 

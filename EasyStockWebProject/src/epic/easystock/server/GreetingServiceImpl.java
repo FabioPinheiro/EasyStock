@@ -1,7 +1,8 @@
 package epic.easystock.server;
 
-import epic.easystock.client.GreetingService;
+import epic.easystock.client.service.GreetingService;
 import epic.easystock.shared.FieldVerifier;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**

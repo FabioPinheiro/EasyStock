@@ -7,13 +7,13 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>loginService</servlet-name>
+    <servlet-name>loginServlet</servlet-name>
     <servlet-class>epic.easystock.server.LoginServiceImpl</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>loginService</servlet-name>
-    <url-pattern>/easystock/login</url-pattern>
+    <servlet-name>loginServlet</servlet-name>
+    <url-pattern>/easystockwebproject/login</url-pattern>
   </servlet-mapping>
   
   <!--
