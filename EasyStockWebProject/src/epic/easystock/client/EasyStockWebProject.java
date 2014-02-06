@@ -40,8 +40,10 @@ public class EasyStockWebProject implements EntryPoint {
 	
 	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label("Please sign in to your Google Account to access the StockWatcher application.");
+	private Label loginLabel = new Label("Please sign in to your Google Account to access application.");
 	private Anchor signInLink = new Anchor("Sign In");
+	private Label logOutLabel = new Label("Please sign Out of the application.");
+	private Anchor signOutLink = new Anchor("Sign Out");
 	
 	/**
 	 * This is the entry point method.
@@ -49,8 +51,8 @@ public class EasyStockWebProject implements EntryPoint {
 	public void onModuleLoad() {
 		final Button sendButton = new Button("Send");
 		final Button logoutButton = new Button("Logout");
-		final TextBox nameField = new TextBox();
-		nameField.setText("GWT User");
+		//final TextBox nameField = new TextBox();
+		//nameField.setText("GWT User");
 		final Label errorLabel = new Label();
 
 		// We can add style names to widgets
@@ -59,14 +61,9 @@ public class EasyStockWebProject implements EntryPoint {
 
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
-		RootPanel.get("nameFieldContainer").add(nameField);
 		RootPanel.get("sendButtonContainer").add(sendButton);
 		RootPanel.get("logoutButtonContainer").add(logoutButton);
 		RootPanel.get("errorLabelContainer").add(errorLabel);
-
-		// Focus the cursor on the name field when the app loads
-		nameField.setFocus(true);
-		nameField.selectAll();
 
 		// Create the popup dialog box
 		
@@ -82,12 +79,9 @@ public class EasyStockWebProject implements EntryPoint {
 		
 		// We can set the id of a widget by accessing its Element
 		closeButton.getElement().setId("closeButton");
-		final Label textToServerLabel = new Label();
 		final HTML serverResponseLabel = new HTML();
 		VerticalPanel dialogVPanel = new VerticalPanel();
 		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
-		dialogVPanel.add(textToServerLabel);
 		dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
 		dialogVPanel.add(serverResponseLabel);
 		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
@@ -123,18 +117,9 @@ public class EasyStockWebProject implements EntryPoint {
 				sendHandlerMethod();
 			}
 			private void sendHandlerMethod(){
-				// First, we validate the input.
-				errorLabel.setText("");
-				String textToServer = nameField.getText();
-				if (!FieldVerifier.isValidName(textToServer)) {
-					errorLabel.setText("Please enter at least four characters");
-					return;
-				}
-		 
 				// Then, we send the input to the server.
 				sendButton.setEnabled(false);
-				textToServerLabel.setText(textToServer);
-				serverResponseLabel.setText("");
+				
 				// Check login status using login service.
 				LoginServiceAsync loginService = GWT.create(LoginService.class);
 				loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
@@ -174,7 +159,10 @@ public class EasyStockWebProject implements EntryPoint {
 				logoutHandlerMethod();
 			}
 			private void logoutHandlerMethod(){
-				loginInfo = null;
+				signOutLink.setHref(loginInfo.getLogoutUrl());
+				loginPanel.add(logOutLabel);
+				loginPanel.add(signOutLink);
+				RootPanel.get("loginRoot").add(loginPanel);
 			}
 		}
 		
@@ -182,7 +170,6 @@ public class EasyStockWebProject implements EntryPoint {
 		// Add a handler to send the name to the server
 		SendHandler sendHandler = new SendHandler();
 		sendButton.addClickHandler(sendHandler);
-		//nameField.addKeyUpHandler(sendHandler);
 		
 		LogoutHandler logoutHandler = new LogoutHandler();
 		logoutButton.addClickHandler(logoutHandler);
