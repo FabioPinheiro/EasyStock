@@ -5,6 +5,11 @@
          version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee">
 
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>EasyStockWebProject.html</welcome-file>
+  </welcome-file-list>
+  
   <!-- Servlets -->
   <servlet>
     <servlet-name>loginServlet</servlet-name>
@@ -15,22 +20,5 @@
     <servlet-name>loginServlet</servlet-name>
     <url-pattern>/easystockwebproject/login</url-pattern>
   </servlet-mapping>
-  
-  <!--
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>epic.easystock.server.GreetingServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/easystockwebproject/greet</url-pattern>
-  </servlet-mapping>
-  -->
-  
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>EasyStockWebProject.html</welcome-file>
-  </welcome-file-list>
 
 </web-app>

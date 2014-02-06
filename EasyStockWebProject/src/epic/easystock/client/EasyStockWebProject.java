@@ -16,8 +16,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import epic.easystock.client.service.GreetingService;
-import epic.easystock.client.service.GreetingServiceAsync;
 import epic.easystock.client.service.LoginInfo;
 import epic.easystock.client.service.LoginService;
 import epic.easystock.client.service.LoginServiceAsync;
@@ -38,7 +36,6 @@ public class EasyStockWebProject implements EntryPoint {
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
 	 */
-	private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
 	
 	private LoginInfo loginInfo = null;
@@ -51,17 +48,20 @@ public class EasyStockWebProject implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		final Button sendButton = new Button("Send");
+		final Button logoutButton = new Button("Logout");
 		final TextBox nameField = new TextBox();
 		nameField.setText("GWT User");
 		final Label errorLabel = new Label();
 
 		// We can add style names to widgets
 		sendButton.addStyleName("sendButton");
+		sendButton.addStyleName("logoutButton");
 
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel.get("nameFieldContainer").add(nameField);
 		RootPanel.get("sendButtonContainer").add(sendButton);
+		RootPanel.get("logoutButtonContainer").add(logoutButton);
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 
 		// Focus the cursor on the name field when the app loads
@@ -69,10 +69,17 @@ public class EasyStockWebProject implements EntryPoint {
 		nameField.selectAll();
 
 		// Create the popup dialog box
+		
 		final DialogBox dialogBox = new DialogBox();
 		dialogBox.setText("Remote Procedure Call");
 		dialogBox.setAnimationEnabled(true);
 		final Button closeButton = new Button("Close");
+		
+		final DialogBox logoutDialogBox = new DialogBox();
+		logoutDialogBox.setText("Remote Procedure Call");
+		logoutDialogBox.setAnimationEnabled(true);
+		final Button logoutCloseButton = new Button("Close LogoutDialogBox");
+		
 		// We can set the id of a widget by accessing its Element
 		closeButton.getElement().setId("closeButton");
 		final Label textToServerLabel = new Label();
@@ -86,7 +93,14 @@ public class EasyStockWebProject implements EntryPoint {
 		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
 		dialogVPanel.add(closeButton);
 		dialogBox.setWidget(dialogVPanel);
-		System.out.print("$$$$$$$$$$$$$$$$$$$$$$");
+		
+		logoutCloseButton.getElement().setId("closeButton");
+		VerticalPanel logoutDialogVPanel = new VerticalPanel();;
+		logoutDialogVPanel.add(new HTML("<b>Logout logoutDialogBox</b>"));
+		logoutDialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+		logoutDialogVPanel.add(logoutCloseButton);
+		logoutDialogBox.setWidget(logoutDialogVPanel);
+		
 		// Add a handler to close the DialogBox
 		closeButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -96,17 +110,19 @@ public class EasyStockWebProject implements EntryPoint {
 			}
 		});
 		
-		class MyHandler implements ClickHandler, KeyUpHandler {
+		logoutButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				xpto();
+				logoutDialogBox.hide();
+				logoutButton.setEnabled(true);
+				logoutButton.setFocus(true);
 			}
-
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				xpto();
+		});
+		
+		class SendHandler implements ClickHandler {
+			public void onClick(ClickEvent event) {
+				sendHandlerMethod();
 			}
-			
-			private void xpto(){
+			private void sendHandlerMethod(){
 				// First, we validate the input.
 				errorLabel.setText("");
 				String textToServer = nameField.getText();
@@ -114,7 +130,7 @@ public class EasyStockWebProject implements EntryPoint {
 					errorLabel.setText("Please enter at least four characters");
 					return;
 				}
-				
+		 
 				// Then, we send the input to the server.
 				sendButton.setEnabled(false);
 				textToServerLabel.setText(textToServer);
@@ -131,7 +147,7 @@ public class EasyStockWebProject implements EntryPoint {
 						dialogBox.center();
 						closeButton.setFocus(true);
 					}
-	
+		 
 					public void onSuccess(LoginInfo result) {
 						System.out.print("onSuccess\n");
 						loginInfo = result;
@@ -149,72 +165,26 @@ public class EasyStockWebProject implements EntryPoint {
 							RootPanel.get("loginRoot").add(loginPanel);
 						}
 					}
-				});	
+				}); 
 			}
 		}
-		// Add a handler to send the name to the server
-		MyHandler handler = new MyHandler();
-		sendButton.addClickHandler(handler);
-		nameField.addKeyUpHandler(handler);
 		
-//		// Create a handler for the sendButton and nameField
-//		class MyHandler implements ClickHandler, KeyUpHandler {
-//			/**
-//			 * Fired when the user clicks on the sendButton.
-//			 */
-//			public void onClick(ClickEvent event) {
-//				sendNameToServer();
-//			}
-//			
-//			/**
-//			 * Fired when the user types in the nameField.
-//			 */
-//			public void onKeyUp(KeyUpEvent event) {
-//				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-//					sendNameToServer();
-//				}
-//			}
-//			
-//			/**
-//			 * Send the name from the nameField to the server and wait for a response.
-//			 */
-//			private void sendNameToServer() {
-//				// First, we validate the input.
-//				errorLabel.setText("");
-//				String textToServer = nameField.getText();
-//				if (!FieldVerifier.isValidName(textToServer)) {
-//					errorLabel.setText("Please enter at least four characters");
-//					return;
-//				}
-//				
-//				// Then, we send the input to the server.
-//				sendButton.setEnabled(false);
-//				textToServerLabel.setText(textToServer);
-//				serverResponseLabel.setText("");
-//				greetingService.greetServer(textToServer, new AsyncCallback<String>() {
-//					public void onFailure(Throwable caught) {
-//						// Show the RPC error message to the user
-//						dialogBox.setText("Remote Procedure Call - Failure");
-//						serverResponseLabel.addStyleName("serverResponseLabelError");
-//						serverResponseLabel.setHTML(SERVER_ERROR);
-//						dialogBox.center();
-//						closeButton.setFocus(true);
-//					}
-//					
-//					public void onSuccess(String result) {
-//						dialogBox.setText("Remote Procedure Call");
-//						serverResponseLabel.removeStyleName("serverResponseLabelError");
-//						serverResponseLabel.setHTML(result);
-//						dialogBox.center();
-//						closeButton.setFocus(true);
-//					}
-//				});
-//			}
-//		}
-//		
-//		// Add a handler to send the name to the server
-//		MyHandler handler = new MyHandler();
-//		sendButton.addClickHandler(handler);
-//		nameField.addKeyUpHandler(handler);
+		class LogoutHandler implements ClickHandler {
+			public void onClick(ClickEvent event) {
+				logoutHandlerMethod();
+			}
+			private void logoutHandlerMethod(){
+				loginInfo = null;
+			}
+		}
+		
+
+		// Add a handler to send the name to the server
+		SendHandler sendHandler = new SendHandler();
+		sendButton.addClickHandler(sendHandler);
+		//nameField.addKeyUpHandler(sendHandler);
+		
+		LogoutHandler logoutHandler = new LogoutHandler();
+		logoutButton.addClickHandler(logoutHandler);
 	}
 }
