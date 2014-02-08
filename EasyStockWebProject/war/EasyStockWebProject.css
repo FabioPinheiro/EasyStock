@@ -32,3 +32,15 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+.FlexTable td {
+   border: 1px solid #BBBBBB;
+   padding: 3px;
+}
+
+.FlexTable {
+  border-top: thin solid #444444;
+  border-left: thin solid #444444;
+  border-right: thin solid #111111;
+  border-bottom: thin solid #111111;
+}
