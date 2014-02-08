@@ -41,3 +41,5 @@ temp-testng-customsuite.xml
 test-output
 .externalToolBuilders
 *~
+.gwt/.gwt-log
+.settings/com.google.appengine.eclipse.core.prefs
