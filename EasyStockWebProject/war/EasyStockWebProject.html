@@ -5,62 +5,77 @@
 <!-- with a "Quirks Mode" doctype is not supported. -->
 
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<!-- meta name='gwt:module' content='org.project.package.Core=org.project.package.Core'-->
 
-    <!--                                                               -->
-    <!-- Consider inlining CSS to reduce the number of requested files -->
-    <!--                                                               -->
-    <link type="text/css" rel="stylesheet" href="EasyStockWebProject.css">
+		<!-- Consider inlining CSS to reduce the number of requested files -->
+		<link type="text/css" rel="stylesheet" href="EasyStockWebProject.css">
 
-    <!--                                           -->
-    <!-- Any title is fine                         -->
-    <!--                                           -->
-    <title>Web Application Starter Project</title>
+		<!-- Any title is fine                         -->
+		<title>Web Application Starter Project</title>
+
+		<!-- This script loads your compiled module.   -->
+		<!-- If you add any GWT meta tags, they must   -->
+		<!-- be added before this line.                -->
+		<script type="text/javascript" language="javascript" src="easystockwebproject/easystockwebproject.nocache.js"></script>
+	</head>
+
+	<!-- The body can have arbitrary html, or      -->
+	<!-- you can leave the body empty if you want  -->
+	<!-- to create a completely dynamic UI.        -->
+	<body>
+		<!-- OPTIONAL: include this if you want history support -->
+		<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
+
+		<!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+		<noscript>
+			<div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+			Your web browser must have JavaScript enabled in order for this application to display correctly.
+			</div>
+		</noscript>
+
+		<h1>Web Application Starter Project</h1>
+		<!--table align="center">
+		<tr>
+			<td colspan="2" style="font-weight:bold;">Please enter your name:</td>
+		</tr>
+		<tr>
+			<td id="sendButtonContainer"></td>
+			<td id="logoutButtonContainer"></td>
+		</tr>
+		<tr>
+			<td colspan="2" style="color:red;" id="errorLabelContainer"></td>
+		</tr>
+		</table>
     
-    <!--                                           -->
-    <!-- This script loads your compiled module.   -->
-    <!-- If you add any GWT meta tags, they must   -->
-    <!-- be added before this line.                -->
-    <!--                                           -->
-    <script type="text/javascript" language="javascript" src="easystockwebproject/easystockwebproject.nocache.js"></script>
-  </head>
+		<h3>loginRoot</h3>
+		<div id="loginRoot"></div-->
 
-  <!--                                           -->
-  <!-- The body can have arbitrary html, or      -->
-  <!-- you can leave the body empty if you want  -->
-  <!-- to create a completely dynamic UI.        -->
-  <!--                                           -->
-  <body>
+		<hr>
+		<!-- *********************************************************************************************************** -->
+    	<!-- Load the JavaScript code for GWT -->
+		<!--script language="javascript" src="ui/org.project.package.ui.Core.nocache.js"></script-->
 
-    <!-- OPTIONAL: include this if you want history support -->
-    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
-    
-    <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
-    <noscript>
-      <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
-        Your web browser must have JavaScript enabled
-        in order for this application to display correctly.
-      </div>
-    </noscript>
-
-    <h1>Web Application Starter Project</h1>
-
-    <table align="center">
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Please enter your name:</td>        
-      </tr>
-      <tr>
-        <td id="sendButtonContainer"></td>
-        <td id="logoutButtonContainer"></td>
-      </tr>
-      <tr>
-        <td colspan="2" style="color:red;" id="errorLabelContainer"></td>
-      </tr>
-    </table>
-    
-    <h1>loginRoot</h1>
-    <div id="loginRoot"></div>
-    
-  </body>
+        <!-- For some unknown reason in Internet Explorer you have to have cellpadding/spacing ON THE ELEMENT and not on the STYLE if it is in the body tag like this -->
+        <table id="wrapper" cellpadding="0" cellspacing="0" style="width: 100%;height: 100%;">
+			<!-- Header row -->
+			<tr style="height: 25%;">
+				<td colspan="2" id="header"></td>
+			</tr>
+			
+			<!-- Body row and left nav row -->
+			<tr style="height: 65%;">
+				<td id="leftnav"></td>
+				<td id="content"></td>
+			</tr>
+			<!-- Footer row -->
+			<tr style="height: 10%;">
+				<td colspan="2" id="footer"></td>
+			</tr>
+		</table>
+		
+		<!-- This iframe handles history -->
+		<iframe id="__gwt_historyFrame" style="width:0;height:0;border:0"></iframe>
+	</body>
 </html>

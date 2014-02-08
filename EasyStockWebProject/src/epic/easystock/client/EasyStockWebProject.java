@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
@@ -25,29 +26,41 @@ import epic.easystock.shared.FieldVerifier;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class EasyStockWebProject implements EntryPoint {
+	
+	public static PageConductor contentContainer = new PageConductor();
+	private static LoginInfo loginInfo = null;
+	
+	public static LoginInfo getLoginInfo() {
+		if(loginInfo == null) {
+			MethodsLib.log(EasyStockWebProject.class.getName(),"getLoginInfo", "loginInfo == null");
+			//MethodsLib.logInMethod();
+		} 
+		return loginInfo;
+	}
+	
+	public static void setLoginInfo(LoginInfo loginInfo) {EasyStockWebProject.loginInfo = loginInfo;}
+	
 	/**
-	 * The message displayed to the user when the server cannot be reached or
-	 * returns an error.
+	 * This is the entry point method.
 	 */
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
+	public void onModuleLoad() {
+		contentContainer.loadPageConductor();
+	}
+}
+	/*XXX LIXO
+	//The message displayed to the user when the server cannot be reached or returns an error.
+	private static final String SERVER_ERROR = "An error occurred while " + "attempting to contact the server. Please check your network " + "connection and try again.";
 
-	/**
-	 * Create a remote service proxy to talk to the server-side Greeting service.
-	 */
+	//Create a remote service proxy to talk to the server-side Greeting service.
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
 	
-	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private Label loginLabel = new Label("Please sign in to your Google Account to access application.");
 	private Anchor signInLink = new Anchor("Sign In");
 	private Label logOutLabel = new Label("Please sign Out of the application.");
 	private Anchor signOutLink = new Anchor("Sign Out");
 	
-	/**
-	 * This is the entry point method.
-	 */
+	
 	public void onModuleLoad() {
 		final Button sendButton = new Button("Send");
 		final Button logoutButton = new Button("Logout");
@@ -173,5 +186,4 @@ public class EasyStockWebProject implements EntryPoint {
 		
 		LogoutHandler logoutHandler = new LogoutHandler();
 		logoutButton.addClickHandler(logoutHandler);
-	}
-}
+	}*/
