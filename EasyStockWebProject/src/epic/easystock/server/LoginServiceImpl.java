@@ -1,12 +1,10 @@
 package epic.easystock.server;
 
-import java.util.Date;
+import java.util.List;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
+
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -14,11 +12,15 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import epic.easystock.client.service.LoginInfo;
 import epic.easystock.client.service.LoginService;
+import epic.easystock.server.components.Item;
+import epic.easystock.shared.PMF;
 
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	
+	
 	public LoginInfo login(String requestUri) {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
@@ -37,48 +39,38 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 
 	@Override
 	public void saveItemService(String name, String type) {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Entity item = new Entity("Item");
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
-		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Item item;
 		if (user != null) {
-			item.setProperty("email", user.getEmail());
+			item = new Item(user.getEmail(), name,type,(long) 1);
 		}else {
-			item.setProperty("email", null);
+			item = new Item(null, name,type,(long) 1);
 		}
-		item.setProperty("name", name);
-		item.setProperty("type", type);
-		
-		Date currentDate = new Date();
-		
-		item.setProperty("dateAdded", currentDate);
-		item.setProperty("#",1);
-		datastore.put(item);
+		try{
+		pm.makePersistent(item);
+		} finally {
+			pm.close();
+		}
 		return;
 	}
 	
 	@Override
-	public Iterable<Entity> getItems(){
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query("Item");
+	public List<Item> getItems(){
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query q = pm.newQuery(Item.class);
+		List<Item> results;
+		try{
+			results = (List<Item>) q.execute();
+			
+		} finally {
+			q.closeAll();
+		}
+
 		
-		PreparedQuery pq = datastore.prepare(q);
-		
-		return pq.asIterable();
-		/*
-		 * Como usar o preparedQuery:
-		 
-		 	for (Entity result : pq.asIterable()) {
-  				String name = (String) result.getProperty("name");
-  				String type = (String) result.getProperty("type");
-  				Date date = (Date) result.getProperty("dateAdded");
-  				Long number = (Long) result.getProperty("#");
-				
-				...(fazer cenas)
-			}
-		 */
-		
+		return results;
+	
 	}
 	
 }

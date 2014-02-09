@@ -10,7 +10,8 @@ public class Item {
 	
 	@Persistent
 	private String name;
-	
+	@Persistent
+	private String email;
 	@Persistent	
 	private String type;
 	
@@ -26,8 +27,9 @@ public class Item {
 	 * @param dateAdded
 	 * @param amount
 	 */
-	public Item(String name, String type, Long amount) {
+	public Item(String email, String name, String type, Long amount) {
 		super();
+		this.email = email;
 		this.name = name;
 		this.type = type;
 		this.dateAdded = new Date();
@@ -64,3 +66,5 @@ public class Item {
 	
 	
 }
+
+
