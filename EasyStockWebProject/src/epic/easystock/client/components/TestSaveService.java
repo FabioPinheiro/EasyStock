@@ -14,10 +14,10 @@ public class TestSaveService extends AbstractContent {
 
 	private HorizontalPanel panel = new HorizontalPanel();
 	private SaveServiceTestHandler saveServiceTestHandler = new SaveServiceTestHandler();
-	private final Button saveServiceTestButton = new Button("save");
+	private final Button saveServiceTestButton = new Button("Save");
 	private TextBox nomeTextBox = new TextBox();
 	private TextBox typeTextBox = new TextBox();
-	private Label saveServiceTestLabel = new Label("saveServiceTestLabe:l");
+	private Label saveServiceTestLabel = new Label("New Item:");
 
 	public TestSaveService() {
 		loadModule();

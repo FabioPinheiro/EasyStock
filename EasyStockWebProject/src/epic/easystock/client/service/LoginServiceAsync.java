@@ -10,4 +10,6 @@ public interface LoginServiceAsync {
 	public void login(String requestUri, AsyncCallback<LoginInfo> async);
 	public void saveItemService(String name, String type, AsyncCallback<Void> async);
 	public void getItems(AsyncCallback<List<Item>> async);
+	public void getUserItems(AsyncCallback<List<Item>> async);
+
 }

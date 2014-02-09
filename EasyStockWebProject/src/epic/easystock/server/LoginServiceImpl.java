@@ -43,13 +43,13 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		Item item;
 		Long amount = (long) 1;
 		Item old;
-		
-		try{
+
+		try {
 			old = pm.getObjectById(Item.class, name);
-		}catch(JDOObjectNotFoundException e){
+		} catch (JDOObjectNotFoundException e) {
 			old = null;
 		}
-		
+
 		if (old != null) {
 			try {
 				old.setAmount(old.getAmount() + 1);
@@ -76,6 +76,35 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	public List<Item> getItems() {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(Item.class);
+		List<Item> results;
+		try {
+			results = (List<Item>) q.execute();
+
+		} finally {
+			q.closeAll();
+		}
+
+		return results;
+
+	}
+
+	@Override
+	public List<Item> getUserItems() {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query q = pm.newQuery(Item.class);
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser();
+		String email;
+		
+		if (user != null) {
+			email = user.getEmail();
+		} else {
+			email = "";
+		}
+		
+		
+		q.setFilter("email == " + email);
+
 		List<Item> results;
 		try {
 			results = (List<Item>) q.execute();
