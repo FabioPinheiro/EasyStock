@@ -53,6 +53,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		datastore.put(item);
 	}
 	
+	@Override
 	public PreparedQuery getItems(){
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q = new Query("Item");
