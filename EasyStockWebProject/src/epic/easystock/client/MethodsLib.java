@@ -30,8 +30,8 @@ public class MethodsLib {
 	
 	public static void logInMethod(){
 		// Check login status using login service.
-		LoginServiceAsync loginService = GWT.create(LoginService.class);
-		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
+		LoginServiceAsync service = GWT.create(LoginService.class);
+		service.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 			public void onFailure(Throwable error) {
 				//FIXME Show the RPC error message to the user
 				log("logInMethod", "onFailure -> Remote Procedure Call - Failure");
@@ -50,27 +50,19 @@ public class MethodsLib {
 		}); 
 	}
 	
-	public static void saveSarviceTestMethod(){
+	public static void saveSarviceTestMethod(String name, String type){
 		// Check login status using login service.
-		
-		LoginServiceAsync loginService = GWT.create(LoginService.class);
-		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
+		LoginServiceAsync service = GWT.create(LoginService.class);
+		service.saveItemService(name, type, new AsyncCallback<Void>() {
 			public void onFailure(Throwable error) {
 				//FIXME Show the RPC error message to the user
-				log("logInMethod", "onFailure -> Remote Procedure Call - Failure");
+				log("saveSarviceTestMethod", "onFailure -> Remote Procedure Call - Failure");
 			}
 			
-			public void onSuccess(LoginInfo result) {
-				EasyStockWebProject.setLoginInfo(result);
-				log("logInMethod","onSuccess -> Remote Procedure Call");
-				if(result.isLoggedIn()) {
-					//emailLabel.setText(result.getEmailAddress());
-				} else {
-					Window.Location.assign(result.getLoginUrl());
-				}
-				EasyStockWebProject.contentContainer.lobby.reloadModule();
+			public void onSuccess(Void result) {
+				log("saveSarviceTestMethod","onSuccess -> Remote Procedure Call");
 			}
-		}); 
+		});
 	}
 	
 	public static void logOutMethod(){

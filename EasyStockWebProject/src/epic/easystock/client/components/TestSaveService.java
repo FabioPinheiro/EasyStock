@@ -38,7 +38,7 @@ public class TestSaveService extends AbstractContent {
 	class SaveServiceTestHandler implements ClickHandler {
 		@Override
 		public void onClick(ClickEvent event) {
-			MethodsLib.saveSarviceTestMethod();
+			MethodsLib.saveSarviceTestMethod("nome", "type");
 		}
 	}
 }

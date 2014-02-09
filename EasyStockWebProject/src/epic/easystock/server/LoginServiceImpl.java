@@ -1,5 +1,10 @@
 package epic.easystock.server;
 
+import java.util.Date;
+
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -26,5 +31,20 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 			loginInfo.setLoginUrl(userService.createLoginURL(requestUri));
 		}
 		return loginInfo;
+	}
+
+	@Override
+	public void saveItemService(String name, String type) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Entity item = new Entity("Item");
+		
+		item.setProperty("name", name);
+		item.setProperty("type", type);
+		
+		Date currentDate = new Date();
+		
+		item.setProperty("dateAdded", currentDate);
+		
+		datastore.put(item);
 	}
 }
