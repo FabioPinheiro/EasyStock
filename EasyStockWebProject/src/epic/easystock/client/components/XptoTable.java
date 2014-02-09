@@ -23,6 +23,7 @@ public class XptoTable extends AbstractContent {
 		super.loadModule();
 		textBox.setName("textBox");
 		initWidget(grid);
+		/*cenas*/
 		reloadModule();
 	}
 
