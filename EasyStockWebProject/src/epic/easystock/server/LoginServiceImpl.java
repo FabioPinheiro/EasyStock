@@ -46,5 +46,6 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		item.setProperty("dateAdded", currentDate);
 		
 		datastore.put(item);
+		return;
 	}
 }
