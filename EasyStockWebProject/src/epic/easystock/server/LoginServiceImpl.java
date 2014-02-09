@@ -12,15 +12,14 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import epic.easystock.client.service.LoginInfo;
 import epic.easystock.client.service.LoginService;
-import epic.easystock.server.components.Item;
+import epic.easystock.shared.Item;
 import epic.easystock.shared.PMF;
 
-public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
+public class LoginServiceImpl extends RemoteServiceServlet implements
+		LoginService {
 
 	private static final long serialVersionUID = 1L;
-	
-	
-	
+
 	public LoginInfo login(String requestUri) {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
@@ -43,34 +42,45 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		User user = userService.getCurrentUser();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Item item;
-		if (user != null) {
-			item = new Item(user.getEmail(), name,type,(long) 1);
-		}else {
-			item = new Item(null, name,type,(long) 1);
-		}
-		try{
-		pm.makePersistent(item);
-		} finally {
-			pm.close();
+		Long amount = (long) 1;
+		Item e = pm.getObjectById(Item.class, name);
+
+		if (e != null) {
+			try {
+				e.setAmount(e.getAmount() + 1);
+			} finally {
+				pm.close();
+			}
+
+		} else {
+			if (user != null) {
+				item = new Item(user.getEmail(), name, type, amount);
+			} else {
+				item = new Item(null, name, type, amount);
+			}
+			try {
+				pm.makePersistent(item);
+			} finally {
+				pm.close();
+			}
 		}
 		return;
 	}
-	
+
 	@Override
-	public List<Item> getItems(){
+	public List<Item> getItems() {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(Item.class);
 		List<Item> results;
-		try{
+		try {
 			results = (List<Item>) q.execute();
-			
+
 		} finally {
 			q.closeAll();
 		}
 
-		
 		return results;
-	
+
 	}
-	
+
 }

@@ -2,10 +2,9 @@ package epic.easystock.client.service;
 
 import java.util.List;
 
-import com.google.appengine.api.datastore.Entity;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import epic.easystock.server.components.Item;
+import epic.easystock.shared.Item;
 
 public interface LoginServiceAsync {
 	public void login(String requestUri, AsyncCallback<LoginInfo> async);
