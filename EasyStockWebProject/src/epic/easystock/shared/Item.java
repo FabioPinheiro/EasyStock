@@ -1,4 +1,4 @@
-package epic.easystock.server.components;
+package epic.easystock.shared;
 
 import java.util.Date;
 
