@@ -2,8 +2,7 @@ package epic.easystock.server;
 
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
+import javax.jdo.*;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -43,11 +42,17 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Item item;
 		Long amount = (long) 1;
-		Item e = pm.getObjectById(Item.class, name);
-
-		if (e != null) {
+		Item old;
+		
+		try{
+			old = pm.getObjectById(Item.class, name);
+		}catch(JDOObjectNotFoundException e){
+			old = null;
+		}
+		
+		if (old != null) {
 			try {
-				e.setAmount(e.getAmount() + 1);
+				old.setAmount(old.getAmount() + 1);
 			} finally {
 				pm.close();
 			}

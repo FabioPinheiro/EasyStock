@@ -9,8 +9,8 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable
 public class Item {
 	@PrimaryKey
-	@Persistent
 	private String name;
+	
 	@Persistent
 	private String email;
 	@Persistent	
