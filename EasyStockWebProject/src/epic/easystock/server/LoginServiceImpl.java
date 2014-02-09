@@ -5,6 +5,11 @@ import java.util.Date;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -44,7 +49,30 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		Date currentDate = new Date();
 		
 		item.setProperty("dateAdded", currentDate);
-		
+		item.setProperty("#",1);
 		datastore.put(item);
 	}
+	
+	public PreparedQuery getItems(){
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query q = new Query("Item");
+		
+		PreparedQuery pq = datastore.prepare(q);
+		
+		return pq;
+		/*
+		 * Como usar o preparedQuery:
+		 
+		 	for (Entity result : pq.asIterable()) {
+  				String name = (String) result.getProperty("name");
+  				String type = (String) result.getProperty("type");
+  				Date date = (Date) result.getProperty("dateAdded");
+  				Long number = (Long) result.getProperty("#");
+				
+				...(fazer cenas)
+			}
+		 */
+		
+	}
+	
 }
