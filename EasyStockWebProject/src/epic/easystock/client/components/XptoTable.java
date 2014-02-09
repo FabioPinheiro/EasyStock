@@ -1,11 +1,19 @@
 package epic.easystock.client.components;
 
-import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.*;
+import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
 
 public class XptoTable extends AbstractContent {
 
-	private FlexTable flexTable = new FlexTable();
-
+	Grid grid = new Grid(3, 2);
+	FileUpload upload = new FileUpload();
+	TextBox textBox = new TextBox();
+    Label textLabel = new Label("Name");
+    Label fileLabel = new Label("Upload Something");
+    Button submit = new Button("Submit");
+    
+    
 	public XptoTable() {
 		loadModule();
 	}
@@ -13,19 +21,23 @@ public class XptoTable extends AbstractContent {
 	@Override
 	public void loadModule() {
 		super.loadModule();
-		flexTable.addStyleName("FlexTable");
-		initWidget(flexTable);
+		textBox.setName("textBox");
+		initWidget(grid);
+		/*cenas*/
 		reloadModule();
 	}
 
 	@Override
 	public void reloadModule() {
 		super.reloadModule();
-		flexTable.setText(0, 0, "0,0");
-		flexTable.setText(0, 1, "0,1");
-		flexTable.setText(1, 0, "1,0");
-		flexTable.setText(1, 1, "1,1");
-		flexTable.setText(2, 0, "2,0");
-		flexTable.setText(2, 1, "2,1");
-	}
+		grid.setWidget(0, 0, textLabel);
+        grid.setWidget(0, 1, textBox);
+        
+        upload.setName("upload");
+        grid.setWidget(1, 0, fileLabel);
+        grid.setWidget(1, 1, upload);
+        
+        grid.setWidget(2, 0, submit);
+
+    }
 }
