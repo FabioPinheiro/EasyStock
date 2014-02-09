@@ -50,6 +50,29 @@ public class MethodsLib {
 		}); 
 	}
 	
+	public static void saveSarviceTestMethod(){
+		// Check login status using login service.
+		
+		LoginServiceAsync loginService = GWT.create(LoginService.class);
+		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
+			public void onFailure(Throwable error) {
+				//FIXME Show the RPC error message to the user
+				log("logInMethod", "onFailure -> Remote Procedure Call - Failure");
+			}
+			
+			public void onSuccess(LoginInfo result) {
+				EasyStockWebProject.setLoginInfo(result);
+				log("logInMethod","onSuccess -> Remote Procedure Call");
+				if(result.isLoggedIn()) {
+					//emailLabel.setText(result.getEmailAddress());
+				} else {
+					Window.Location.assign(result.getLoginUrl());
+				}
+				EasyStockWebProject.contentContainer.lobby.reloadModule();
+			}
+		}); 
+	}
+	
 	public static void logOutMethod(){
 		Window.Location.assign(EasyStockWebProject.getLoginInfo().getLogoutUrl());
 	}

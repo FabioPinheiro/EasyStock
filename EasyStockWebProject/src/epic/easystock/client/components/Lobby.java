@@ -39,7 +39,7 @@ public class Lobby extends AbstractContent {
 	@Override
 	public void reloadModule() {
 		super.reloadModule();
-		if(EasyStockWebProject.getLoginInfo()== null ||
+		if(EasyStockWebProject.getLoginInfo() == null ||
 		   !EasyStockWebProject.getLoginInfo().isLoggedIn()){
 			logInButton.setVisible(true);
 			logOutButton.setVisible(false);
@@ -54,9 +54,6 @@ public class Lobby extends AbstractContent {
 	}
 	
 	class LogInHandler implements ClickHandler {
-		public void onClick1(ClickEvent event) {
-			MethodsLib.logInMethod();
-		}
 		@Override
 		public void onClick(ClickEvent event) {
 			MethodsLib.logInMethod();
@@ -64,9 +61,9 @@ public class Lobby extends AbstractContent {
 	}
 	
 	class LogoutHandler implements ClickHandler {
+		@Override
 		public void onClick(ClickEvent event) {
 			MethodsLib.logOutMethod();
 		}
-
 	}
 }

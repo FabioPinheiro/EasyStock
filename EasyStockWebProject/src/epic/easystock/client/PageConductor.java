@@ -4,12 +4,14 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import epic.easystock.client.components.AbstractContent;
 import epic.easystock.client.components.Lobby;
+import epic.easystock.client.components.TestSaveService;
 import epic.easystock.client.components.XptoTable;
 import epic.easystock.client.service.LoginInfo;
 
 public class PageConductor {
 	public Lobby lobby = null;
 	public XptoTable xptoTable = null;
+	public TestSaveService testSaveService = null;
 	
 	public void loadPageConductor() {
 		MethodsLib.log(this.getClass().getName().toString(), "loadPageConductor", "load all");
@@ -19,6 +21,7 @@ public class PageConductor {
 		//ContentContainer.setContent(new Lobby());
 		this.setContentLobby();
 		this.setContentXptoTable();
+		this.setContentTest();
 	}
 	
 	/*public void setContent(AbstractContent content) {
@@ -33,5 +36,10 @@ public class PageConductor {
 	public void setContentXptoTable() {
 		if(xptoTable == null){ xptoTable = new XptoTable();}
 		RootPanel.get("content").add(xptoTable);
+	}
+	
+	public void setContentTest() {
+		if(testSaveService == null){ testSaveService = new TestSaveService();}
+		RootPanel.get("leftnav").add(testSaveService);
 	}
 }
