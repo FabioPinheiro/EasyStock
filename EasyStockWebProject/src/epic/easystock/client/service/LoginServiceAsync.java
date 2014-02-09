@@ -1,7 +1,6 @@
 package epic.easystock.client.service;
 
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface LoginServiceAsync {

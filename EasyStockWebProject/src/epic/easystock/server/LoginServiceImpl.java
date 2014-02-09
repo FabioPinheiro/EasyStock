@@ -5,7 +5,6 @@ import java.util.Date;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.User;
@@ -40,7 +39,14 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	public void saveItemService(String name, String type) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity item = new Entity("Item");
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser();
 		
+		if (user != null) {
+			item.setProperty("email", user.getEmail());
+		}else {
+			item.setProperty("email", null);
+		}
 		item.setProperty("name", name);
 		item.setProperty("type", type);
 		
@@ -49,6 +55,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		item.setProperty("dateAdded", currentDate);
 		item.setProperty("#",1);
 		datastore.put(item);
+		return;
 	}
 	
 	@Override
