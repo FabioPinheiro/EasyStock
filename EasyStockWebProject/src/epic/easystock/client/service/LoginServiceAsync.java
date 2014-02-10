@@ -11,5 +11,7 @@ public interface LoginServiceAsync {
 	public void saveItemService(String name, String type, AsyncCallback<Void> async);
 	public void getItems(AsyncCallback<List<Item>> async);
 	public void getUserItems(AsyncCallback<List<Item>> async);
+	public void getUserItemsType(String type, AsyncCallback<List<Item>> async);
+	public void getItemsType(String type, AsyncCallback<List<Item>> async);
 
 }

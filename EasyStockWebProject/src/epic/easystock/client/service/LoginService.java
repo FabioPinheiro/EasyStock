@@ -13,4 +13,6 @@ public interface LoginService extends RemoteService {
 	public void saveItemService(String name, String type);
 	public List<Item> getItems();
 	public List<Item> getUserItems();
+	public List<Item> getUserItemsType(String type);
+	public List<Item> getItemsType(String type);
 }

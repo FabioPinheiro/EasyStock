@@ -116,5 +116,53 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		return results;
 
 	}
+	
+	@Override
+	public List<Item> getItemsType(String type) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query q = pm.newQuery(Item.class);
+		
+		
+		q.setFilter("type == " + type);
+		List<Item> results;
+		try {
+			results = (List<Item>) q.execute();
+
+		} finally {
+			q.closeAll();
+		}
+
+		return results;
+
+	}
+	
+	@Override
+	public List<Item> getUserItemsType(String type) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query q = pm.newQuery(Item.class);
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser();
+		String email;
+		
+		if (user != null) {
+			email = user.getEmail();
+		} else {
+			email = "";
+		}
+		
+		
+		q.setFilter("email == " + email);
+		q.setFilter("type == " + type);
+		List<Item> results;
+		try {
+			results = (List<Item>) q.execute();
+
+		} finally {
+			q.closeAll();
+		}
+
+		return results;
+
+	}
 
 }
