@@ -1,14 +1,17 @@
 package epic.easystock.client;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import epic.easystock.client.handler.ItemListHandler;
 import epic.easystock.client.service.LoginInfo;
 import epic.easystock.client.service.LoginService;
 import epic.easystock.client.service.LoginServiceAsync;
+import epic.easystock.shared.Item;
 
 public class MethodsLib {
 	static LinkedList<String> methodsLibLog = new LinkedList<String>();
@@ -50,6 +53,10 @@ public class MethodsLib {
 		}); 
 	}
 	
+	public static void logOutMethod(){
+		Window.Location.assign(EasyStockWebProject.getLoginInfo().getLogoutUrl());
+	}
+
 	public static void saveSarviceTestMethod(String name, String type){
 		// Check login status using login service.
 		LoginServiceAsync service = GWT.create(LoginService.class);
@@ -65,7 +72,20 @@ public class MethodsLib {
 		});
 	}
 	
-	public static void logOutMethod(){
-		Window.Location.assign(EasyStockWebProject.getLoginInfo().getLogoutUrl());
+	
+	public static void getItemsMethod(final ItemListHandler itemListHandler){
+		// Check login status using login service.
+		LoginServiceAsync service = GWT.create(LoginService.class);
+		service.getItems(new AsyncCallback<List<Item>>() {
+			public void onFailure(Throwable error) {
+				//FIXME Show the RPC error message to the user
+				log("getItemsMethod", "onFailure -> Remote Procedure Call - Failure");
+			}
+			
+			public void onSuccess(List<Item> result) {
+				log("getItemsMethod","onSuccess -> Remote Procedure Call");
+				itemListHandler.handler(result);
+			}
+		});
 	}
 }
