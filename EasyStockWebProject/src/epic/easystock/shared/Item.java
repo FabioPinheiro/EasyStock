@@ -1,5 +1,6 @@
 package epic.easystock.shared;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -7,7 +8,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
-public class Item {
+public class Item implements Serializable {
 	@PrimaryKey
 	private String name;
 	
