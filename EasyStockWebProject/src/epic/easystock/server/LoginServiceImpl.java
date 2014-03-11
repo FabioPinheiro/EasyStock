@@ -1,8 +1,12 @@
 package epic.easystock.server;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import javax.jdo.*;
+import javax.jdo.JDOObjectNotFoundException;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -14,8 +18,7 @@ import epic.easystock.client.service.LoginService;
 import epic.easystock.shared.Item;
 import epic.easystock.shared.PMF;
 
-public class LoginServiceImpl extends RemoteServiceServlet implements
-		LoginService {
+public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
 
 	private static final long serialVersionUID = 1L;
 
@@ -40,11 +43,17 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		Item item;
 		Long amount = (long) 1;
 		Item old;
-
+		
+		Item e = new Item(user.getEmail(), name, type, amount);
 		try {
+			pm.makePersistent(e);
+		} finally {
+			pm.close();
+		}
+		
+		/*try {
 			old = pm.getObjectById(Item.class, name);
 		} catch (JDOObjectNotFoundException e) {
 			old = null;
@@ -68,18 +77,19 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 			} finally {
 				pm.close();
 			}
-		}
+		}*/
 		return;
 	}
 
 	@Override
-	public List<Item> getItems() {
+	public ArrayList<Item> getItems() {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(Item.class);
-		List<Item> results;
+		ArrayList<Item> results = new ArrayList<Item>();
 		try {
-			results = (List<Item>) q.execute();
-
+			for (Item it : (Collection<Item>) q.execute()) {
+				results.add(it);
+			}
 		} finally {
 			q.closeAll();
 		}
@@ -87,9 +97,9 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		return results;
 
 	}
-
+/*
 	@Override
-	public List<Item> getUserItems() {
+	public ArrayList<ItemDTO> getUserItems() {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query q = pm.newQuery(Item.class);
 		UserService userService = UserServiceFactory.getUserService();
@@ -105,9 +115,9 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		
 		q.setFilter("email == " + email);
 
-		List<Item> results;
+		ArrayList<ItemDTO> results;
 		try {
-			results = (List<Item>) q.execute();
+			results = new ArrayList<ItemDTO>((Collection<ItemDTO>)q.execute());
 
 		} finally {
 			q.closeAll();
@@ -118,15 +128,15 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 	
 	@Override
-	public List<Item> getItemsType(String type) {
+	public ArrayList<ItemDTO> getItemsType(String type) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		Query q = pm.newQuery(Item.class);
+		Query q = pm.newQuery(ItemDTO.class);
 		
 		
 		q.setFilter("type == " + type);
-		List<Item> results;
+		ArrayList<ItemDTO> results;
 		try {
-			results = (List<Item>) q.execute();
+			results = new ArrayList<ItemDTO>((Collection<ItemDTO>)q.execute());
 
 		} finally {
 			q.closeAll();
@@ -137,9 +147,9 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 	
 	@Override
-	public List<Item> getUserItemsType(String type) {
+	public ArrayList<ItemDTO> getUserItemsType(String type) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		Query q = pm.newQuery(Item.class);
+		Query q = pm.newQuery(ItemDTO.class);
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		String email;
@@ -150,12 +160,12 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 			email = "";
 		}
 		
-		
 		q.setFilter("email == " + email);
 		q.setFilter("type == " + type);
-		List<Item> results;
+		
+		ArrayList<ItemDTO> results;
 		try {
-			results = (List<Item>) q.execute();
+			results = new ArrayList<ItemDTO>((Collection<ItemDTO>)q.execute());
 
 		} finally {
 			q.closeAll();
@@ -163,6 +173,6 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 		return results;
 
-	}
+	}*/
 
 }
