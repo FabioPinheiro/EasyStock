@@ -1,5 +1,6 @@
 package epic.easystock.client.handler;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.user.cellview.client.CellTable;
@@ -30,7 +31,7 @@ public class ItemListHandler{
 		dataProvider.addDataDisplay(itemCellTable);
 	}
 	
-	public void handler(List<Item> Items) {
+	public void handler(Collection<Item> Items) {
 		// Add the data to the data provider, which automatically pushes it to the
 		// widget.
 		List<Item> list = dataProvider.getList();

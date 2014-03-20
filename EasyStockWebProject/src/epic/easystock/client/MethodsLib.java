@@ -1,7 +1,8 @@
 package epic.easystock.client;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
@@ -76,13 +77,13 @@ public class MethodsLib {
 	public static void getItemsMethod(final ItemListHandler itemListHandler){
 		// Check login status using login service.
 		LoginServiceAsync service = GWT.create(LoginService.class);
-		service.getItems(new AsyncCallback<List<Item>>() {
+		service.getItems(new AsyncCallback<ArrayList<Item>>() {
 			public void onFailure(Throwable error) {
 				//FIXME Show the RPC error message to the user
 				log("getItemsMethod", "onFailure -> Remote Procedure Call - Failure");
 			}
 			
-			public void onSuccess(List<Item> result) {
+			public void onSuccess(ArrayList<Item> result) {
 				log("getItemsMethod","onSuccess -> Remote Procedure Call");
 				itemListHandler.handler(result);
 			}

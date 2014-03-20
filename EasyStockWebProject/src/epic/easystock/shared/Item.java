@@ -9,6 +9,11 @@ import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
 public class Item implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@PrimaryKey
 	private String name;
 	
@@ -18,11 +23,12 @@ public class Item implements Serializable {
 	private String type;
 	
 	@Persistent
-	private Date dateAdded;
-	
-	@Persistent
 	private Long amount;
 
+	public Item() {
+		super();
+	}
+	
 	/**
 	 * @param name
 	 * @param type
@@ -34,7 +40,6 @@ public class Item implements Serializable {
 		this.email = email;
 		this.name = name;
 		this.type = type;
-		this.dateAdded = new Date();
 		this.amount = amount;
 	}
 
@@ -68,10 +73,6 @@ public class Item implements Serializable {
 
 	public void setAmount(Long amount) {
 		this.amount = amount;
-	}
-
-	public Date getDateAdded() {
-		return dateAdded;
 	}
 	
 	
