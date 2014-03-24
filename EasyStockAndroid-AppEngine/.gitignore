@@ -1,0 +1,16 @@
+### libs ###
+/war/WEB-INF/lib
+
+### Java ###
+*.class
+
+###
+.idea
+.DS_Store
+#.settings
+*.jar
+*.iml
+*~
+target/
+classes/
+appengine-generated/
