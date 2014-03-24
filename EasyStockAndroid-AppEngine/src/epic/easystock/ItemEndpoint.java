@@ -95,7 +95,7 @@ public class ItemEndpoint {
 	 * @return The inserted entity.
 	 */
 	@ApiMethod(name = "insertItem")
-	public ItemData insertItem(@Named("item") ItemData item) {
+	public ItemData insertItem(ItemData item) {
 		EntityManager mgr = getEntityManager();
 		try {
 			if (containsItem(item)) {
@@ -117,7 +117,7 @@ public class ItemEndpoint {
 	 * @return The updated entity.
 	 */
 	@ApiMethod(name = "updateItem")
-	public ItemData updateItem(@Named("item") ItemData item) {
+	public ItemData updateItem(ItemData item) {
 		EntityManager mgr = getEntityManager();
 		try {
 			if (!containsItem(item)) {
