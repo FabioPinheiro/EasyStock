@@ -26,5 +26,15 @@ public class HomeActivity extends Activity {
 		Intent intent = new Intent(this, ProductListActivity.class);
 		startActivity(intent);
 	}
+	
+	public void changeRegisterActivity(View view) {
+		Intent intent = new Intent(this, RegisterActivity.class);
+		startActivity(intent);
+	}
+	
+	public void changeToTestAddToProductListActivity(View view) {
+		Intent intent = new Intent(this, TestAddToProductListActivity.class);
+		startActivity(intent);
+	}
 
 }

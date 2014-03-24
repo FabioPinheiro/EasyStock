@@ -2,7 +2,7 @@
   "extends" : "thirdParty.api",
   "abstract" : false,
   "root" : "https://my-stock-manager.appspot.com/_ah/api",
-  "name" : "deviceinfoendpoint",
+  "name" : "itemendpoint",
   "version" : "v1",
   "defaultVersion" : false,
   "adapter" : {
@@ -26,14 +26,14 @@
   "ownerDomain" : "easystock.epic",
   "ownerName" : "easystock.epic",
   "methods" : {
-    "deviceinfoendpoint.insertDeviceInfo" : {
-      "path" : "deviceinfo",
-      "httpMethod" : "POST",
+    "itemendpoint.updateItem" : {
+      "path" : "itemdata",
+      "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.DeviceInfoEndpoint.insertDeviceInfo",
+      "rosyMethod" : "epic.easystock.ItemEndpoint.updateItem",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -42,35 +42,30 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "deviceinfoendpoint.removeDeviceInfo" : {
-      "path" : "deviceinfo/{id}",
-      "httpMethod" : "DELETE",
+    "itemendpoint.insertItem" : {
+      "path" : "itemdata",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.DeviceInfoEndpoint.removeDeviceInfo",
+      "rosyMethod" : "epic.easystock.ItemEndpoint.insertItem",
       "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
       }
     },
-    "deviceinfoendpoint.listDeviceInfo" : {
-      "path" : "deviceinfo",
+    "itemendpoint.listItem" : {
+      "path" : "itemdata",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.DeviceInfoEndpoint.listDeviceInfo",
+      "rosyMethod" : "epic.easystock.ItemEndpoint.listItem",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -88,18 +83,39 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "deviceinfoendpoint.getDeviceInfo" : {
-      "path" : "deviceinfo/{id}",
+    "itemendpoint.removeItem" : {
+      "path" : "item/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ItemEndpoint.removeItem",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "itemendpoint.getItem" : {
+      "path" : "itemdata/{id}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.DeviceInfoEndpoint.getDeviceInfo",
+      "rosyMethod" : "epic.easystock.ItemEndpoint.getItem",
       "request" : {
         "parameters" : {
           "id" : {
-            "type" : "string",
+            "type" : "int64",
             "required" : true
           }
         },
@@ -108,50 +124,61 @@
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
-    },
-    "deviceinfoendpoint.updateDeviceInfo" : {
-      "path" : "deviceinfo",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.DeviceInfoEndpoint.updateDeviceInfo",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
     }
   },
   "descriptor" : {
     "schemas" : {
-      "DeviceInfo" : {
-        "id" : "DeviceInfo",
+      "ItemData" : {
+        "id" : "ItemData",
         "type" : "object",
         "properties" : {
-          "deviceRegistrationID" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "name" : {
             "type" : "string"
           },
-          "deviceInformation" : {
+          "description" : {
             "type" : "string"
-          },
-          "timestamp" : {
-            "type" : "string",
-            "format" : "int64"
           }
         }
       },
-      "CollectionResponse_DeviceInfo" : {
-        "id" : "CollectionResponse_DeviceInfo",
+      "Key" : {
+        "id" : "Key",
+        "type" : "object",
+        "properties" : {
+          "kind" : {
+            "type" : "string"
+          },
+          "appId" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "parent" : {
+            "$ref" : "Key"
+          },
+          "complete" : {
+            "type" : "boolean"
+          },
+          "namespace" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CollectionResponse_ItemData" : {
+        "id" : "CollectionResponse_ItemData",
         "type" : "object",
         "properties" : {
           "items" : {
             "type" : "array",
             "items" : {
-              "$ref" : "DeviceInfo"
+              "$ref" : "ItemData"
             }
           },
           "nextPageToken" : {
@@ -161,32 +188,32 @@
       }
     },
     "methods" : {
-      "epic.easystock.DeviceInfoEndpoint.insertDeviceInfo" : {
+      "epic.easystock.ItemEndpoint.updateItem" : {
         "request" : {
-          "$ref" : "DeviceInfo"
+          "$ref" : "ItemData"
         },
         "response" : {
-          "$ref" : "DeviceInfo"
+          "$ref" : "ItemData"
         }
       },
-      "epic.easystock.DeviceInfoEndpoint.removeDeviceInfo" : {
-      },
-      "epic.easystock.DeviceInfoEndpoint.listDeviceInfo" : {
-        "response" : {
-          "$ref" : "CollectionResponse_DeviceInfo"
-        }
-      },
-      "epic.easystock.DeviceInfoEndpoint.getDeviceInfo" : {
-        "response" : {
-          "$ref" : "DeviceInfo"
-        }
-      },
-      "epic.easystock.DeviceInfoEndpoint.updateDeviceInfo" : {
+      "epic.easystock.ItemEndpoint.insertItem" : {
         "request" : {
-          "$ref" : "DeviceInfo"
+          "$ref" : "ItemData"
         },
         "response" : {
-          "$ref" : "DeviceInfo"
+          "$ref" : "ItemData"
+        }
+      },
+      "epic.easystock.ItemEndpoint.listItem" : {
+        "response" : {
+          "$ref" : "CollectionResponse_ItemData"
+        }
+      },
+      "epic.easystock.ItemEndpoint.removeItem" : {
+      },
+      "epic.easystock.ItemEndpoint.getItem" : {
+        "response" : {
+          "$ref" : "ItemData"
         }
       }
     }

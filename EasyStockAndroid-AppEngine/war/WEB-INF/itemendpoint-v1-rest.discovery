@@ -1,9 +1,9 @@
 {
- "kind": "discovery#rpcDescription",
- "etag": "\"FWXGb4Q2eZqWRcG8B2Ixrr-vrqQ/RS-zqkgwFClr1dK2-NpxZoWIqxc\"",
+ "kind": "discovery#restDescription",
+ "etag": "\"FWXGb4Q2eZqWRcG8B2Ixrr-vrqQ/oJqpgFofL3qlyS2pKk3UUlFtzHs\"",
  "discoveryVersion": "v1",
- "id": "messageEndpoint:v1",
- "name": "messageEndpoint",
+ "id": "itemendpoint:v1",
+ "name": "itemendpoint",
  "version": "v1",
  "description": "This is an API",
  "ownerDomain": "easystock.epic",
@@ -12,10 +12,12 @@
   "x16": "http://www.google.com/images/icons/product/search-16.gif",
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
- "protocol": "rpc",
+ "protocol": "rest",
+ "baseUrl": "https://my-stock-manager.appspot.com/_ah/api/itemendpoint/v1/",
+ "basePath": "/_ah/api/itemendpoint/v1/",
  "rootUrl": "https://my-stock-manager.appspot.com/_ah/api/",
- "rpcUrl": "https://my-stock-manager.appspot.com/_ah/api/rpc",
- "rpcPath": "/_ah/api/rpc",
+ "servicePath": "itemendpoint/v1/",
+ "batchPath": "batch",
  "parameters": {
   "alt": {
    "type": "string",
@@ -71,17 +73,32 @@
   }
  },
  "schemas": {
-  "CollectionResponse_MessageData": {
-   "id": "CollectionResponse_MessageData",
+  "CollectionResponse_ItemData": {
+   "id": "CollectionResponse_ItemData",
    "type": "object",
    "properties": {
     "items": {
      "type": "array",
      "items": {
-      "$ref": "MessageData"
+      "$ref": "ItemData"
      }
     },
     "nextPageToken": {
+     "type": "string"
+    }
+   }
+  },
+  "ItemData": {
+   "id": "ItemData",
+   "type": "object",
+   "properties": {
+    "description": {
+     "type": "string"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "name": {
      "type": "string"
     }
    }
@@ -113,55 +130,98 @@
      "$ref": "Key"
     }
    }
-  },
-  "MessageData": {
-   "id": "MessageData",
-   "type": "object",
-   "properties": {
-    "key": {
-     "$ref": "Key"
-    },
-    "message": {
-     "type": "string"
-    },
-    "timestamp": {
-     "type": "string",
-     "format": "int64"
-    }
-   }
   }
  },
  "methods": {
-  "messageEndpoint.listMessages": {
-   "id": "messageEndpoint.listMessages",
-   "allowGet": true,
+  "getItem": {
+   "id": "itemendpoint.getItem",
+   "path": "itemdata/{id}",
+   "httpMethod": "GET",
    "parameters": {
-    "cursor": {
-     "type": "string"
-    },
-    "limit": {
-     "type": "integer",
-     "format": "int32"
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
     }
    },
-   "returns": {
-    "$ref": "CollectionResponse_MessageData"
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "ItemData"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "messageEndpoint.sendMessage": {
-   "id": "messageEndpoint.sendMessage",
+  "insertItem": {
+   "id": "itemendpoint.insertItem",
+   "path": "itemdata",
+   "httpMethod": "POST",
+   "request": {
+    "$ref": "ItemData",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "ItemData"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "listItem": {
+   "id": "itemendpoint.listItem",
+   "path": "itemdata",
+   "httpMethod": "GET",
    "parameters": {
-    "message": {
+    "cursor": {
      "type": "string",
-     "required": true
+     "location": "query"
+    },
+    "limit": {
+     "type": "integer",
+     "format": "int32",
+     "location": "query"
+    }
+   },
+   "response": {
+    "$ref": "CollectionResponse_ItemData"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "removeItem": {
+   "id": "itemendpoint.removeItem",
+   "path": "item/{id}",
+   "httpMethod": "DELETE",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
     }
    },
    "parameterOrder": [
-    "message"
+    "id"
    ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updateItem": {
+   "id": "itemendpoint.updateItem",
+   "path": "itemdata",
+   "httpMethod": "PUT",
+   "request": {
+    "$ref": "ItemData",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "ItemData"
+   },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]

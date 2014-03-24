@@ -1,9 +1,9 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"FWXGb4Q2eZqWRcG8B2Ixrr-vrqQ/RS-zqkgwFClr1dK2-NpxZoWIqxc\"",
+ "etag": "\"FWXGb4Q2eZqWRcG8B2Ixrr-vrqQ/oJqpgFofL3qlyS2pKk3UUlFtzHs\"",
  "discoveryVersion": "v1",
- "id": "messageEndpoint:v1",
- "name": "messageEndpoint",
+ "id": "itemendpoint:v1",
+ "name": "itemendpoint",
  "version": "v1",
  "description": "This is an API",
  "ownerDomain": "easystock.epic",
@@ -71,17 +71,32 @@
   }
  },
  "schemas": {
-  "CollectionResponse_MessageData": {
-   "id": "CollectionResponse_MessageData",
+  "CollectionResponse_ItemData": {
+   "id": "CollectionResponse_ItemData",
    "type": "object",
    "properties": {
     "items": {
      "type": "array",
      "items": {
-      "$ref": "MessageData"
+      "$ref": "ItemData"
      }
     },
     "nextPageToken": {
+     "type": "string"
+    }
+   }
+  },
+  "ItemData": {
+   "id": "ItemData",
+   "type": "object",
+   "properties": {
+    "description": {
+     "type": "string"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "name": {
      "type": "string"
     }
    }
@@ -113,27 +128,48 @@
      "$ref": "Key"
     }
    }
-  },
-  "MessageData": {
-   "id": "MessageData",
-   "type": "object",
-   "properties": {
-    "key": {
-     "$ref": "Key"
-    },
-    "message": {
-     "type": "string"
-    },
-    "timestamp": {
-     "type": "string",
-     "format": "int64"
-    }
-   }
   }
  },
  "methods": {
-  "messageEndpoint.listMessages": {
-   "id": "messageEndpoint.listMessages",
+  "itemendpoint.getItem": {
+   "id": "itemendpoint.getItem",
+   "allowGet": true,
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "returns": {
+    "$ref": "ItemData"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "itemendpoint.insertItem": {
+   "id": "itemendpoint.insertItem",
+   "parameters": {
+    "resource": {
+     "$ref": "ItemData"
+    }
+   },
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "ItemData"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "itemendpoint.listItem": {
+   "id": "itemendpoint.listItem",
    "allowGet": true,
    "parameters": {
     "cursor": {
@@ -145,23 +181,41 @@
     }
    },
    "returns": {
-    "$ref": "CollectionResponse_MessageData"
+    "$ref": "CollectionResponse_ItemData"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "messageEndpoint.sendMessage": {
-   "id": "messageEndpoint.sendMessage",
+  "itemendpoint.removeItem": {
+   "id": "itemendpoint.removeItem",
    "parameters": {
-    "message": {
+    "id": {
      "type": "string",
-     "required": true
+     "required": true,
+     "format": "int64"
     }
    },
    "parameterOrder": [
-    "message"
+    "id"
    ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "itemendpoint.updateItem": {
+   "id": "itemendpoint.updateItem",
+   "parameters": {
+    "resource": {
+     "$ref": "ItemData"
+    }
+   },
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "ItemData"
+   },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
