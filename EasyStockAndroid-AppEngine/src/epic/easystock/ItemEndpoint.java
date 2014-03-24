@@ -117,7 +117,7 @@ public class ItemEndpoint {
 	 * @return The updated entity.
 	 */
 	@ApiMethod(name = "updateItem")
-	public ItemData updateItem(ItemData item) {
+	public ItemData updateItem(@Named("item") ItemData item) {
 		EntityManager mgr = getEntityManager();
 		try {
 			if (!containsItem(item)) {
