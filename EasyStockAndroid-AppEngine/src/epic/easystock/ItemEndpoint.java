@@ -151,6 +151,8 @@ public class ItemEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
+			if (item.getKey() == null)
+				return false;
 			ItemData item1 = mgr.find(ItemData.class, item.getKey());
 			if (item1 == null) {
 				contains = false;
@@ -160,6 +162,20 @@ public class ItemEndpoint {
 		}
 		return contains;
 	}
+	 
+	/*private boolean containsItem(ItemData item) {
+		EntityManager mgr = getEntityManager();
+		boolean contains = true;
+		try {
+			ItemData item1 = mgr.find(ItemData.class, item.getKey());
+			if (item1 == null) {
+				contains = false;
+			}
+		} finally {
+			mgr.close();
+		}
+		return contains;
+	}*/
 
 	private static EntityManager getEntityManager() {
 		return EMF.get().createEntityManager();

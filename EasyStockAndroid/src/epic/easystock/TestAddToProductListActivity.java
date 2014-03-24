@@ -10,9 +10,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.gson.GsonFactory;
-
-import epic.easystock.itemjdoendpoint.Itemjdoendpoint;
-import epic.easystock.itemjdoendpoint.model.ItemJDO;
+import com.google.api.client.json.jackson.JacksonFactory;
 
 
 public class TestAddToProductListActivity extends Activity {
@@ -22,16 +20,18 @@ public class TestAddToProductListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test_add_to_product_list);
 		
-		//GoogleAccountCredential credential = GoogleAccountCredential.usingAudience(this, "server:client_id:your_web_client_id");
+		/*//GoogleAccountCredential credential = GoogleAccountCredential.usingAudience(this, "server:client_id:your_web_client_id");
 		Itemjdoendpoint.Builder builder = new Itemjdoendpoint.Builder(
 				AndroidHttp.newCompatibleTransport(),
-				new GsonFactory(),
+				new JacksonFactory(),
 				new HttpRequestInitializer() {
 					public void initialize(HttpRequest httpRequest) {
 					}
 				});
-		builder.setApplicationName("my-stock-manager");
+		//builder.getGoogleClientRequestInitializer();
+		//builder.setApplicationName("my-stock-manager");
 		Itemjdoendpoint endpoint = builder.build();
+		//endpoint.getGoogleClientRequestInitializer();
 		
 		try {
 			ItemJDO item = new ItemJDO();
@@ -41,9 +41,11 @@ public class TestAddToProductListActivity extends Activity {
 			item.setType("typr raiz");
 			
 			endpoint.insertItemJDO(item);
+			endpoint.updateItemJDO(item);
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 }
