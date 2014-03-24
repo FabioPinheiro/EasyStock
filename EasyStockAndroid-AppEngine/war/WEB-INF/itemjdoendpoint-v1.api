@@ -1,0 +1,197 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://my-stock-manager.appspot.com/_ah/api",
+  "name" : "itemjdoendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://my-stock-manager.appspot.com/_ah/spi",
+    "deadline" : 10.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "easystock.epic",
+  "ownerName" : "easystock.epic",
+  "methods" : {
+    "itemjdoendpoint.removeItemJDO" : {
+      "path" : "itemjdo/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ItemJDOEndpoint.removeItemJDO",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "itemjdoendpoint.getItemJDO" : {
+      "path" : "itemjdo/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ItemJDOEndpoint.getItemJDO",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemjdoendpoint.insertItemJDO" : {
+      "path" : "itemjdo",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ItemJDOEndpoint.insertItemJDO",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemjdoendpoint.updateItemJDO" : {
+      "path" : "itemjdo",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ItemJDOEndpoint.updateItemJDO",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "itemjdoendpoint.listItemJDO" : {
+      "path" : "itemjdo",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ItemJDOEndpoint.listItemJDO",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "ItemJDO" : {
+        "id" : "ItemJDO",
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "string",
+            "format" : "int64"
+          }
+        }
+      },
+      "CollectionResponse_ItemJDO" : {
+        "id" : "CollectionResponse_ItemJDO",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "ItemJDO"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "epic.easystock.ItemJDOEndpoint.removeItemJDO" : {
+      },
+      "epic.easystock.ItemJDOEndpoint.getItemJDO" : {
+        "response" : {
+          "$ref" : "ItemJDO"
+        }
+      },
+      "epic.easystock.ItemJDOEndpoint.insertItemJDO" : {
+        "request" : {
+          "$ref" : "ItemJDO"
+        },
+        "response" : {
+          "$ref" : "ItemJDO"
+        }
+      },
+      "epic.easystock.ItemJDOEndpoint.updateItemJDO" : {
+        "request" : {
+          "$ref" : "ItemJDO"
+        },
+        "response" : {
+          "$ref" : "ItemJDO"
+        }
+      },
+      "epic.easystock.ItemJDOEndpoint.listItemJDO" : {
+        "response" : {
+          "$ref" : "CollectionResponse_ItemJDO"
+        }
+      }
+    }
+  }
+}
