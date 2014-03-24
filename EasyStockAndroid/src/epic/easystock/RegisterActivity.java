@@ -60,7 +60,7 @@ public class RegisterActivity extends Activity {
   private OnTouchListener registerListener = null;
   private OnTouchListener unregisterListener = null;
   private MessageEndpoint messageEndpoint = null;
-
+  
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
