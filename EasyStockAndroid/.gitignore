@@ -24,8 +24,8 @@ local.properties
 proguard/
 
 #endpoint-libs
-/.apt_generated
-/endpoint-libs
+/.apt_generated/*
+/endpoint-libs/*
 
 #libs
 /libs/gcm.jar
