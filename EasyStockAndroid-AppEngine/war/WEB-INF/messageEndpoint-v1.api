@@ -7,7 +7,7 @@
   "defaultVersion" : false,
   "adapter" : {
     "bns" : "https://my-stock-manager.appspot.com/_ah/spi",
-    "deadline" : 10.0,
+    "deadline" : 65.0,
     "type" : "lily"
   },
   "auth" : {
