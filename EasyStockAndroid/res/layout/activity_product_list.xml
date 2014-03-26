@@ -1,39 +1,51 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="epic.easystock.ProductListActivity"
-    tools:ignore="MergeRootFrame" >
+    android:layout_height="match_parent" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        tools:context=".ProductListActivity" >
 
-        <EditText
-            android:id="@+id/itemName"
+        <ListView
+            android:id="@+id/listview_product_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10" >
+            android:layout_height="match_parent" >
+        </ListView>
+    </RelativeLayout>
 
-            <requestFocus />
-        </EditText>
+    <LinearLayout
+        android:id="@+id/undobar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_margin="20dp"
+        android:alpha="100"
+        android:background="#808080"
+        android:dividerPadding="11dp"
+        android:padding="4dp"
+        android:visibility="gone" >
 
-        <EditText
-            android:id="@+id/descriptionText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10" />
-
-        <Button
-            android:id="@+id/button1"
+        <TextView
+            android:id="@+id/undobar_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Add Item"
-            android:onClick="addXPTO" />
+            android:text="Deleted"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#fff" />
 
+        <Button
+            android:id="@+id/undobar_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:background="#808080"
+            android:drawableLeft="@drawable/ic_undobar_undo"
+            android:onClick="onClick"
+            android:text="Undo"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#fff" />
     </LinearLayout>
 
 </FrameLayout>
