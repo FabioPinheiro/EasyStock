@@ -1,0 +1,267 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://my-stock-manager.appspot.com/_ah/api",
+  "name" : "pantryendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://my-stock-manager.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "easystock.epic",
+  "ownerName" : "easystock.epic",
+  "methods" : {
+    "pantryendpoint.updatePantry" : {
+      "path" : "pantry",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.PantryEndpoint.updatePantry",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "pantryendpoint.insertPantry" : {
+      "path" : "pantry",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.PantryEndpoint.insertPantry",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "pantryendpoint.getPantry" : {
+      "path" : "pantry/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.PantryEndpoint.getPantry",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "pantryendpoint.listPantry" : {
+      "path" : "pantry",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.PantryEndpoint.listPantry",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "pantryendpoint.removePantry" : {
+      "path" : "pantry/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.PantryEndpoint.removePantry",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "Pantry" : {
+        "id" : "Pantry",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "products" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "MetaProduct"
+            }
+          },
+          "timeStamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "Key" : {
+        "id" : "Key",
+        "type" : "object",
+        "properties" : {
+          "kind" : {
+            "type" : "string"
+          },
+          "appId" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "complete" : {
+            "type" : "boolean"
+          },
+          "namespace" : {
+            "type" : "string"
+          },
+          "parent" : {
+            "$ref" : "Key"
+          }
+        }
+      },
+      "MetaProduct" : {
+        "id" : "MetaProduct",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "product" : {
+            "$ref" : "Product"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "timeStamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "Product" : {
+        "id" : "Product",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "barCode" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "timeStamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CollectionResponse_Pantry" : {
+        "id" : "CollectionResponse_Pantry",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Pantry"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "epic.easystock.PantryEndpoint.updatePantry" : {
+        "request" : {
+          "$ref" : "Pantry"
+        },
+        "response" : {
+          "$ref" : "Pantry"
+        }
+      },
+      "epic.easystock.PantryEndpoint.insertPantry" : {
+        "request" : {
+          "$ref" : "Pantry"
+        },
+        "response" : {
+          "$ref" : "Pantry"
+        }
+      },
+      "epic.easystock.PantryEndpoint.getPantry" : {
+        "response" : {
+          "$ref" : "Pantry"
+        }
+      },
+      "epic.easystock.PantryEndpoint.listPantry" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Pantry"
+        }
+      },
+      "epic.easystock.PantryEndpoint.removePantry" : {
+      }
+    }
+  }
+}
