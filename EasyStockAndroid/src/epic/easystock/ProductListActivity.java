@@ -17,7 +17,7 @@ public class ProductListActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_product_list);
-		ListView l = (ListView) findViewById(R.id.listview_product_list);
+		ListView l = (ListView) findViewById(R.id.listView_product_list);
 		//FIXME l.childDrawableStateChanged(findViewById(R.id.xpto));
 		String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
 				"Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
