@@ -1,48 +1,49 @@
 package epic.easystock.activitys;
 
+import java.util.ArrayList;
+
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import epic.easystock.Product;
+import epic.easystock.ProductAdapter;
 import epic.easystock.R;
 
 public class ProductListActivity extends ListActivity {
 	
 	private View viewContainer;
 	private View xpto;
-	private String item;
+	private Product product;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_product_list);
 		
 		xpto = findViewById(R.id.layout_edit_botons_product_list);
+		//FIXME viewContainer = findViewById(R.id.undobar);
 		
-		//ListView list = (ListView) findViewById(R.id.listView_product_list);
-		//FIXME l.childDrawableStateChanged(findViewById(R.id.xpto));
-		String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-				"Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-				"Linux", "OS/2" };
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, values);
-		//l.inflate(this, findViewById(R.id.xpto), findViewById(R.id.xpto));
-		viewContainer = findViewById(R.id.undobar);
-		this.setListAdapter(adapter);
-		//list.setAdapter(adapter);
+		// 1. pass context and data to the custom adapter
+		ProductAdapter adapter = new ProductAdapter(this, generateData());
+
+		// 2. setListAdapter
+		setListAdapter(adapter);
+		
+		
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		item = (String) getListAdapter().getItem(position);
+		product = (Product) getListAdapter().getItem(position);
 		//Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
 		xpto.setVisibility(View.VISIBLE);
 		TextView x = (TextView) findViewById(R.id.textView1);
-		x.setText(item);
+		x.setText(product.getName());
 	}
 
 	@Override
@@ -74,5 +75,20 @@ public class ProductListActivity extends ListActivity {
 						viewContainer.setVisibility(View.GONE);
 					}
 				});
+	}
+	
+	
+	private ArrayList<Product> generateData() { //FIXME
+		ArrayList<Product> productsList = new ArrayList<Product>();
+		productsList.add(new Product(1l, "name1", "barCode1", "description1"));
+		productsList.add(new Product(2l, "name2", "barCode2", "description2"));
+		productsList.add(new Product(3l, "name3", "barCode3", "description3"));
+		productsList.add(new Product(4l, "name4", "barCode4", "description4"));
+		productsList.add(new Product(5l, "name5", "barCode5", "description5"));
+		productsList.add(new Product(6l, "name6", "barCode6", "description6"));
+		productsList.add(new Product(7l, "name7", "barCode7", "description7"));
+		productsList.add(new Product(8l, "name8", "barCode8", "description8"));
+
+		return productsList;
 	}
 }

@@ -6,114 +6,49 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class ProductAdapter extends BaseAdapter {
+/**
+ * @author fabio
+ *
+ */
+public class ProductAdapter extends ArrayAdapter<Product> {
 
-	private ArrayList<String> comments;
-	Context mContext;
+	private final Context context;
+	private final ArrayList<Product> productArrayList;
 
-	public void CustomAdapter(Context context, ArrayList<String> comments) {
-		this.mContext = context;
-		this.comments = comments;
-	}
+	public ProductAdapter(Context context, ArrayList<Product> itemsArrayList) {
 
-	public View getView(final int position, View convertView, ViewGroup parent) {
+		super(context, R.layout.layout_list_product_row, itemsArrayList);
 
-		String item = comments.get(position);
-
-		if (getItemViewType(position) == 0) {
-
-			View v = convertView;
-			if (v == null) {
-
-				// GET View 1
-				LayoutInflater inflater = (LayoutInflater) mContext
-						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-						R.layout.fragment_example, null);
-
-				v = viewGroup;
-			}
-
-			// Fill Data for Ist view
-			TextView comm = (TextView) v.findViewById(R.id.button1);
-			comm.setText(item);
-
-			return v;
-
-		} else if (getItemViewType(position) == 1) {
-
-			View v = convertView;
-			if (v == null) {
-
-				// GET View 2
-				LayoutInflater inflater = (LayoutInflater) mContext
-						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-						R.layout.fragment_example, null);
-
-				v = viewGroup;
-			}
-
-			// Fill Data for IInd view
-			TextView comm = (TextView) v.findViewById(R.id.button1);
-			comm.setText(item);
-
-			return v;
-
-		} else {
-
-			// GET View 3
-			View v = convertView;
-			if (v == null) {
-				LayoutInflater inflater = (LayoutInflater) mContext
-						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-						R.layout.fragment_example, null);
-
-				v = viewGroup;
-			}
-
-			// Fill Data for IInd view
-			TextView comm = (TextView) v.findViewById(R.id.button1);
-			comm.setText(item);
-
-			return v;
-
-		}
-
+		this.context = context;
+		this.productArrayList = itemsArrayList;
 	}
 
 	@Override
-	public int getCount() {
-		return comments.size();
-	}
+	public View getView(int position, View convertView, ViewGroup parent) {
 
-	@Override
-	public Object getItem(int position) {
-		return comments.get(position);
-	}
+		// 1. Create inflater
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+		// 2. Get rowView from inflater
+		View rowView = inflater.inflate(R.layout.layout_list_product_row, parent, false);
 
-	@Override
-	public int getViewTypeCount() {
-		return 2;
-	}
+		// 3. Get the two text view from the rowView
+		TextView labelViewIdProduct = (TextView) rowView.findViewById(R.id.product_row_label_idProduct);
+		TextView labelViewName = (TextView) rowView.findViewById(R.id.product_row_label_name);
+		TextView labelViewBarCode = (TextView) rowView.findViewById(R.id.product_row_label_barCode);
+		TextView labelViewDescription = (TextView) rowView.findViewById(R.id.product_row_label_description);
 
-	@Override
-	public int getItemViewType(int position) {
+		// 4. Set the text for textView
+		labelViewIdProduct.setText(productArrayList.get(position).getIdProduct().toString());
+		labelViewName.setText(productArrayList.get(position).getName());
+		labelViewBarCode.setText(productArrayList.get(position).getBarCode());
+		labelViewDescription.setText(productArrayList.get(position).getDescription());
 
-		if (position == 0)
-			return 0;
-		else if (position == 1)
-			return 1;
-		else
-			return 2;
+		// 5. retrn rowView
+		return rowView;
 	}
 }

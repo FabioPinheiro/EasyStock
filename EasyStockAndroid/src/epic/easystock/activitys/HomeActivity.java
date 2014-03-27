@@ -1,5 +1,6 @@
 package epic.easystock.activitys;
 
+import epic.easystock.MainActivity;
 import epic.easystock.R;
 import epic.easystock.RegisterActivity;
 import epic.easystock.R.layout;
@@ -37,6 +38,11 @@ public class HomeActivity extends Activity {
 	
 	public void changeToTestAddToProductListActivity(View view) {
 		Intent intent = new Intent(this, TestAddToProductListActivity.class);
+		startActivity(intent);
+	}
+	
+	public void changeToMainActivity(View view) {
+		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 	}
 
