@@ -1,4 +1,4 @@
-package epic.easystock;
+package epic.easystock.activitys;
 
 import java.io.IOException;
 
@@ -15,6 +15,10 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
 
+import epic.easystock.CloudEndpointUtils;
+import epic.easystock.R;
+import epic.easystock.R.id;
+import epic.easystock.R.layout;
 import epic.easystock.itemendpoint.Itemendpoint;
 import epic.easystock.itemendpoint.model.ItemData;
 

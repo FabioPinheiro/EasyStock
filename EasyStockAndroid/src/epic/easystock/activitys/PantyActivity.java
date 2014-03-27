@@ -1,5 +1,7 @@
-package epic.easystock;
+package epic.easystock.activitys;
 
+import epic.easystock.R;
+import epic.easystock.R.layout;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;

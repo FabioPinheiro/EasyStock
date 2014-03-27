@@ -1,5 +1,8 @@
-package epic.easystock;
+package epic.easystock.activitys;
 
+import epic.easystock.R;
+import epic.easystock.RegisterActivity;
+import epic.easystock.R.layout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
