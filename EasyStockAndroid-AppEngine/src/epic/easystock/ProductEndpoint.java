@@ -151,6 +151,8 @@ public class ProductEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
+			if(product.getKey()==null)
+				return false;
 			Product item = mgr.find(Product.class, product.getKey());
 			if (item == null) {
 				contains = false;
