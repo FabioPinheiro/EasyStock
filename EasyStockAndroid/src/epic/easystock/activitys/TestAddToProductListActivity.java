@@ -86,15 +86,12 @@ public class TestAddToProductListActivity extends Activity {
 			try {
 
 				ItemData item = new ItemData();
-				String name = ((EditText) findViewById(R.id.itemName))
-						.getText().toString();
+				String name = ((EditText) findViewById(R.id.itemName)).getText().toString();
 				item.setName(name);
 
-				String description = ((EditText) findViewById(R.id.descriptionText))
-						.getText().toString();
-				;
+				/*FIXME String description = ((EditText) findViewById(R.id.descriptionText)).getText().toString();
 				item.setDescription(description);
-				ItemData result = endpoint.insertItem(item).execute();
+				ItemData result = endpoint.insertItem(item).execute();*/
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

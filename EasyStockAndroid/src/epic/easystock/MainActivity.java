@@ -19,14 +19,14 @@ public class MainActivity extends ListActivity {
 
 	private ArrayList<Product> generateData() {
 		ArrayList<Product> productsList = new ArrayList<Product>();
-		productsList.add(new Product(1l, "name1", "barCode1", "description1"));
-		productsList.add(new Product(2l, "name2", "barCode2", "description2"));
-		productsList.add(new Product(3l, "name3", "barCode3", "description3"));
-		productsList.add(new Product(4l, "name4", "barCode4", "description4"));
-		productsList.add(new Product(5l, "name5", "barCode5", "description5"));
-		productsList.add(new Product(6l, "name6", "barCode6", "description6"));
-		productsList.add(new Product(7l, "name7", "barCode7", "description7"));
-		productsList.add(new Product(8l, "name8", "barCode8", "description8"));
+		productsList.add(new Product(1l, "name1", 11l, "description1"));
+		productsList.add(new Product(2l, "name2", 12l, "description2"));
+		productsList.add(new Product(3l, "name3", 13l, "description3"));
+		productsList.add(new Product(4l, "name4", 14l, "description4"));
+		productsList.add(new Product(5l, "name5", 15l, "description5"));
+		productsList.add(new Product(6l, "name6", 16l, "description6"));
+		productsList.add(new Product(7l, "name7", 17l, "description7"));
+		productsList.add(new Product(8l, "name8", 18l, "description8"));
 
 		return productsList;
 	}
