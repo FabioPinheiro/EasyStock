@@ -18,8 +18,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-@Api(name = "pantryendpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""))
-public class PantryEndpoint {
+@Api(name = "userpantryendpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""))
+public class UserPantryEndpoint {
 
 	/**
 	 * This method lists all the entities inserted in datastore.
@@ -29,18 +29,19 @@ public class PantryEndpoint {
 	 * persisted and a cursor to the next page.
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
-	@ApiMethod(name = "listPantry")
-	public CollectionResponse<Pantry> listPantry(
+	@ApiMethod(name = "listUserPantry")
+	public CollectionResponse<UserPantry> listUserPantry(
 			@Nullable @Named("cursor") String cursorString,
 			@Nullable @Named("limit") Integer limit) {
 
 		EntityManager mgr = null;
 		Cursor cursor = null;
-		List<Pantry> execute = null;
+		List<UserPantry> execute = null;
 
 		try {
 			mgr = getEntityManager();
-			Query query = mgr.createQuery("select from Pantry as Pantry");
+			Query query = mgr
+					.createQuery("select from UserPantry as UserPantry");
 			if (cursorString != null && cursorString != "") {
 				cursor = Cursor.fromWebSafeString(cursorString);
 				query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
@@ -51,20 +52,20 @@ public class PantryEndpoint {
 				query.setMaxResults(limit);
 			}
 
-			execute = (List<Pantry>) query.getResultList();
+			execute = (List<UserPantry>) query.getResultList();
 			cursor = JPACursorHelper.getCursor(execute);
 			if (cursor != null)
 				cursorString = cursor.toWebSafeString();
 
 			// Tight loop for fetching all entities from datastore and accomodate
 			// for lazy fetch.
-			for (Pantry obj : execute)
+			for (UserPantry obj : execute)
 				;
 		} finally {
 			mgr.close();
 		}
 
-		return CollectionResponse.<Pantry> builder().setItems(execute)
+		return CollectionResponse.<UserPantry> builder().setItems(execute)
 				.setNextPageToken(cursorString).build();
 	}
 
@@ -74,35 +75,16 @@ public class PantryEndpoint {
 	 * @param id the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
-	@ApiMethod(name = "getPantry")
-	public Pantry getPantry(@Named("id") Long id) {
+	@ApiMethod(name = "getUserPantry")
+	public UserPantry getUserPantry(@Named("id") Long id) {
 		EntityManager mgr = getEntityManager();
-		Pantry pantry = null;
+		UserPantry userpantry = null;
 		try {
-			pantry = mgr.find(Pantry.class, id);
+			userpantry = mgr.find(UserPantry.class, id);
 		} finally {
 			mgr.close();
 		}
-		return pantry;
-	}
-	
-	/**
-	 * This method gets the entity having primary key id. It uses HTTP GET method.
-	 *
-	 * @param id the primary key of the java bean.
-	 * @return The entity with primary key id.
-	 */
-	@ApiMethod(name = "getPantryProducts")
-	public List<MetaProduct> getPantryProducts(@Named("id") Long id) {
-		EntityManager mgr = getEntityManager();
-		Pantry pantry = null;
-		try {
-			pantry = mgr.find(Pantry.class, id);
-			
-		} finally {
-			mgr.close();
-		}
-		return pantry.getProducts();
+		return userpantry;
 	}
 
 	/**
@@ -110,21 +92,21 @@ public class PantryEndpoint {
 	 * exists in the datastore, an exception is thrown.
 	 * It uses HTTP POST method.
 	 *
-	 * @param pantry the entity to be inserted.
+	 * @param userpantry the entity to be inserted.
 	 * @return The inserted entity.
 	 */
-	@ApiMethod(name = "insertPantry")
-	public Pantry insertPantry(Pantry pantry) {
+	@ApiMethod(name = "insertUserPantry")
+	public UserPantry insertUserPantry(UserPantry userpantry) {
 		EntityManager mgr = getEntityManager();
 		try {
-			if (containsPantry(pantry)) {
+			if (containsUserPantry(userpantry)) {
 				throw new EntityExistsException("Object already exists");
 			}
-			mgr.persist(pantry);
+			mgr.persist(userpantry);
 		} finally {
 			mgr.close();
 		}
-		return pantry;
+		return userpantry;
 	}
 
 	/**
@@ -132,21 +114,21 @@ public class PantryEndpoint {
 	 * exist in the datastore, an exception is thrown.
 	 * It uses HTTP PUT method.
 	 *
-	 * @param pantry the entity to be updated.
+	 * @param userpantry the entity to be updated.
 	 * @return The updated entity.
 	 */
-	@ApiMethod(name = "updatePantry")
-	public Pantry updatePantry(Pantry pantry) {
+	@ApiMethod(name = "updateUserPantry")
+	public UserPantry updateUserPantry(UserPantry userpantry) {
 		EntityManager mgr = getEntityManager();
 		try {
-			if (!containsPantry(pantry)) {
+			if (!containsUserPantry(userpantry)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
-			mgr.persist(pantry);
+			mgr.persist(userpantry);
 		} finally {
 			mgr.close();
 		}
-		return pantry;
+		return userpantry;
 	}
 
 	/**
@@ -155,22 +137,22 @@ public class PantryEndpoint {
 	 *
 	 * @param id the primary key of the entity to be deleted.
 	 */
-	@ApiMethod(name = "removePantry")
-	public void removePantry(@Named("id") Long id) {
+	@ApiMethod(name = "removeUserPantry")
+	public void removeUserPantry(@Named("id") Long id) {
 		EntityManager mgr = getEntityManager();
 		try {
-			Pantry pantry = mgr.find(Pantry.class, id);
-			mgr.remove(pantry);
+			UserPantry userpantry = mgr.find(UserPantry.class, id);
+			mgr.remove(userpantry);
 		} finally {
 			mgr.close();
 		}
 	}
 
-	private boolean containsPantry(Pantry pantry) {
+	private boolean containsUserPantry(UserPantry userpantry) {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			Pantry item = mgr.find(Pantry.class, pantry.getKey());
+			UserPantry item = mgr.find(UserPantry.class, userpantry.getKey());
 			if (item == null) {
 				contains = false;
 			}
