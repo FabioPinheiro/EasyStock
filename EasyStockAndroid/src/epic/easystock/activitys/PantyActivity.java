@@ -1,24 +1,72 @@
 package epic.easystock.activitys;
 
-import epic.easystock.R;
-import epic.easystock.R.layout;
-import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class PantyActivity extends Activity {
+import android.app.ListActivity;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Bundle;
+
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.json.jackson.JacksonFactory;
+
+import epic.easystock.CloudEndpointUtils;
+import epic.easystock.Product;
+import epic.easystock.ProductAdapter;
+import epic.easystock.R;
+import epic.easystock.pantryendpoint.Pantryendpoint;
+import epic.easystock.pantryendpoint.model.MetaProduct;
+
+public class PantyActivity extends ListActivity {
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_panty);
+		new ListPantryTask().execute(getApplicationContext());
+
+
 	}
 
+	public class ListPantryTask extends AsyncTask<Context, Integer, Void> {
+		@Override
+		protected Void doInBackground(Context... contexts) {
+			Pantryendpoint.Builder endpointBuilder = new Pantryendpoint.Builder(
+					AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+					new HttpRequestInitializer() {
+						public void initialize(HttpRequest httpRequest) {
+						}
+					});
+			Pantryendpoint endpoint = CloudEndpointUtils.updateBuilder(
+					endpointBuilder).build();
+			List<MetaProduct> products = null;
+			try {
+				 products = endpoint.getPantryProducts(12l)
+						.execute().getItems();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			ArrayList<Product> list = new ArrayList<Product>(products.size());
+			for(MetaProduct mp:products){
+				Product aux = new Product();
+				aux.setQuantity(mp.getAmount().intValue());
+				aux.setName(mp.getProduct().getName());
+				aux.setDescription(mp.getProduct().getDescription());
+				aux.setBarCode(mp.getProduct().getBarCode());
+				aux.setIdProduct(mp.getProduct().getKey().getId());
+				list.add(aux);
+			}
+			ProductAdapter adapter = new ProductAdapter(contexts[0], list);
+
+			// 2. setListAdapter
+			setListAdapter(adapter);
+
+			return null;
+		}
+	}
 }

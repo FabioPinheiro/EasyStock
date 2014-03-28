@@ -1,5 +1,6 @@
 package epic.easystock;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -26,7 +27,7 @@ public class Product {
 	
 	private long BarCode;
 	
-	private Date TimeStamp;
+	private Date TimeStamp = new Date();
 
 	public String getName() {
 		return Name;
