@@ -42,3 +42,4 @@ proguard/
 /libs/jackson-core-asl-1.9.11.jar
 /libs/jsr305-1.3.9.jar
 /endpoint-libs
+/endpoint-libs/*
