@@ -26,6 +26,27 @@
   "ownerDomain" : "easystock.epic",
   "ownerName" : "easystock.epic",
   "methods" : {
+    "pantryendpoint.getPantryProducts" : {
+      "path" : "metaproductcollection/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.PantryEndpoint.getPantryProducts",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "pantryendpoint.updatePantry" : {
       "path" : "pantry",
       "httpMethod" : "PUT",
@@ -128,18 +149,18 @@
   },
   "descriptor" : {
     "schemas" : {
-      "Pantry" : {
-        "id" : "Pantry",
+      "MetaProduct" : {
+        "id" : "MetaProduct",
         "type" : "object",
         "properties" : {
           "key" : {
             "$ref" : "Key"
           },
-          "products" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "MetaProduct"
-            }
+          "product" : {
+            "$ref" : "Product"
+          },
+          "amount" : {
+            "type" : "number"
           },
           "timeStamp" : {
             "type" : "string",
@@ -175,25 +196,6 @@
           }
         }
       },
-      "MetaProduct" : {
-        "id" : "MetaProduct",
-        "type" : "object",
-        "properties" : {
-          "key" : {
-            "$ref" : "Key"
-          },
-          "product" : {
-            "$ref" : "Product"
-          },
-          "amount" : {
-            "type" : "number"
-          },
-          "timeStamp" : {
-            "type" : "string",
-            "format" : "date-time"
-          }
-        }
-      },
       "Product" : {
         "id" : "Product",
         "type" : "object",
@@ -217,6 +219,37 @@
           }
         }
       },
+      "MetaProductCollection" : {
+        "id" : "MetaProductCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "MetaProduct"
+            }
+          }
+        }
+      },
+      "Pantry" : {
+        "id" : "Pantry",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "products" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "MetaProduct"
+            }
+          },
+          "timeStamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
       "CollectionResponse_Pantry" : {
         "id" : "CollectionResponse_Pantry",
         "type" : "object",
@@ -234,6 +267,11 @@
       }
     },
     "methods" : {
+      "epic.easystock.PantryEndpoint.getPantryProducts" : {
+        "response" : {
+          "$ref" : "MetaProductCollection"
+        }
+      },
       "epic.easystock.PantryEndpoint.updatePantry" : {
         "request" : {
           "$ref" : "Pantry"

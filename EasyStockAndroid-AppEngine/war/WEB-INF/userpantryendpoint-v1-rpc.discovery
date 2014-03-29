@@ -1,9 +1,9 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"OqxT57NU1DEATg4yJjzJs2FozZE/RS-zqkgwFClr1dK2-NpxZoWIqxc\"",
+ "etag": "\"OqxT57NU1DEATg4yJjzJs2FozZE/vCLGfS4pUh_D0jOLxpNRslrgJbQ\"",
  "discoveryVersion": "v1",
- "id": "messageEndpoint:v1",
- "name": "messageEndpoint",
+ "id": "userpantryendpoint:v1",
+ "name": "userpantryendpoint",
  "version": "v1",
  "description": "This is an API",
  "ownerDomain": "easystock.epic",
@@ -71,14 +71,14 @@
   }
  },
  "schemas": {
-  "CollectionResponse_MessageData": {
-   "id": "CollectionResponse_MessageData",
+  "CollectionResponse_UserPantry": {
+   "id": "CollectionResponse_UserPantry",
    "type": "object",
    "properties": {
     "items": {
      "type": "array",
      "items": {
-      "$ref": "MessageData"
+      "$ref": "UserPantry"
      }
     },
     "nextPageToken": {
@@ -114,26 +114,156 @@
     }
    }
   },
-  "MessageData": {
-   "id": "MessageData",
+  "MetaProduct": {
+   "id": "MetaProduct",
+   "type": "object",
+   "properties": {
+    "amount": {
+     "type": "number",
+     "format": "double"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "product": {
+     "$ref": "Product"
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "Pantry": {
+   "id": "Pantry",
    "type": "object",
    "properties": {
     "key": {
      "$ref": "Key"
     },
-    "message": {
-     "type": "string"
+    "products": {
+     "type": "array",
+     "items": {
+      "$ref": "MetaProduct"
+     }
     },
-    "timestamp": {
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "PermissionType": {
+   "id": "PermissionType",
+   "type": "string",
+   "enum": [
+    "EDITOR",
+    "OWNER",
+    "READER"
+   ],
+   "enumDescriptions": [
+    "",
+    "",
+    ""
+   ]
+  },
+  "Product": {
+   "id": "Product",
+   "type": "object",
+   "properties": {
+    "barCode": {
      "type": "string",
      "format": "int64"
+    },
+    "description": {
+     "type": "string"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "name": {
+     "type": "string"
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "User": {
+   "id": "User",
+   "type": "object",
+   "properties": {
+    "email": {
+     "type": "string"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "nick": {
+     "type": "string"
+    }
+   }
+  },
+  "UserPantry": {
+   "id": "UserPantry",
+   "type": "object",
+   "properties": {
+    "key": {
+     "$ref": "Key"
+    },
+    "pantry": {
+     "$ref": "Pantry"
+    },
+    "permissionType": {
+     "$ref": "PermissionType"
+    },
+    "user": {
+     "$ref": "User"
     }
    }
   }
  },
  "methods": {
-  "messageEndpoint.listMessages": {
-   "id": "messageEndpoint.listMessages",
+  "userpantryendpoint.getUserPantry": {
+   "id": "userpantryendpoint.getUserPantry",
+   "allowGet": true,
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "returns": {
+    "$ref": "UserPantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "userpantryendpoint.insertUserPantry": {
+   "id": "userpantryendpoint.insertUserPantry",
+   "parameters": {
+    "resource": {
+     "$ref": "UserPantry"
+    }
+   },
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "UserPantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "userpantryendpoint.listUserPantry": {
+   "id": "userpantryendpoint.listUserPantry",
    "allowGet": true,
    "parameters": {
     "cursor": {
@@ -145,23 +275,41 @@
     }
    },
    "returns": {
-    "$ref": "CollectionResponse_MessageData"
+    "$ref": "CollectionResponse_UserPantry"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "messageEndpoint.sendMessage": {
-   "id": "messageEndpoint.sendMessage",
+  "userpantryendpoint.removeUserPantry": {
+   "id": "userpantryendpoint.removeUserPantry",
    "parameters": {
-    "message": {
+    "id": {
      "type": "string",
-     "required": true
+     "required": true,
+     "format": "int64"
     }
    },
    "parameterOrder": [
-    "message"
+    "id"
    ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "userpantryendpoint.updateUserPantry": {
+   "id": "userpantryendpoint.updateUserPantry",
+   "parameters": {
+    "resource": {
+     "$ref": "UserPantry"
+    }
+   },
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "UserPantry"
+   },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]

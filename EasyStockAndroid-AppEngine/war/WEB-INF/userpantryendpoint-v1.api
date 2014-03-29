@@ -2,7 +2,7 @@
   "extends" : "thirdParty.api",
   "abstract" : false,
   "root" : "https://my-stock-manager.appspot.com/_ah/api",
-  "name" : "metaproductendpoint",
+  "name" : "userpantryendpoint",
   "version" : "v1",
   "defaultVersion" : false,
   "adapter" : {
@@ -26,14 +26,14 @@
   "ownerDomain" : "easystock.epic",
   "ownerName" : "easystock.epic",
   "methods" : {
-    "metaproductendpoint.updateMetaProduct" : {
-      "path" : "metaproduct",
+    "userpantryendpoint.updateUserPantry" : {
+      "path" : "userpantry",
       "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.MetaProductEndpoint.updateMetaProduct",
+      "rosyMethod" : "epic.easystock.UserPantryEndpoint.updateUserPantry",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -42,14 +42,35 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "metaproductendpoint.listMetaProduct" : {
-      "path" : "metaproduct",
+    "userpantryendpoint.getUserPantry" : {
+      "path" : "userpantry/{id}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.MetaProductEndpoint.listMetaProduct",
+      "rosyMethod" : "epic.easystock.UserPantryEndpoint.getUserPantry",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "userpantryendpoint.listUserPantry" : {
+      "path" : "userpantry",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.UserPantryEndpoint.listUserPantry",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -67,35 +88,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "metaproductendpoint.getMetaProduct" : {
-      "path" : "metaproduct/{id}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.MetaProductEndpoint.getMetaProduct",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "metaproductendpoint.insertMetaProduct" : {
-      "path" : "metaproduct",
+    "userpantryendpoint.insertUserPantry" : {
+      "path" : "userpantry",
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.MetaProductEndpoint.insertMetaProduct",
+      "rosyMethod" : "epic.easystock.UserPantryEndpoint.insertUserPantry",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -104,14 +104,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "metaproductendpoint.removeMetaProduct" : {
-      "path" : "metaproduct/{id}",
+    "userpantryendpoint.removeUserPantry" : {
+      "path" : "userpantry/{id}",
       "httpMethod" : "DELETE",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.MetaProductEndpoint.removeMetaProduct",
+      "rosyMethod" : "epic.easystock.UserPantryEndpoint.removeUserPantry",
       "request" : {
         "parameters" : {
           "id" : {
@@ -128,22 +128,21 @@
   },
   "descriptor" : {
     "schemas" : {
-      "MetaProduct" : {
-        "id" : "MetaProduct",
+      "UserPantry" : {
+        "id" : "UserPantry",
         "type" : "object",
         "properties" : {
           "key" : {
             "$ref" : "Key"
           },
-          "product" : {
-            "$ref" : "Product"
+          "pantry" : {
+            "$ref" : "Pantry"
           },
-          "amount" : {
-            "type" : "number"
+          "user" : {
+            "$ref" : "User"
           },
-          "timeStamp" : {
-            "type" : "string",
-            "format" : "date-time"
+          "permissionType" : {
+            "$ref" : "PermissionType"
           }
         }
       },
@@ -175,6 +174,44 @@
           }
         }
       },
+      "Pantry" : {
+        "id" : "Pantry",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "products" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "MetaProduct"
+            }
+          },
+          "timeStamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "MetaProduct" : {
+        "id" : "MetaProduct",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "product" : {
+            "$ref" : "Product"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "timeStamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
       "Product" : {
         "id" : "Product",
         "type" : "object",
@@ -198,14 +235,34 @@
           }
         }
       },
-      "CollectionResponse_MetaProduct" : {
-        "id" : "CollectionResponse_MetaProduct",
+      "User" : {
+        "id" : "User",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "nick" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PermissionType" : {
+        "id" : "PermissionType",
+        "type" : "string",
+        "enum" : [ "OWNER", "EDITOR", "READER" ]
+      },
+      "CollectionResponse_UserPantry" : {
+        "id" : "CollectionResponse_UserPantry",
         "type" : "object",
         "properties" : {
           "items" : {
             "type" : "array",
             "items" : {
-              "$ref" : "MetaProduct"
+              "$ref" : "UserPantry"
             }
           },
           "nextPageToken" : {
@@ -215,33 +272,33 @@
       }
     },
     "methods" : {
-      "epic.easystock.MetaProductEndpoint.updateMetaProduct" : {
+      "epic.easystock.UserPantryEndpoint.updateUserPantry" : {
         "request" : {
-          "$ref" : "MetaProduct"
+          "$ref" : "UserPantry"
         },
         "response" : {
-          "$ref" : "MetaProduct"
+          "$ref" : "UserPantry"
         }
       },
-      "epic.easystock.MetaProductEndpoint.listMetaProduct" : {
+      "epic.easystock.UserPantryEndpoint.getUserPantry" : {
         "response" : {
-          "$ref" : "CollectionResponse_MetaProduct"
+          "$ref" : "UserPantry"
         }
       },
-      "epic.easystock.MetaProductEndpoint.getMetaProduct" : {
+      "epic.easystock.UserPantryEndpoint.listUserPantry" : {
         "response" : {
-          "$ref" : "MetaProduct"
+          "$ref" : "CollectionResponse_UserPantry"
         }
       },
-      "epic.easystock.MetaProductEndpoint.insertMetaProduct" : {
+      "epic.easystock.UserPantryEndpoint.insertUserPantry" : {
         "request" : {
-          "$ref" : "MetaProduct"
+          "$ref" : "UserPantry"
         },
         "response" : {
-          "$ref" : "MetaProduct"
+          "$ref" : "UserPantry"
         }
       },
-      "epic.easystock.MetaProductEndpoint.removeMetaProduct" : {
+      "epic.easystock.UserPantryEndpoint.removeUserPantry" : {
       }
     }
   }

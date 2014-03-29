@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/deviceinfoendpoint/v1/20140326174145/java/1.16.0-rc/easystock.epic-deviceinfoendpoint-v1-20140326174145-java-1.16.0-rc-sources.jar", 
-      "path": "easystock.epic-deviceinfoendpoint-v1-20140326174145-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/deviceinfoendpoint/v1/20140329180721/java/1.16.0-rc/easystock.epic-deviceinfoendpoint-v1-20140329180721-java-1.16.0-rc-sources.jar", 
+      "path": "easystock.epic-deviceinfoendpoint-v1-20140329180721-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-03-26 17:41"
+      "timestamp": "2014-03-29 18:07"
     }, 
     {
-      "path": "easystock.epic-deviceinfoendpoint-v1-20140326174145-java-1.16.0-rc.jar.properties", 
+      "path": "easystock.epic-deviceinfoendpoint-v1-20140329180721-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -701,5 +701,5 @@
   "version": "v1", 
   "language_version": "1.16.0-rc", 
   "id": "deviceinfoendpoint:v1", 
-  "revision": 20140326174145
+  "revision": 20140329180721
 }

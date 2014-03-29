@@ -1,9 +1,9 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"OqxT57NU1DEATg4yJjzJs2FozZE/mI3_fxjXYAvZkxvN3etPHm6-6lE\"",
+ "etag": "\"OqxT57NU1DEATg4yJjzJs2FozZE/Glt3BT4seBNZr85CWr5LdJ93skc\"",
  "discoveryVersion": "v1",
- "id": "deviceinfoendpoint:v1",
- "name": "deviceinfoendpoint",
+ "id": "userendpoint:v1",
+ "name": "userendpoint",
  "version": "v1",
  "description": "This is an API",
  "ownerDomain": "easystock.epic",
@@ -13,10 +13,10 @@
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rest",
- "baseUrl": "https://my-stock-manager.appspot.com/_ah/api/deviceinfoendpoint/v1/",
- "basePath": "/_ah/api/deviceinfoendpoint/v1/",
+ "baseUrl": "https://my-stock-manager.appspot.com/_ah/api/userendpoint/v1/",
+ "basePath": "/_ah/api/userendpoint/v1/",
  "rootUrl": "https://my-stock-manager.appspot.com/_ah/api/",
- "servicePath": "deviceinfoendpoint/v1/",
+ "servicePath": "userendpoint/v1/",
  "batchPath": "batch",
  "parameters": {
   "alt": {
@@ -73,14 +73,14 @@
   }
  },
  "schemas": {
-  "CollectionResponse_DeviceInfo": {
-   "id": "CollectionResponse_DeviceInfo",
+  "CollectionResponse_User": {
+   "id": "CollectionResponse_User",
    "type": "object",
    "properties": {
     "items": {
      "type": "array",
      "items": {
-      "$ref": "DeviceInfo"
+      "$ref": "User"
      }
     },
     "nextPageToken": {
@@ -88,32 +88,60 @@
     }
    }
   },
-  "DeviceInfo": {
-   "id": "DeviceInfo",
+  "Key": {
+   "id": "Key",
    "type": "object",
    "properties": {
-    "deviceInformation": {
+    "appId": {
      "type": "string"
     },
-    "deviceRegistrationID": {
-     "type": "string"
+    "complete": {
+     "type": "boolean"
     },
-    "timestamp": {
+    "id": {
      "type": "string",
      "format": "int64"
+    },
+    "kind": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "namespace": {
+     "type": "string"
+    },
+    "parent": {
+     "$ref": "Key"
+    }
+   }
+  },
+  "User": {
+   "id": "User",
+   "type": "object",
+   "properties": {
+    "email": {
+     "type": "string"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "nick": {
+     "type": "string"
     }
    }
   }
  },
  "methods": {
-  "getDeviceInfo": {
-   "id": "deviceinfoendpoint.getDeviceInfo",
-   "path": "deviceinfo/{id}",
+  "getUser": {
+   "id": "userendpoint.getUser",
+   "path": "user/{id}",
    "httpMethod": "GET",
    "parameters": {
     "id": {
      "type": "string",
      "required": true,
+     "format": "int64",
      "location": "path"
     }
    },
@@ -121,30 +149,30 @@
     "id"
    ],
    "response": {
-    "$ref": "DeviceInfo"
+    "$ref": "User"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "insertDeviceInfo": {
-   "id": "deviceinfoendpoint.insertDeviceInfo",
-   "path": "deviceinfo",
+  "insertUser": {
+   "id": "userendpoint.insertUser",
+   "path": "user",
    "httpMethod": "POST",
    "request": {
-    "$ref": "DeviceInfo",
+    "$ref": "User",
     "parameterName": "resource"
    },
    "response": {
-    "$ref": "DeviceInfo"
+    "$ref": "User"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "listDeviceInfo": {
-   "id": "deviceinfoendpoint.listDeviceInfo",
-   "path": "deviceinfo",
+  "listUser": {
+   "id": "userendpoint.listUser",
+   "path": "user",
    "httpMethod": "GET",
    "parameters": {
     "cursor": {
@@ -158,20 +186,21 @@
     }
    },
    "response": {
-    "$ref": "CollectionResponse_DeviceInfo"
+    "$ref": "CollectionResponse_User"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "removeDeviceInfo": {
-   "id": "deviceinfoendpoint.removeDeviceInfo",
-   "path": "deviceinfo/{id}",
+  "removeUser": {
+   "id": "userendpoint.removeUser",
+   "path": "user/{id}",
    "httpMethod": "DELETE",
    "parameters": {
     "id": {
      "type": "string",
      "required": true,
+     "format": "int64",
      "location": "path"
     }
    },
@@ -182,16 +211,16 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "updateDeviceInfo": {
-   "id": "deviceinfoendpoint.updateDeviceInfo",
-   "path": "deviceinfo",
+  "updateUser": {
+   "id": "userendpoint.updateUser",
+   "path": "user",
    "httpMethod": "PUT",
    "request": {
-    "$ref": "DeviceInfo",
+    "$ref": "User",
     "parameterName": "resource"
    },
    "response": {
-    "$ref": "DeviceInfo"
+    "$ref": "User"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

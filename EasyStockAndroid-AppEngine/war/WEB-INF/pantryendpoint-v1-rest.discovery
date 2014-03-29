@@ -1,9 +1,9 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"OqxT57NU1DEATg4yJjzJs2FozZE/mI3_fxjXYAvZkxvN3etPHm6-6lE\"",
+ "etag": "\"OqxT57NU1DEATg4yJjzJs2FozZE/IX96V103AjxjDNJowvem__s1Sos\"",
  "discoveryVersion": "v1",
- "id": "deviceinfoendpoint:v1",
- "name": "deviceinfoendpoint",
+ "id": "pantryendpoint:v1",
+ "name": "pantryendpoint",
  "version": "v1",
  "description": "This is an API",
  "ownerDomain": "easystock.epic",
@@ -13,10 +13,10 @@
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rest",
- "baseUrl": "https://my-stock-manager.appspot.com/_ah/api/deviceinfoendpoint/v1/",
- "basePath": "/_ah/api/deviceinfoendpoint/v1/",
+ "baseUrl": "https://my-stock-manager.appspot.com/_ah/api/pantryendpoint/v1/",
+ "basePath": "/_ah/api/pantryendpoint/v1/",
  "rootUrl": "https://my-stock-manager.appspot.com/_ah/api/",
- "servicePath": "deviceinfoendpoint/v1/",
+ "servicePath": "pantryendpoint/v1/",
  "batchPath": "batch",
  "parameters": {
   "alt": {
@@ -73,14 +73,14 @@
   }
  },
  "schemas": {
-  "CollectionResponse_DeviceInfo": {
-   "id": "CollectionResponse_DeviceInfo",
+  "CollectionResponse_Pantry": {
+   "id": "CollectionResponse_Pantry",
    "type": "object",
    "properties": {
     "items": {
      "type": "array",
      "items": {
-      "$ref": "DeviceInfo"
+      "$ref": "Pantry"
      }
     },
     "nextPageToken": {
@@ -88,32 +88,119 @@
     }
    }
   },
-  "DeviceInfo": {
-   "id": "DeviceInfo",
+  "Key": {
+   "id": "Key",
    "type": "object",
    "properties": {
-    "deviceInformation": {
+    "appId": {
      "type": "string"
     },
-    "deviceRegistrationID": {
-     "type": "string"
+    "complete": {
+     "type": "boolean"
     },
-    "timestamp": {
+    "id": {
      "type": "string",
      "format": "int64"
+    },
+    "kind": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "namespace": {
+     "type": "string"
+    },
+    "parent": {
+     "$ref": "Key"
+    }
+   }
+  },
+  "MetaProduct": {
+   "id": "MetaProduct",
+   "type": "object",
+   "properties": {
+    "amount": {
+     "type": "number",
+     "format": "double"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "product": {
+     "$ref": "Product"
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "MetaProductCollection": {
+   "id": "MetaProductCollection",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "MetaProduct"
+     }
+    }
+   }
+  },
+  "Pantry": {
+   "id": "Pantry",
+   "type": "object",
+   "properties": {
+    "key": {
+     "$ref": "Key"
+    },
+    "products": {
+     "type": "array",
+     "items": {
+      "$ref": "MetaProduct"
+     }
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "Product": {
+   "id": "Product",
+   "type": "object",
+   "properties": {
+    "barCode": {
+     "type": "string",
+     "format": "int64"
+    },
+    "description": {
+     "type": "string"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "name": {
+     "type": "string"
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
     }
    }
   }
  },
  "methods": {
-  "getDeviceInfo": {
-   "id": "deviceinfoendpoint.getDeviceInfo",
-   "path": "deviceinfo/{id}",
+  "getPantry": {
+   "id": "pantryendpoint.getPantry",
+   "path": "pantry/{id}",
    "httpMethod": "GET",
    "parameters": {
     "id": {
      "type": "string",
      "required": true,
+     "format": "int64",
      "location": "path"
     }
    },
@@ -121,30 +208,52 @@
     "id"
    ],
    "response": {
-    "$ref": "DeviceInfo"
+    "$ref": "Pantry"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "insertDeviceInfo": {
-   "id": "deviceinfoendpoint.insertDeviceInfo",
-   "path": "deviceinfo",
+  "getPantryProducts": {
+   "id": "pantryendpoint.getPantryProducts",
+   "path": "metaproductcollection/{id}",
+   "httpMethod": "GET",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "MetaProductCollection"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "insertPantry": {
+   "id": "pantryendpoint.insertPantry",
+   "path": "pantry",
    "httpMethod": "POST",
    "request": {
-    "$ref": "DeviceInfo",
+    "$ref": "Pantry",
     "parameterName": "resource"
    },
    "response": {
-    "$ref": "DeviceInfo"
+    "$ref": "Pantry"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "listDeviceInfo": {
-   "id": "deviceinfoendpoint.listDeviceInfo",
-   "path": "deviceinfo",
+  "listPantry": {
+   "id": "pantryendpoint.listPantry",
+   "path": "pantry",
    "httpMethod": "GET",
    "parameters": {
     "cursor": {
@@ -158,20 +267,21 @@
     }
    },
    "response": {
-    "$ref": "CollectionResponse_DeviceInfo"
+    "$ref": "CollectionResponse_Pantry"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "removeDeviceInfo": {
-   "id": "deviceinfoendpoint.removeDeviceInfo",
-   "path": "deviceinfo/{id}",
+  "removePantry": {
+   "id": "pantryendpoint.removePantry",
+   "path": "pantry/{id}",
    "httpMethod": "DELETE",
    "parameters": {
     "id": {
      "type": "string",
      "required": true,
+     "format": "int64",
      "location": "path"
     }
    },
@@ -182,16 +292,16 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "updateDeviceInfo": {
-   "id": "deviceinfoendpoint.updateDeviceInfo",
-   "path": "deviceinfo",
+  "updatePantry": {
+   "id": "pantryendpoint.updatePantry",
+   "path": "pantry",
    "httpMethod": "PUT",
    "request": {
-    "$ref": "DeviceInfo",
+    "$ref": "Pantry",
     "parameterName": "resource"
    },
    "response": {
-    "$ref": "DeviceInfo"
+    "$ref": "Pantry"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

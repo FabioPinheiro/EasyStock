@@ -1,9 +1,9 @@
 {
- "kind": "discovery#restDescription",
- "etag": "\"OqxT57NU1DEATg4yJjzJs2FozZE/mI3_fxjXYAvZkxvN3etPHm6-6lE\"",
+ "kind": "discovery#rpcDescription",
+ "etag": "\"OqxT57NU1DEATg4yJjzJs2FozZE/rWiYn_p9BqvguH4oylkcXLLfhNw\"",
  "discoveryVersion": "v1",
- "id": "deviceinfoendpoint:v1",
- "name": "deviceinfoendpoint",
+ "id": "metaproductendpoint:v1",
+ "name": "metaproductendpoint",
  "version": "v1",
  "description": "This is an API",
  "ownerDomain": "easystock.epic",
@@ -12,12 +12,10 @@
   "x16": "http://www.google.com/images/icons/product/search-16.gif",
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
- "protocol": "rest",
- "baseUrl": "https://my-stock-manager.appspot.com/_ah/api/deviceinfoendpoint/v1/",
- "basePath": "/_ah/api/deviceinfoendpoint/v1/",
+ "protocol": "rpc",
  "rootUrl": "https://my-stock-manager.appspot.com/_ah/api/",
- "servicePath": "deviceinfoendpoint/v1/",
- "batchPath": "batch",
+ "rpcUrl": "https://my-stock-manager.appspot.com/_ah/api/rpc",
+ "rpcPath": "/_ah/api/rpc",
  "parameters": {
   "alt": {
    "type": "string",
@@ -73,14 +71,14 @@
   }
  },
  "schemas": {
-  "CollectionResponse_DeviceInfo": {
-   "id": "CollectionResponse_DeviceInfo",
+  "CollectionResponse_MetaProduct": {
+   "id": "CollectionResponse_MetaProduct",
    "type": "object",
    "properties": {
     "items": {
      "type": "array",
      "items": {
-      "$ref": "DeviceInfo"
+      "$ref": "MetaProduct"
      }
     },
     "nextPageToken": {
@@ -88,91 +86,142 @@
     }
    }
   },
-  "DeviceInfo": {
-   "id": "DeviceInfo",
+  "Key": {
+   "id": "Key",
    "type": "object",
    "properties": {
-    "deviceInformation": {
+    "appId": {
      "type": "string"
     },
-    "deviceRegistrationID": {
-     "type": "string"
+    "complete": {
+     "type": "boolean"
     },
-    "timestamp": {
+    "id": {
      "type": "string",
      "format": "int64"
+    },
+    "kind": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "namespace": {
+     "type": "string"
+    },
+    "parent": {
+     "$ref": "Key"
+    }
+   }
+  },
+  "MetaProduct": {
+   "id": "MetaProduct",
+   "type": "object",
+   "properties": {
+    "amount": {
+     "type": "number",
+     "format": "double"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "product": {
+     "$ref": "Product"
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "Product": {
+   "id": "Product",
+   "type": "object",
+   "properties": {
+    "barCode": {
+     "type": "string",
+     "format": "int64"
+    },
+    "description": {
+     "type": "string"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "name": {
+     "type": "string"
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
     }
    }
   }
  },
  "methods": {
-  "getDeviceInfo": {
-   "id": "deviceinfoendpoint.getDeviceInfo",
-   "path": "deviceinfo/{id}",
-   "httpMethod": "GET",
+  "metaproductendpoint.getMetaProduct": {
+   "id": "metaproductendpoint.getMetaProduct",
+   "allowGet": true,
    "parameters": {
     "id": {
      "type": "string",
      "required": true,
-     "location": "path"
+     "format": "int64"
     }
    },
    "parameterOrder": [
     "id"
    ],
-   "response": {
-    "$ref": "DeviceInfo"
+   "returns": {
+    "$ref": "MetaProduct"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "insertDeviceInfo": {
-   "id": "deviceinfoendpoint.insertDeviceInfo",
-   "path": "deviceinfo",
-   "httpMethod": "POST",
-   "request": {
-    "$ref": "DeviceInfo",
-    "parameterName": "resource"
+  "metaproductendpoint.insertMetaProduct": {
+   "id": "metaproductendpoint.insertMetaProduct",
+   "parameters": {
+    "resource": {
+     "$ref": "MetaProduct"
+    }
    },
-   "response": {
-    "$ref": "DeviceInfo"
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "MetaProduct"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "listDeviceInfo": {
-   "id": "deviceinfoendpoint.listDeviceInfo",
-   "path": "deviceinfo",
-   "httpMethod": "GET",
+  "metaproductendpoint.listMetaProduct": {
+   "id": "metaproductendpoint.listMetaProduct",
+   "allowGet": true,
    "parameters": {
     "cursor": {
-     "type": "string",
-     "location": "query"
+     "type": "string"
     },
     "limit": {
      "type": "integer",
-     "format": "int32",
-     "location": "query"
+     "format": "int32"
     }
    },
-   "response": {
-    "$ref": "CollectionResponse_DeviceInfo"
+   "returns": {
+    "$ref": "CollectionResponse_MetaProduct"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "removeDeviceInfo": {
-   "id": "deviceinfoendpoint.removeDeviceInfo",
-   "path": "deviceinfo/{id}",
-   "httpMethod": "DELETE",
+  "metaproductendpoint.removeMetaProduct": {
+   "id": "metaproductendpoint.removeMetaProduct",
    "parameters": {
     "id": {
      "type": "string",
      "required": true,
-     "location": "path"
+     "format": "int64"
     }
    },
    "parameterOrder": [
@@ -182,16 +231,18 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "updateDeviceInfo": {
-   "id": "deviceinfoendpoint.updateDeviceInfo",
-   "path": "deviceinfo",
-   "httpMethod": "PUT",
-   "request": {
-    "$ref": "DeviceInfo",
-    "parameterName": "resource"
+  "metaproductendpoint.updateMetaProduct": {
+   "id": "metaproductendpoint.updateMetaProduct",
+   "parameters": {
+    "resource": {
+     "$ref": "MetaProduct"
+    }
    },
-   "response": {
-    "$ref": "DeviceInfo"
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "MetaProduct"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

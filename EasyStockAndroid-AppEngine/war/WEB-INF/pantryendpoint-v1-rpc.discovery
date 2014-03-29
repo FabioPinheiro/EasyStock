@@ -1,9 +1,9 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"OqxT57NU1DEATg4yJjzJs2FozZE/RS-zqkgwFClr1dK2-NpxZoWIqxc\"",
+ "etag": "\"OqxT57NU1DEATg4yJjzJs2FozZE/IX96V103AjxjDNJowvem__s1Sos\"",
  "discoveryVersion": "v1",
- "id": "messageEndpoint:v1",
- "name": "messageEndpoint",
+ "id": "pantryendpoint:v1",
+ "name": "pantryendpoint",
  "version": "v1",
  "description": "This is an API",
  "ownerDomain": "easystock.epic",
@@ -71,14 +71,14 @@
   }
  },
  "schemas": {
-  "CollectionResponse_MessageData": {
-   "id": "CollectionResponse_MessageData",
+  "CollectionResponse_Pantry": {
+   "id": "CollectionResponse_Pantry",
    "type": "object",
    "properties": {
     "items": {
      "type": "array",
      "items": {
-      "$ref": "MessageData"
+      "$ref": "Pantry"
      }
     },
     "nextPageToken": {
@@ -114,26 +114,141 @@
     }
    }
   },
-  "MessageData": {
-   "id": "MessageData",
+  "MetaProduct": {
+   "id": "MetaProduct",
+   "type": "object",
+   "properties": {
+    "amount": {
+     "type": "number",
+     "format": "double"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "product": {
+     "$ref": "Product"
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "MetaProductCollection": {
+   "id": "MetaProductCollection",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "MetaProduct"
+     }
+    }
+   }
+  },
+  "Pantry": {
+   "id": "Pantry",
    "type": "object",
    "properties": {
     "key": {
      "$ref": "Key"
     },
-    "message": {
-     "type": "string"
+    "products": {
+     "type": "array",
+     "items": {
+      "$ref": "MetaProduct"
+     }
     },
-    "timestamp": {
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "Product": {
+   "id": "Product",
+   "type": "object",
+   "properties": {
+    "barCode": {
      "type": "string",
      "format": "int64"
+    },
+    "description": {
+     "type": "string"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "name": {
+     "type": "string"
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
     }
    }
   }
  },
  "methods": {
-  "messageEndpoint.listMessages": {
-   "id": "messageEndpoint.listMessages",
+  "pantryendpoint.getPantry": {
+   "id": "pantryendpoint.getPantry",
+   "allowGet": true,
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "returns": {
+    "$ref": "Pantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "pantryendpoint.getPantryProducts": {
+   "id": "pantryendpoint.getPantryProducts",
+   "allowGet": true,
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "returns": {
+    "$ref": "MetaProductCollection"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "pantryendpoint.insertPantry": {
+   "id": "pantryendpoint.insertPantry",
+   "parameters": {
+    "resource": {
+     "$ref": "Pantry"
+    }
+   },
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "Pantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "pantryendpoint.listPantry": {
+   "id": "pantryendpoint.listPantry",
    "allowGet": true,
    "parameters": {
     "cursor": {
@@ -145,23 +260,41 @@
     }
    },
    "returns": {
-    "$ref": "CollectionResponse_MessageData"
+    "$ref": "CollectionResponse_Pantry"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "messageEndpoint.sendMessage": {
-   "id": "messageEndpoint.sendMessage",
+  "pantryendpoint.removePantry": {
+   "id": "pantryendpoint.removePantry",
    "parameters": {
-    "message": {
+    "id": {
      "type": "string",
-     "required": true
+     "required": true,
+     "format": "int64"
     }
    },
    "parameterOrder": [
-    "message"
+    "id"
    ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "pantryendpoint.updatePantry": {
+   "id": "pantryendpoint.updatePantry",
+   "parameters": {
+    "resource": {
+     "$ref": "Pantry"
+    }
+   },
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "Pantry"
+   },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
