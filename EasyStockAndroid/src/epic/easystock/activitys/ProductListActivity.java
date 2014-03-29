@@ -11,14 +11,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import epic.easystock.R;
-import epic.easystock.assist.Product;
+import epic.easystock.assist.EndpointCall;
+import epic.easystock.assist.ProductAUX;
 import epic.easystock.assist.ProductAdapter;
+import epic.easystock.metaproductendpoint.model.Key;
+import epic.easystock.metaproductendpoint.model.Product;
 
 public class ProductListActivity extends ListActivity {
 	
 	private View viewContainer;
 	private View xpto;
-	private Product product;
+	private ProductAUX product;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +33,14 @@ public class ProductListActivity extends ListActivity {
 		
 		// 1. pass context and data to the custom adapter
 		ProductAdapter adapter = new ProductAdapter(this, generateData());
-
 		// 2. setListAdapter
 		setListAdapter(adapter);
-		
-		
+		EndpointCall.listProductTask(adapter);
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		product = (Product) getListAdapter().getItem(position);
+		product = (ProductAUX) getListAdapter().getItem(position);
 		//Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
 		xpto.setVisibility(View.VISIBLE);
 		TextView x = (TextView) findViewById(R.id.textView1);
@@ -78,17 +79,15 @@ public class ProductListActivity extends ListActivity {
 	}
 	
 	
-	private ArrayList<Product> generateData() { //FIXME
-		ArrayList<Product> productsList = new ArrayList<Product>();
-		productsList.add(new Product(1l, "name1", 11l, "description1"));
-		productsList.add(new Product(2l, "name2", 12l, "description2"));
-		productsList.add(new Product(3l, "name3", 13l, "description3"));
-		productsList.add(new Product(4l, "name4", 14l, "description4"));
-		productsList.add(new Product(5l, "name5", 15l, "description5"));
-		productsList.add(new Product(6l, "name6", 16l, "description6"));
-		productsList.add(new Product(7l, "name7", 17l, "description7"));
-		productsList.add(new Product(8l, "name8", 18l, "description8"));
-
+	private ArrayList<epic.easystock.productendpoint.model.Product> generateData() { //FIXME remove me
+		ArrayList<epic.easystock.productendpoint.model.Product> productsList = new ArrayList<epic.easystock.productendpoint.model.Product>();
+		for(int i=10; i<20; i++){
+			Product aux = new Product();
+			aux.setBarCode((long) i+ 9000);
+			aux.setDescription("description " + i + " !");
+			aux.setKey(new Key());
+			aux.setName("name " + i + " !");
+		}
 		return productsList;
 	}
 }

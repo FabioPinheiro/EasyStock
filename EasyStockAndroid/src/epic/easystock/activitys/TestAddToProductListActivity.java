@@ -58,7 +58,7 @@ public class TestAddToProductListActivity extends Activity {
 		String name = ((EditText) findViewById(R.id.activity_test_add_to_product_list_name)).getText().toString();
 		Long barCode = Long.parseLong(((EditText) findViewById(R.id.activity_test_add_to_product_list_barCode)).getText().toString());
 		String description =  ((EditText) findViewById(R.id.activity_test_add_to_product_list_description)).getText().toString();
-		new EndpointCall().AddProductTask(name, barCode, description);
+		EndpointCall.addProductTask(name, barCode, description);
 	}
 
 	/*FIXME LIXO public class EndpointsTask extends AsyncTask<Context, Integer, Long> {

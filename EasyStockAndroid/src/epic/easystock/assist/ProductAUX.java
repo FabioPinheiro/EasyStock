@@ -1,6 +1,6 @@
 package epic.easystock.assist;
 
-public class Product {
+public class ProductAUX {
 	private static final int UNDEFINED = -1;
 	private Long idProduct;
 	private String name;
@@ -8,14 +8,14 @@ public class Product {
 	private String description;
 	private int quantity = UNDEFINED;
 	
-	public Product(){
+	public ProductAUX(){
 		idProduct = -1l;
 		name = "UNDEFINED_NAME";
 		barCode = 0l;
 		description = "UNDEFINED_description";
 		quantity = UNDEFINED;
 	}
-	public Product(Long idProduct, String name, Long barCode, String description) {
+	public ProductAUX(Long idProduct, String name, Long barCode, String description) {
 		super();
 		this.idProduct = idProduct;
 		this.name = name;

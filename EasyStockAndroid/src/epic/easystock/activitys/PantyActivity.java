@@ -16,7 +16,7 @@ import com.google.api.client.json.jackson.JacksonFactory;
 
 import epic.easystock.CloudEndpointUtils;
 import epic.easystock.R;
-import epic.easystock.assist.Product;
+import epic.easystock.assist.ProductAUX;
 import epic.easystock.assist.ProductAdapter;
 import epic.easystock.pantryendpoint.Pantryendpoint;
 import epic.easystock.pantryendpoint.model.MetaProduct;
@@ -51,9 +51,9 @@ public class PantyActivity extends ListActivity {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			ArrayList<Product> list = new ArrayList<Product>(products.size());
+			ArrayList<ProductAUX> list = new ArrayList<ProductAUX>(products.size());
 			for(MetaProduct mp:products){
-				Product aux = new Product();
+				ProductAUX aux = new ProductAUX();
 				aux.setQuantity(mp.getAmount().intValue());
 				aux.setName(mp.getProduct().getName());
 				aux.setDescription(mp.getProduct().getDescription());
@@ -61,10 +61,10 @@ public class PantyActivity extends ListActivity {
 				aux.setIdProduct(mp.getProduct().getKey().getId());
 				list.add(aux);
 			}
-			ProductAdapter adapter = new ProductAdapter(contexts[0], list);
+			//FIXME ProductAdapter adapter = new ProductAdapter(contexts[0], list);
 
 			// 2. setListAdapter
-			setListAdapter(adapter);
+			//FIXME setListAdapter(adapter);
 
 			return null;
 		}

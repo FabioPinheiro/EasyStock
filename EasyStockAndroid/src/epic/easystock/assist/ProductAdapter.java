@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import epic.easystock.R;
 import epic.easystock.R.id;
 import epic.easystock.R.layout;
+import epic.easystock.metaproductendpoint.model.Product;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,11 @@ import android.widget.TextView;
  * @author fabio
  *
  */
-public class ProductAdapter extends ArrayAdapter<Product> {
+public class ProductAdapter extends ArrayAdapter<epic.easystock.productendpoint.model.Product> {
 
 	private final Context context;
-	private final ArrayList<Product> productArrayList;
-
-	public ProductAdapter(Context context, ArrayList<Product> itemsArrayList) {
+	private final ArrayList<epic.easystock.productendpoint.model.Product> productArrayList;
+	public ProductAdapter(Context context, ArrayList<epic.easystock.productendpoint.model.Product> itemsArrayList) {
 
 		super(context, R.layout.layout_list_product_row, itemsArrayList);
 
@@ -46,7 +46,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 		TextView labelViewDescription = (TextView) rowView.findViewById(R.id.product_row_label_description);
 
 		// 4. Set the text for textView
-		labelViewIdProduct.setText(productArrayList.get(position).getIdProduct().toString());
+		labelViewIdProduct.setText(productArrayList.get(position).getKey().toString());
 		labelViewName.setText(productArrayList.get(position).getName());
 		labelViewBarCode.setText(productArrayList.get(position).getBarCode().toString());
 		labelViewDescription.setText(productArrayList.get(position).getDescription());
