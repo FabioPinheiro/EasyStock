@@ -1,4 +1,4 @@
-package epic.easystock;
+package epic.easystock.assist;
 
 import android.view.View;
 import android.widget.TextView;

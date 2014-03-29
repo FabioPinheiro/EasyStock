@@ -15,9 +15,9 @@ import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
 
 import epic.easystock.CloudEndpointUtils;
-import epic.easystock.Product;
-import epic.easystock.ProductAdapter;
 import epic.easystock.R;
+import epic.easystock.assist.Product;
+import epic.easystock.assist.ProductAdapter;
 import epic.easystock.pantryendpoint.Pantryendpoint;
 import epic.easystock.pantryendpoint.model.MetaProduct;
 

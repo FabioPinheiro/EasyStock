@@ -10,9 +10,9 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import epic.easystock.Product;
-import epic.easystock.ProductAdapter;
 import epic.easystock.R;
+import epic.easystock.assist.Product;
+import epic.easystock.assist.ProductAdapter;
 
 public class ProductListActivity extends ListActivity {
 	

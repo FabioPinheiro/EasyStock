@@ -1,7 +1,10 @@
-package epic.easystock;
+package epic.easystock.assist;
 
 import java.util.ArrayList;
 
+import epic.easystock.R;
+import epic.easystock.R.id;
+import epic.easystock.R.layout;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

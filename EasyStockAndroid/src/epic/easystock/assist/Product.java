@@ -1,4 +1,4 @@
-package epic.easystock;
+package epic.easystock.assist;
 
 public class Product {
 	private static final int UNDEFINED = -1;

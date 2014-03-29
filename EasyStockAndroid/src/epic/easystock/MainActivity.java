@@ -2,6 +2,8 @@ package epic.easystock;
 
 import java.util.ArrayList;
 
+import epic.easystock.assist.Product;
+import epic.easystock.assist.ProductAdapter;
 import android.app.ListActivity;
 import android.os.Bundle;
 

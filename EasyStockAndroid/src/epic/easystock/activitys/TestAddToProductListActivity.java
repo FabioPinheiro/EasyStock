@@ -17,6 +17,7 @@ import com.google.api.client.json.jackson.JacksonFactory;
 
 import epic.easystock.CloudEndpointUtils;
 import epic.easystock.R;
+import epic.easystock.assist.EndpointCall;
 import epic.easystock.productendpoint.Productendpoint;
 
 public class TestAddToProductListActivity extends Activity {
@@ -53,10 +54,14 @@ public class TestAddToProductListActivity extends Activity {
 	 */
 
 	public void addXPTO(View view) {
-		new EndpointsTask().execute(getApplicationContext());
+		//new EndpointsTask().execute(getApplicationContext());
+		String name = ((EditText) findViewById(R.id.activity_test_add_to_product_list_name)).getText().toString();
+		Long barCode = Long.parseLong(((EditText) findViewById(R.id.activity_test_add_to_product_list_barCode)).getText().toString());
+		String description =  ((EditText) findViewById(R.id.activity_test_add_to_product_list_description)).getText().toString();
+		new EndpointCall().AddProductTask(name, barCode, description);
 	}
 
-	public class EndpointsTask extends AsyncTask<Context, Integer, Long> {
+	/*FIXME LIXO public class EndpointsTask extends AsyncTask<Context, Integer, Long> {
 		@Override
 		protected Long doInBackground(Context... contexts) {
 			Productendpoint.Builder endpointBuilder = new Productendpoint.Builder(
@@ -86,5 +91,5 @@ public class TestAddToProductListActivity extends Activity {
 			}
 			return (long) 0;
 		}
-	}
+	}*/
 }
