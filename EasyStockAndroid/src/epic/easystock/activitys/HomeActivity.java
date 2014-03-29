@@ -41,6 +41,11 @@ public class HomeActivity extends Activity {
 		startActivity(intent);
 	}
 	
+	public void changeToPantyActivity(View view) {
+		Intent intent = new Intent(this, PantyActivity.class);
+		startActivity(intent);
+	}
+	
 	public void changeToMainActivity(View view) {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
