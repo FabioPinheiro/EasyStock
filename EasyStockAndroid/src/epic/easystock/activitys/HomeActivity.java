@@ -45,7 +45,10 @@ public class HomeActivity extends Activity {
 		Intent intent = new Intent(this, PantyActivity.class);
 		startActivity(intent);
 	}
-	
+	public void changeToLogInActivity(View view) {
+		Intent intent = new Intent(this, LoginActivity.class);
+		startActivity(intent);
+	}
 	public void changeToMainActivity(View view) {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
