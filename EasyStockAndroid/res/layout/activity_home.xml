@@ -3,10 +3,12 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/pantry_image"
     android:orientation="vertical"
     tools:context="epic.easystock.HomeActivity"
-    tools:ignore="MergeRootFrame" >
-
+    tools:ignore="MergeRootFrame" 
+    >
+	
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
