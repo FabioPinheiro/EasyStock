@@ -12,11 +12,28 @@ import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
 
 import epic.easystock.CloudEndpointUtils;
-import epic.easystock.metaproductendpoint.model.Product;
-import epic.easystock.productendpoint.Productendpoint;
-import epic.easystock.productendpoint.model.CollectionResponseProduct;
+import epic.easystock.apiEndpoint.ApiEndpoint;
+import epic.easystock.apiEndpoint.model.Product;
+import epic.easystock.apiEndpoint.model.CollectionResponseProduct;
 
 public final class EndpointCall {
+
+	static private ApiEndpoint.Builder apiEndpointBuilder = null;
+	static private ApiEndpoint apiEndpoint = null;
+	static{
+		apiEndpointBuilder = new ApiEndpoint.Builder(
+				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		apiEndpoint = CloudEndpointUtils.updateBuilder(
+				apiEndpointBuilder).build();
+	}
+	
+	public static ApiEndpoint getApiEndpoint() {
+		return apiEndpoint;
+	}
 
 	static public void addProductTask(String name, Long barCode,
 			String description) {
@@ -30,32 +47,23 @@ public final class EndpointCall {
 	}
 
 	// ##################################################################################
-	private static class EndpointTask2 extends AsyncTask<Void, Void, List<epic.easystock.productendpoint.model.Product> > {
+	private static class EndpointTask2 extends AsyncTask<Void, Void, List<Product> > {
 		private ProductAdapter adapter;
 		public EndpointTask2(ProductAdapter adapter) {
 			this.adapter = adapter;
 		}
 		@Override
-		protected void onPostExecute(List<epic.easystock.productendpoint.model.Product> result) {
+		protected void onPostExecute(List<Product> result) {
 			super.onPostExecute(result);
-			Collection<epic.easystock.productendpoint.model.Product> aux = result;
+			Collection<Product> aux = result;
 			adapter.addAll(aux);
 		}
 
 		@Override
-		protected List<epic.easystock.productendpoint.model.Product> doInBackground(Void... params) {
-			Productendpoint.Builder endpointBuilder = new Productendpoint.Builder(
-					AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-					new HttpRequestInitializer() {
-						public void initialize(HttpRequest httpRequest) {
-						}
-					});
-			Productendpoint endpoint = CloudEndpointUtils.updateBuilder(
-					endpointBuilder).build();
-			
+		protected List<Product> doInBackground(Void... params) {
 			CollectionResponseProduct result = null;
 			try {
-				result = endpoint.listProduct().execute();
+				result = getApiEndpoint().listProduct().execute();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -87,29 +95,20 @@ public final class EndpointCall {
 
 		@Override
 		protected Long doInBackground(Param... params) {
-			Productendpoint.Builder endpointBuilder = new Productendpoint.Builder(
-					AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-					new HttpRequestInitializer() {
-						public void initialize(HttpRequest httpRequest) {
-						}
-					});
-			Productendpoint endpoint = CloudEndpointUtils.updateBuilder(
-					endpointBuilder).build();
 			try {
 				// Product productAux = new Product(idProduct, name, barCode,
 				// description);
 
-				epic.easystock.productendpoint.model.Product content = new epic.easystock.productendpoint.model.Product();
+				Product content = new Product();
 				content.setName(params[0].name);
 				content.setBarCode(params[0].barCode);
 				content.setDescription(params[0].description);
 
-				epic.easystock.productendpoint.model.Product result = endpoint
-						.insertProduct(content).execute();
+				Product result = getApiEndpoint().insertProduct(content).execute();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return (long) 0;
+			return (long) 0; //FIXME
 		}
 	}
 }

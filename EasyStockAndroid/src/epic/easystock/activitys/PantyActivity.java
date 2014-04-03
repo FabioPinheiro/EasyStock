@@ -16,10 +16,11 @@ import com.google.api.client.json.jackson.JacksonFactory;
 
 import epic.easystock.CloudEndpointUtils;
 import epic.easystock.R;
+import epic.easystock.assist.EndpointCall;
 import epic.easystock.assist.ProductAUX;
 import epic.easystock.assist.ProductAdapter;
-import epic.easystock.pantryendpoint.Pantryendpoint;
-import epic.easystock.pantryendpoint.model.MetaProduct;
+import epic.easystock.apiEndpoint.ApiEndpoint;
+import epic.easystock.apiEndpoint.model.MetaProduct;
 
 public class PantyActivity extends ListActivity {
 
@@ -36,14 +37,9 @@ public class PantyActivity extends ListActivity {
 	public class ListPantryTask extends AsyncTask<Context, Integer, Void> {
 		@Override
 		protected Void doInBackground(Context... contexts) {
-			Pantryendpoint.Builder endpointBuilder = new Pantryendpoint.Builder(
-					AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-					new HttpRequestInitializer() {
-						public void initialize(HttpRequest httpRequest) {
-						}
-					});
-			Pantryendpoint endpoint = CloudEndpointUtils.updateBuilder(
-					endpointBuilder).build();
+
+			ApiEndpoint endpoint = EndpointCall.getApiEndpoint();//FIXME
+			
 			List<MetaProduct> products = null;
 			try {
 				 products = endpoint.getPantryProducts(12l)

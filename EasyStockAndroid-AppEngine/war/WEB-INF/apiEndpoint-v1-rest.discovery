@@ -1,0 +1,913 @@
+{
+ "kind": "discovery#restDescription",
+ "etag": "\"gWnWV7fYC80JM0beuSxOtzgfiS0/FEphlv6hozm0Q3-farNs7bRQAyA\"",
+ "discoveryVersion": "v1",
+ "id": "apiEndpoint:v1",
+ "name": "apiEndpoint",
+ "version": "v1",
+ "description": "This is an API",
+ "ownerDomain": "easystock.epic",
+ "ownerName": "easystock.epic",
+ "icons": {
+  "x16": "http://www.google.com/images/icons/product/search-16.gif",
+  "x32": "http://www.google.com/images/icons/product/search-32.gif"
+ },
+ "protocol": "rest",
+ "baseUrl": "https://my-stock-manager.appspot.com/_ah/api/apiEndpoint/v1/",
+ "basePath": "/_ah/api/apiEndpoint/v1/",
+ "rootUrl": "https://my-stock-manager.appspot.com/_ah/api/",
+ "servicePath": "apiEndpoint/v1/",
+ "batchPath": "batch",
+ "parameters": {
+  "alt": {
+   "type": "string",
+   "description": "Data format for the response.",
+   "default": "json",
+   "enum": [
+    "json"
+   ],
+   "enumDescriptions": [
+    "Responses with Content-Type of application/json"
+   ],
+   "location": "query"
+  },
+  "fields": {
+   "type": "string",
+   "description": "Selector specifying which fields to include in a partial response.",
+   "location": "query"
+  },
+  "key": {
+   "type": "string",
+   "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+   "location": "query"
+  },
+  "oauth_token": {
+   "type": "string",
+   "description": "OAuth 2.0 token for the current user.",
+   "location": "query"
+  },
+  "prettyPrint": {
+   "type": "boolean",
+   "description": "Returns response with indentations and line breaks.",
+   "default": "true",
+   "location": "query"
+  },
+  "quotaUser": {
+   "type": "string",
+   "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+   "location": "query"
+  },
+  "userIp": {
+   "type": "string",
+   "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+   "location": "query"
+  }
+ },
+ "auth": {
+  "oauth2": {
+   "scopes": {
+    "https://www.googleapis.com/auth/userinfo.email": {
+     "description": "View your email address"
+    }
+   }
+  }
+ },
+ "schemas": {
+  "CollectionResponse_ItemData": {
+   "id": "CollectionResponse_ItemData",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "ItemData"
+     }
+    },
+    "nextPageToken": {
+     "type": "string"
+    }
+   }
+  },
+  "CollectionResponse_MetaProduct": {
+   "id": "CollectionResponse_MetaProduct",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "MetaProduct"
+     }
+    },
+    "nextPageToken": {
+     "type": "string"
+    }
+   }
+  },
+  "CollectionResponse_Pantry": {
+   "id": "CollectionResponse_Pantry",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "Pantry"
+     }
+    },
+    "nextPageToken": {
+     "type": "string"
+    }
+   }
+  },
+  "CollectionResponse_Product": {
+   "id": "CollectionResponse_Product",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "Product"
+     }
+    },
+    "nextPageToken": {
+     "type": "string"
+    }
+   }
+  },
+  "CollectionResponse_User": {
+   "id": "CollectionResponse_User",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "User"
+     }
+    },
+    "nextPageToken": {
+     "type": "string"
+    }
+   }
+  },
+  "CollectionResponse_UserPantry": {
+   "id": "CollectionResponse_UserPantry",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "UserPantry"
+     }
+    },
+    "nextPageToken": {
+     "type": "string"
+    }
+   }
+  },
+  "ItemData": {
+   "id": "ItemData",
+   "type": "object",
+   "properties": {
+    "description": {
+     "type": "string"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "name": {
+     "type": "string"
+    }
+   }
+  },
+  "Key": {
+   "id": "Key",
+   "type": "object",
+   "properties": {
+    "appId": {
+     "type": "string"
+    },
+    "complete": {
+     "type": "boolean"
+    },
+    "id": {
+     "type": "string",
+     "format": "int64"
+    },
+    "kind": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "namespace": {
+     "type": "string"
+    },
+    "parent": {
+     "$ref": "Key"
+    }
+   }
+  },
+  "MetaProduct": {
+   "id": "MetaProduct",
+   "type": "object",
+   "properties": {
+    "amount": {
+     "type": "number",
+     "format": "double"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "product": {
+     "$ref": "Product"
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "MetaProductCollection": {
+   "id": "MetaProductCollection",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "MetaProduct"
+     }
+    }
+   }
+  },
+  "Pantry": {
+   "id": "Pantry",
+   "type": "object",
+   "properties": {
+    "key": {
+     "$ref": "Key"
+    },
+    "products": {
+     "type": "array",
+     "items": {
+      "$ref": "MetaProduct"
+     }
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "PermissionType": {
+   "id": "PermissionType",
+   "type": "string",
+   "enum": [
+    "EDITOR",
+    "OWNER",
+    "READER"
+   ],
+   "enumDescriptions": [
+    "",
+    "",
+    ""
+   ]
+  },
+  "Product": {
+   "id": "Product",
+   "type": "object",
+   "properties": {
+    "barCode": {
+     "type": "string",
+     "format": "int64"
+    },
+    "description": {
+     "type": "string"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "name": {
+     "type": "string"
+    },
+    "timeStamp": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "User": {
+   "id": "User",
+   "type": "object",
+   "properties": {
+    "email": {
+     "type": "string"
+    },
+    "key": {
+     "$ref": "Key"
+    },
+    "nick": {
+     "type": "string"
+    }
+   }
+  },
+  "UserPantry": {
+   "id": "UserPantry",
+   "type": "object",
+   "properties": {
+    "key": {
+     "$ref": "Key"
+    },
+    "pantry": {
+     "$ref": "Pantry"
+    },
+    "permissionType": {
+     "$ref": "PermissionType"
+    },
+    "user": {
+     "$ref": "User"
+    }
+   }
+  }
+ },
+ "methods": {
+  "getItem": {
+   "id": "apiEndpoint.getItem",
+   "path": "itemdata/{id}",
+   "httpMethod": "GET",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "ItemData"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getMetaProduct": {
+   "id": "apiEndpoint.getMetaProduct",
+   "path": "metaproduct/{id}",
+   "httpMethod": "GET",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "MetaProduct"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getPantry": {
+   "id": "apiEndpoint.getPantry",
+   "path": "pantry/{id}",
+   "httpMethod": "GET",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "Pantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getPantryProducts": {
+   "id": "apiEndpoint.getPantryProducts",
+   "path": "metaproductcollection/{id}",
+   "httpMethod": "GET",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "MetaProductCollection"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getProduct": {
+   "id": "apiEndpoint.getProduct",
+   "path": "product/{id}",
+   "httpMethod": "GET",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "Product"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getUser": {
+   "id": "apiEndpoint.getUser",
+   "path": "user/{id}",
+   "httpMethod": "GET",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "User"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getUserPantry": {
+   "id": "apiEndpoint.getUserPantry",
+   "path": "userpantry/{id}",
+   "httpMethod": "GET",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "UserPantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "insertItem": {
+   "id": "apiEndpoint.insertItem",
+   "path": "itemdata",
+   "httpMethod": "POST",
+   "request": {
+    "$ref": "ItemData",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "ItemData"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "insertMetaProduct": {
+   "id": "apiEndpoint.insertMetaProduct",
+   "path": "metaproduct",
+   "httpMethod": "POST",
+   "request": {
+    "$ref": "MetaProduct",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "MetaProduct"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "insertPantry": {
+   "id": "apiEndpoint.insertPantry",
+   "path": "pantry",
+   "httpMethod": "POST",
+   "request": {
+    "$ref": "Pantry",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "Pantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "insertProduct": {
+   "id": "apiEndpoint.insertProduct",
+   "path": "product",
+   "httpMethod": "POST",
+   "request": {
+    "$ref": "Product",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "Product"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "insertUser": {
+   "id": "apiEndpoint.insertUser",
+   "path": "user",
+   "httpMethod": "POST",
+   "request": {
+    "$ref": "User",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "User"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "insertUserPantry": {
+   "id": "apiEndpoint.insertUserPantry",
+   "path": "userpantry",
+   "httpMethod": "POST",
+   "request": {
+    "$ref": "UserPantry",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "UserPantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "listItem": {
+   "id": "apiEndpoint.listItem",
+   "path": "itemdata",
+   "httpMethod": "GET",
+   "parameters": {
+    "cursor": {
+     "type": "string",
+     "location": "query"
+    },
+    "limit": {
+     "type": "integer",
+     "format": "int32",
+     "location": "query"
+    }
+   },
+   "response": {
+    "$ref": "CollectionResponse_ItemData"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "listMetaProduct": {
+   "id": "apiEndpoint.listMetaProduct",
+   "path": "metaproduct",
+   "httpMethod": "GET",
+   "parameters": {
+    "cursor": {
+     "type": "string",
+     "location": "query"
+    },
+    "limit": {
+     "type": "integer",
+     "format": "int32",
+     "location": "query"
+    }
+   },
+   "response": {
+    "$ref": "CollectionResponse_MetaProduct"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "listPantry": {
+   "id": "apiEndpoint.listPantry",
+   "path": "pantry",
+   "httpMethod": "GET",
+   "parameters": {
+    "cursor": {
+     "type": "string",
+     "location": "query"
+    },
+    "limit": {
+     "type": "integer",
+     "format": "int32",
+     "location": "query"
+    }
+   },
+   "response": {
+    "$ref": "CollectionResponse_Pantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "listProduct": {
+   "id": "apiEndpoint.listProduct",
+   "path": "product",
+   "httpMethod": "GET",
+   "parameters": {
+    "cursor": {
+     "type": "string",
+     "location": "query"
+    },
+    "limit": {
+     "type": "integer",
+     "format": "int32",
+     "location": "query"
+    }
+   },
+   "response": {
+    "$ref": "CollectionResponse_Product"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "listUser": {
+   "id": "apiEndpoint.listUser",
+   "path": "user",
+   "httpMethod": "GET",
+   "parameters": {
+    "cursor": {
+     "type": "string",
+     "location": "query"
+    },
+    "limit": {
+     "type": "integer",
+     "format": "int32",
+     "location": "query"
+    }
+   },
+   "response": {
+    "$ref": "CollectionResponse_User"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "listUserPantry": {
+   "id": "apiEndpoint.listUserPantry",
+   "path": "userpantry",
+   "httpMethod": "GET",
+   "parameters": {
+    "cursor": {
+     "type": "string",
+     "location": "query"
+    },
+    "limit": {
+     "type": "integer",
+     "format": "int32",
+     "location": "query"
+    }
+   },
+   "response": {
+    "$ref": "CollectionResponse_UserPantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "removeItem": {
+   "id": "apiEndpoint.removeItem",
+   "path": "item/{id}",
+   "httpMethod": "DELETE",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "removeMetaProduct": {
+   "id": "apiEndpoint.removeMetaProduct",
+   "path": "metaproduct/{id}",
+   "httpMethod": "DELETE",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "removePantry": {
+   "id": "apiEndpoint.removePantry",
+   "path": "pantry/{id}",
+   "httpMethod": "DELETE",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "removeProduct": {
+   "id": "apiEndpoint.removeProduct",
+   "path": "product/{id}",
+   "httpMethod": "DELETE",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "removeUser": {
+   "id": "apiEndpoint.removeUser",
+   "path": "user/{id}",
+   "httpMethod": "DELETE",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "removeUserPantry": {
+   "id": "apiEndpoint.removeUserPantry",
+   "path": "userpantry/{id}",
+   "httpMethod": "DELETE",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updateItem": {
+   "id": "apiEndpoint.updateItem",
+   "path": "itemdata",
+   "httpMethod": "PUT",
+   "request": {
+    "$ref": "ItemData",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "ItemData"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updateMetaProduct": {
+   "id": "apiEndpoint.updateMetaProduct",
+   "path": "metaproduct",
+   "httpMethod": "PUT",
+   "request": {
+    "$ref": "MetaProduct",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "MetaProduct"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updatePantry": {
+   "id": "apiEndpoint.updatePantry",
+   "path": "pantry",
+   "httpMethod": "PUT",
+   "request": {
+    "$ref": "Pantry",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "Pantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updateProduct": {
+   "id": "apiEndpoint.updateProduct",
+   "path": "product",
+   "httpMethod": "PUT",
+   "request": {
+    "$ref": "Product",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "Product"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updateUser": {
+   "id": "apiEndpoint.updateUser",
+   "path": "user",
+   "httpMethod": "PUT",
+   "request": {
+    "$ref": "User",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "User"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updateUserPantry": {
+   "id": "apiEndpoint.updateUserPantry",
+   "path": "userpantry",
+   "httpMethod": "PUT",
+   "request": {
+    "$ref": "UserPantry",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "UserPantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  }
+ }
+}

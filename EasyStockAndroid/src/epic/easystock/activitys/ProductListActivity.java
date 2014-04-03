@@ -14,8 +14,8 @@ import epic.easystock.R;
 import epic.easystock.assist.EndpointCall;
 import epic.easystock.assist.ProductAUX;
 import epic.easystock.assist.ProductAdapter;
-import epic.easystock.metaproductendpoint.model.Key;
-import epic.easystock.metaproductendpoint.model.Product;
+import epic.easystock.apiEndpoint.model.Key;
+import epic.easystock.apiEndpoint.model.Product;
 
 public class ProductListActivity extends ListActivity {
 	
@@ -32,7 +32,7 @@ public class ProductListActivity extends ListActivity {
 		//FIXME viewContainer = findViewById(R.id.undobar);
 		
 		// 1. pass context and data to the custom adapter
-		ProductAdapter adapter = new ProductAdapter(this, generateData());
+		ProductAdapter adapter = new ProductAdapter(this, new ArrayList<Product>());
 		// 2. setListAdapter
 		setListAdapter(adapter);
 		EndpointCall.listProductTask(adapter);
@@ -79,7 +79,7 @@ public class ProductListActivity extends ListActivity {
 	}
 	
 	
-	private ArrayList<epic.easystock.productendpoint.model.Product> generateData() { //FIXME remove me
+	/*FIXME LIXO private ArrayList<epic.easystock.productendpoint.model.Product> generateData() { //FIXME remove me
 		ArrayList<epic.easystock.productendpoint.model.Product> productsList = new ArrayList<epic.easystock.productendpoint.model.Product>();
 		for(int i=10; i<20; i++){
 			Product aux = new Product();
@@ -89,5 +89,5 @@ public class ProductListActivity extends ListActivity {
 			aux.setName("name " + i + " !");
 		}
 		return productsList;
-	}
+	}*/
 }

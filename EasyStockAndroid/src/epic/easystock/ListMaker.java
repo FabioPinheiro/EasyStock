@@ -15,22 +15,22 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
 
-import epic.easystock.productendpoint.Productendpoint;
-import epic.easystock.productendpoint.model.CollectionResponseProduct;
-import epic.easystock.productendpoint.model.Product;
+import epic.easystock.apiEndpoint.ApiEndpoint;
+import epic.easystock.apiEndpoint.model.CollectionResponseProduct;
+import epic.easystock.apiEndpoint.model.Product;
 
 public class ListMaker {
 	List<Product> result;
 	ListProductsTask a;
 	
 	public List<Product> getProductList() throws IOException {
-		Productendpoint.Builder endpointBuilder = new Productendpoint.Builder(
+		ApiEndpoint.Builder endpointBuilder = new ApiEndpoint.Builder(
 				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
 				new HttpRequestInitializer() {
 					public void initialize(HttpRequest httpRequest) {
 					}
 				});
-		Productendpoint endpoint = CloudEndpointUtils.updateBuilder(
+		ApiEndpoint endpoint = CloudEndpointUtils.updateBuilder(
 				endpointBuilder).build();
 		
 		CollectionResponseProduct ret = endpoint.listProduct().execute();
@@ -52,13 +52,13 @@ public class ListMaker {
 
 		@Override
 		protected List<Product> doInBackground(Void... contexts) {
-			Productendpoint.Builder endpointBuilder = new Productendpoint.Builder(
+			ApiEndpoint.Builder endpointBuilder = new ApiEndpoint.Builder(
 					AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
 					new HttpRequestInitializer() {
 						public void initialize(HttpRequest httpRequest) {
 						}
 					});
-			Productendpoint endpoint = CloudEndpointUtils.updateBuilder(
+			ApiEndpoint endpoint = CloudEndpointUtils.updateBuilder(
 					endpointBuilder).build();
 				
 				CollectionResponseProduct a = null;

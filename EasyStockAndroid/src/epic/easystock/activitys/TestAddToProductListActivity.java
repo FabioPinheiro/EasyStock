@@ -1,24 +1,12 @@
 package epic.easystock.activitys;
 
-import java.io.IOException;
-
 import android.app.Activity;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.EditText;
-
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.json.jackson.JacksonFactory;
-
-import epic.easystock.CloudEndpointUtils;
 import epic.easystock.R;
 import epic.easystock.assist.EndpointCall;
-import epic.easystock.productendpoint.Productendpoint;
 
 public class TestAddToProductListActivity extends Activity {
 
