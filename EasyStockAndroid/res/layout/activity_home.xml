@@ -3,6 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:background="@drawable/pantry_image"
     android:orientation="vertical"
     tools:context="epic.easystock.HomeActivity"
@@ -13,6 +14,7 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
         android:text="ProductList"
         android:onClick="changeToProductListActivity" />
 
@@ -20,6 +22,7 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
         android:text="RegisterActivity"
         android:onClick="changeRegisterActivity" />
 
@@ -27,6 +30,7 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
         android:text="TestAddToProductListActivity"
         android:onClick="changeToTestAddToProductListActivity" />
 
@@ -34,6 +38,7 @@
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
         android:text="MainActivity" 
         android:onClick="changeToMainActivity"/>
     
@@ -41,7 +46,14 @@
         android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
         android:text="PantyActivity" 
         android:onClick="changeToPantyActivity"/>
-
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:text="LogIn"
+        android:onClick="changeToLogInActivity" />
 </LinearLayout>
