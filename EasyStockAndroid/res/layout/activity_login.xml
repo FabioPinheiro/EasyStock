@@ -14,8 +14,9 @@
         android:layout_below="@+id/revoke_access_button"
         android:layout_marginLeft="21dp"
         android:layout_marginTop="50dp"
-        android:enabled="false"
-        android:text="sign_out" />
+        android:enabled="true"
+        android:text="@string/sign_out_button_name"
+         />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
@@ -34,7 +35,7 @@
         android:layout_below="@+id/sign_in_button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="36dp"
-        android:enabled="false"
+        android:enabled="true"
         android:text="revoke_access" />
 
 </RelativeLayout>

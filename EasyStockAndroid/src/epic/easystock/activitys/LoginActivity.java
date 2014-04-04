@@ -8,14 +8,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
 
 public class LoginActivity extends Activity implements ConnectionCallbacks,
-		OnConnectionFailedListener,OnClickListener {
+		OnConnectionFailedListener, OnClickListener, OnAccessRevokedListener {
 
 	/* Request code used to invoke sign in user interactions. */
 	private static final int RC_SIGN_IN = 0;
@@ -33,17 +36,31 @@ public class LoginActivity extends Activity implements ConnectionCallbacks,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(epic.easystock.R.layout.activity_login);
-		findViewById(epic.easystock.R.id.sign_in_button).setOnClickListener(this);
-		
+		findViewById(epic.easystock.R.id.sign_in_button).setOnClickListener(
+				this);
+		// Connect our sign in, sign out and disconnect buttons.
+		findViewById(epic.easystock.R.id.sign_in_button).setOnClickListener(
+				this);
+		findViewById(epic.easystock.R.id.sign_out_button).setOnClickListener(
+				this);
+		findViewById(epic.easystock.R.id.revoke_access_button)
+				.setOnClickListener(this);
+		findViewById(epic.easystock.R.id.sign_out_button).setVisibility(
+				View.INVISIBLE);
+		findViewById(epic.easystock.R.id.revoke_access_button).setVisibility(
+				View.INVISIBLE);
+
 		mGoogleApiClient = new GoogleApiClient.Builder(this)
 				.addConnectionCallbacks(this)
-				.addOnConnectionFailedListener(this).addApi(Plus.API, null)
-				.addScope(Plus.SCOPE_PLUS_LOGIN).build();
+				.addOnConnectionFailedListener(this)
+				.addApi(Plus.API, null)
+				.addScope(Plus.SCOPE_PLUS_PROFILE)
+				.build();
 	}
 
 	protected void onStart() {
 		super.onStart();
-		mGoogleApiClient.connect();
+		//mGoogleApiClient.connect();
 	}
 
 	protected void onStop() {
@@ -101,22 +118,60 @@ public class LoginActivity extends Activity implements ConnectionCallbacks,
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-	  mSignInClicked = false;
-	  Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+		mSignInClicked = false;
+
+		// Hide the sign in button, show the sign out buttons.
+		findViewById(epic.easystock.R.id.sign_in_button).setVisibility(
+				View.INVISIBLE);
+		findViewById(epic.easystock.R.id.sign_out_button).setVisibility(
+				View.VISIBLE);
+		findViewById(epic.easystock.R.id.revoke_access_button).setVisibility(
+				View.VISIBLE);
+
+		Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+//		GoogleAuthUtil.getToken(getApplicationContext(),  , );
+		
 	}
 
 	@Override
 	public void onConnectionSuspended(int cause) {
 		// TODO Auto-generated method stub
+	}
 
+	public void onDisconnected() {
+		// Bye!
+		mGoogleApiClient.disconnect();
+		Toast.makeText(this, "User is disconnected!", Toast.LENGTH_LONG).show();
+		// Hide the sign out buttons, show the sign in button.
+		findViewById(epic.easystock.R.id.sign_in_button).setVisibility(
+				View.VISIBLE);
+		findViewById(epic.easystock.R.id.sign_out_button).setVisibility(
+				View.INVISIBLE);
+		findViewById(epic.easystock.R.id.revoke_access_button).setVisibility(
+				View.INVISIBLE);
 	}
 
 	public void onClick(View view) {
-		if (view.getId() == epic.easystock.R.id.sign_in_button
-				&& !mGoogleApiClient.isConnecting()) {
-			mSignInClicked = true;
-			resolveSignInError();
+		switch (view.getId()) {
+		case epic.easystock.R.id.sign_in_button:
+			if (!mGoogleApiClient.isConnecting()) {
+				if (mConnectionResult != null) {
+					mSignInClicked = true;
+					resolveSignInError();
+				} else
+					mGoogleApiClient.connect();
+			}
+			break;
+		case epic.easystock.R.id.sign_out_button:
+			if (mGoogleApiClient.isConnected()) {
+				Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+				mGoogleApiClient.disconnect();
+				onDisconnected();
+
+			}
+			break;
 		}
+
 	}
 
 	protected void onActivityResult(int requestCode, int responseCode,
@@ -132,5 +187,11 @@ public class LoginActivity extends Activity implements ConnectionCallbacks,
 				mGoogleApiClient.connect();
 			}
 		}
+	}
+
+	@Override
+	public void onAccessRevoked(ConnectionResult status) {
+		// TODO Auto-generated method stub
+
 	}
 }
