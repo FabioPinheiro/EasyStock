@@ -5,37 +5,27 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.tools.ant.taskdefs.Execute;
-
-import android.accounts.AccountManager;
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Contacts.People;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
 import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.plus.model.people.Person.Image;
 
 public class LoginActivity extends Activity implements ConnectionCallbacks,
 		OnConnectionFailedListener, OnClickListener, OnAccessRevokedListener {
@@ -181,22 +171,38 @@ public class LoginActivity extends Activity implements ConnectionCallbacks,
 
 		// GoogleAuthUtil.getToken(context, accountName, scope);
 
-		String s = Plus.AccountApi.getAccountName(mGoogleApiClient);
-		String token;
-		String Scope = "oauth2:" + Scopes.PLUS_LOGIN
-				+ " https://www.googleapis.com/auth/plus.profile.emails.read";
-		try {
-			token = GoogleAuthUtil.getToken(getApplicationContext(), s, Scope);
-			Toast.makeText(this, token, Toast.LENGTH_LONG).show();
-		} catch (UserRecoverableAuthException e) { // TODO Auto-generated catch
-													// block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (GoogleAuthException e) { // TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		new AsyncTask<Void, Void, String>() {
+
+			@Override
+			protected String doInBackground(Void... params) {
+				String token = "";
+				String s = Plus.AccountApi.getAccountName(mGoogleApiClient);
+
+				final String G_PLUS_SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me";
+			//	final String USERINFO_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
+				//final String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE;
+
+				try {
+					token = GoogleAuthUtil.getToken(LoginActivity.this, s,
+							G_PLUS_SCOPE);
+				} catch (UserRecoverableAuthException e) { 
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (GoogleAuthException e) { 
+					e.printStackTrace();
+				}
+				return token;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				super.onPostExecute(result);
+				Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG)
+						.show();
+			}
+
+		}.execute();
 
 		/*
 		 * TextView tv = (TextView)
