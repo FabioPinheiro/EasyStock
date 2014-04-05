@@ -1,5 +1,6 @@
 package epic.easystock.activitys;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -144,9 +145,10 @@ public class LoginActivity extends Activity implements ConnectionCallbacks,
 				protected Drawable doInBackground(Person... params) {
 					Person p = params[0];
 					Drawable d = null;
+					BufferedInputStream is;
 					try {
-						InputStream is = (InputStream) new URL(p.getImage()
-								.getUrl()).getContent();
+						is = new BufferedInputStream((InputStream) new URL(p
+								.getImage().getUrl()).getContent());
 						d = Drawable.createFromStream(is, "");
 					} catch (MalformedURLException e) {
 						// TODO Auto-generated catch block
@@ -154,7 +156,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks,
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+					} 
 					return d;
 				}
 
@@ -179,17 +181,18 @@ public class LoginActivity extends Activity implements ConnectionCallbacks,
 				String s = Plus.AccountApi.getAccountName(mGoogleApiClient);
 
 				final String G_PLUS_SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me";
-			//	final String USERINFO_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
-				//final String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE;
+				// final String USERINFO_SCOPE =
+				// "https://www.googleapis.com/auth/userinfo.profile";
+				// final String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE;
 
 				try {
 					token = GoogleAuthUtil.getToken(LoginActivity.this, s,
 							G_PLUS_SCOPE);
-				} catch (UserRecoverableAuthException e) { 
+				} catch (UserRecoverableAuthException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
-				} catch (GoogleAuthException e) { 
+				} catch (GoogleAuthException e) {
 					e.printStackTrace();
 				}
 				return token;

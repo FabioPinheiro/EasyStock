@@ -4,47 +4,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="epic.easystock.activitys.TestAddToProductListActivity"
-    tools:ignore="MergeRootFrame">
-    
+    tools:ignore="MergeRootFrame" >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <!-- EditText
+        <!--
+        EditText
             android:id="@+id/activity_test_add_to_product_list_idProduct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10" >
 
             <requestFocus />
-        </EditText-->
+        </EditText
+        -->
 
         <EditText
             android:id="@+id/activity_test_add_to_product_list_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10" />
-        
+            android:ems="10" 
+            android:hint="@string/product_name"
+            
+            />
+
         <EditText
             android:id="@+id/activity_test_add_to_product_list_barCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10" />
+            android:ems="10" 
+            android:hint="@string/product_id"
+            />
 
         <EditText
             android:id="@+id/activity_test_add_to_product_list_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10" />
+            android:ems="10" 
+            android:hint="@string/product_description"
+            />
 
         <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Add Item"
-            android:onClick="addXPTO" />
+            android:onClick="addXPTO"
+            android:text="Add Item" />
 
+        <Button
+            android:id="@+id/take_pic_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="takePic"
+            android:text="@string/take_pic" />
+
+        <ImageView
+            android:id="@+id/add_prod_pic"
+            android:layout_width="305dp"
+            android:layout_height="305dp"
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
+
 </FrameLayout>
