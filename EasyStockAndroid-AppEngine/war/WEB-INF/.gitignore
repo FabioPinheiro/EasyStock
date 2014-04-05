@@ -1,0 +1,9 @@
+/apiEndpoint-v1-rest.discovery
+/apiEndpoint-v1-rpc.discovery
+/apiEndpoint-v1.api
+/deviceinfoendpoint-v1-rest.discovery
+/deviceinfoendpoint-v1-rpc.discovery
+/deviceinfoendpoint-v1.api
+/messageEndpoint-v1-rest.discovery
+/messageEndpoint-v1-rpc.discovery
+/messageEndpoint-v1.api
