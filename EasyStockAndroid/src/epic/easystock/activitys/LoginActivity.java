@@ -1,21 +1,41 @@
 package epic.easystock.activitys;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.apache.tools.ant.taskdefs.Execute;
+
+import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Contacts.People;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
+import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.plus.model.people.Person.Image;
 
 public class LoginActivity extends Activity implements ConnectionCallbacks,
 		OnConnectionFailedListener, OnClickListener, OnAccessRevokedListener {
@@ -52,15 +72,13 @@ public class LoginActivity extends Activity implements ConnectionCallbacks,
 
 		mGoogleApiClient = new GoogleApiClient.Builder(this)
 				.addConnectionCallbacks(this)
-				.addOnConnectionFailedListener(this)
-				.addApi(Plus.API, null)
-				.addScope(Plus.SCOPE_PLUS_PROFILE)
-				.build();
+				.addOnConnectionFailedListener(this).addApi(Plus.API, null)
+				.addScope(Plus.SCOPE_PLUS_PROFILE).build();
 	}
 
 	protected void onStart() {
 		super.onStart();
-		//mGoogleApiClient.connect();
+		mGoogleApiClient.connect();
 	}
 
 	protected void onStop() {
@@ -128,9 +146,64 @@ public class LoginActivity extends Activity implements ConnectionCallbacks,
 		findViewById(epic.easystock.R.id.revoke_access_button).setVisibility(
 				View.VISIBLE);
 
+		Person p;
+		if ((p = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient)) != null) {
+			new AsyncTask<Person, Void, Drawable>() {
+
+				@Override
+				protected Drawable doInBackground(Person... params) {
+					Person p = params[0];
+					Drawable d = null;
+					try {
+						InputStream is = (InputStream) new URL(p.getImage()
+								.getUrl()).getContent();
+						d = Drawable.createFromStream(is, "");
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return d;
+				}
+
+				@Override
+				protected void onPostExecute(Drawable result) {
+					super.onPostExecute(result);
+					ImageView iv = (ImageView) findViewById(epic.easystock.R.id.imageView1);
+					iv.setImageDrawable(result);
+				}
+
+			}.execute(p);
+		}
 		Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
-//		GoogleAuthUtil.getToken(getApplicationContext(),  , );
-		
+
+		// GoogleAuthUtil.getToken(context, accountName, scope);
+
+		String s = Plus.AccountApi.getAccountName(mGoogleApiClient);
+		String token;
+		String Scope = "oauth2:" + Scopes.PLUS_LOGIN
+				+ " https://www.googleapis.com/auth/plus.profile.emails.read";
+		try {
+			token = GoogleAuthUtil.getToken(getApplicationContext(), s, Scope);
+			Toast.makeText(this, token, Toast.LENGTH_LONG).show();
+		} catch (UserRecoverableAuthException e) { // TODO Auto-generated catch
+													// block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GoogleAuthException e) { // TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		/*
+		 * TextView tv = (TextView)
+		 * findViewById(epic.easystock.R.id.logInStatus); tv.setText(s);
+		 * tv.setVisibility(View.VISIBLE); Toast.makeText(this, s,
+		 * Toast.LENGTH_LONG).show();
+		 */
 	}
 
 	@Override
