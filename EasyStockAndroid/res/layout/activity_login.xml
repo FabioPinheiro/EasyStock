@@ -10,10 +10,9 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:contentDescription="Image"
-        android:scaleType="fitXY" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Image" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
