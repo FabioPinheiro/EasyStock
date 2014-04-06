@@ -24,6 +24,7 @@ public final class EndpointCall {
 
 	static private final String FAIL_TO_LIST_PRODUCTS = "FAIL_TO_LIST_PRODUCTS";
 	static private final String FAIL_TO_LIST_PANTRY_PRODUCTS = "FAIL_TO_LIST_PANTRY_PRODUCTS";
+	static private final String FAIL_TO_ADD_PRODUCT = "FAIL_TO_ADD_PRODUCT";
 	static private final String DONE = "AsyncTask Done"; //FIXME remove!!! use in debug
 	
 	static private ApiEndpoint.Builder apiEndpointBuilder = null;
@@ -135,7 +136,7 @@ public final class EndpointCall {
 
 	private static class AddProductTask
 			extends
-			AsyncTask<epic.easystock.assist.EndpointCall.AddProductTask.Param, Integer, Long> {
+			AsyncTask<epic.easystock.assist.EndpointCall.AddProductTask.Param, Integer, Product> {
 		static class Param {
 			String name;
 			Long barCode;
@@ -148,23 +149,33 @@ public final class EndpointCall {
 				this.description = description;
 			}
 		}
+		
 
 		@Override
-		protected Long doInBackground(Param... params) {
-			try {
-				// Product productAux = new Product(idProduct, name, barCode,
-				// description);
+		protected void onPostExecute(Product result) {
+			super.onPostExecute(result);
+			if (result != null){
+				EndpointCall.msg(EndpointCall.DONE);
+			}else{;
+				EndpointCall.msg(EndpointCall.FAIL_TO_ADD_PRODUCT);
+			}
+		}
 
+
+		@Override
+		protected Product doInBackground(Param... params) {
+			Product result = null;
+			try {
 				Product content = new Product();
 				content.setName(params[0].name);
 				content.setBarCode(params[0].barCode);
 				content.setDescription(params[0].description);
 
-				Product result = getApiEndpoint().insertProduct(content).execute();
+				result = getApiEndpoint().insertProduct(content).execute();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return (long) 0; //FIXME
+			return result;
 		}
 	}
 }
