@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
@@ -13,6 +14,7 @@ import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
 
 import epic.easystock.CloudEndpointUtils;
+import epic.easystock.activitys.HomeActivity;
 import epic.easystock.apiEndpoint.ApiEndpoint;
 import epic.easystock.apiEndpoint.model.MetaProduct;
 import epic.easystock.apiEndpoint.model.Product;
@@ -20,9 +22,16 @@ import epic.easystock.apiEndpoint.model.CollectionResponseProduct;
 
 public final class EndpointCall {
 
+	static private final String FAIL_TO_LIST_PRODUCTS = "FAIL_TO_LIST_PRODUCTS";
+	static private final String FAIL_TO_LIST_PANTRY_PRODUCTS = "FAIL_TO_LIST_PANTRY_PRODUCTS";
+	static private final String DONE = "AsyncTask Done"; //FIXME remove!!! use in debug
+	
 	static private ApiEndpoint.Builder apiEndpointBuilder = null;
 	static private ApiEndpoint apiEndpoint = null;
-	static{
+	static private Context globalContext = null;
+	
+	static public void init(Context applicationContext){
+		globalContext = applicationContext;
 		apiEndpointBuilder = new ApiEndpoint.Builder(
 				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
 				new HttpRequestInitializer() {
@@ -36,11 +45,16 @@ public final class EndpointCall {
 	public static ApiEndpoint getApiEndpoint() {
 		return apiEndpoint;
 	}
-
+	public static Context getGlobalContext() {
+		return globalContext;
+	}
+	static private void msg(String message){
+		Toast.makeText(EndpointCall.getGlobalContext(), message, Toast.LENGTH_LONG).show();
+	}
 	static public void addProductTask(String name, Long barCode,
 			String description) {
-		new EndpointsTask()
-				.execute(new epic.easystock.assist.EndpointCall.EndpointsTask.Param(
+		new AddProductTask()
+				.execute(new epic.easystock.assist.EndpointCall.AddProductTask.Param(
 						name, barCode, description));
 	}
 	
@@ -66,9 +80,11 @@ public final class EndpointCall {
 		protected void onPostExecute(List<MetaProduct> result) {
 			super.onPostExecute(result);
 			Collection<MetaProduct> aux = result;
+			EndpointCall.msg(EndpointCall.DONE);
 			if (result != null){
 				adapter.addAll(aux);
-			}else{; //FIXME null case...
+			}else{;
+				EndpointCall.msg(EndpointCall.FAIL_TO_LIST_PANTRY_PRODUCTS);
 			}
 		}
 		
@@ -96,33 +112,30 @@ public final class EndpointCall {
 		protected void onPostExecute(List<Product> result) {
 			super.onPostExecute(result);
 			Collection<Product> aux = result;
+			EndpointCall.msg(EndpointCall.DONE);
 			if (result != null){
 				adapter.addAll(aux);
-			}else{; //FIXME null case...
+			}else{;
+				EndpointCall.msg(EndpointCall.FAIL_TO_LIST_PRODUCTS);
 			}
 		}
 
 		@Override
 		protected List<Product> doInBackground(Void... params) {
-			CollectionResponseProduct result = null;
+			List<Product> result = null;
 			try {
-				result = getApiEndpoint().listProduct().execute();
+				result = getApiEndpoint().listProduct().execute().getItems();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if (result != null){
-				return result.getItems();
-			}else{
-				return null; //FIXME null case...
-			}
+			return result;
 		}
 
 	}
 
-	private static class EndpointsTask
+	private static class AddProductTask
 			extends
-			AsyncTask<epic.easystock.assist.EndpointCall.EndpointsTask.Param, Integer, Long> {
+			AsyncTask<epic.easystock.assist.EndpointCall.AddProductTask.Param, Integer, Long> {
 		static class Param {
 			String name;
 			Long barCode;

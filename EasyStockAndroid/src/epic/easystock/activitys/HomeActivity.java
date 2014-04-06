@@ -1,11 +1,13 @@
 package epic.easystock.activitys;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMultiplayer.InitiateMatchResult;
 
 import epic.easystock.MainActivity;
 import epic.easystock.R;
 import epic.easystock.RegisterActivity;
 import epic.easystock.R.layout;
+import epic.easystock.assist.EndpointCall;
 import epic.easystock.assist.LoginAux;
 import android.app.Activity;
 import android.content.Context;
@@ -16,14 +18,17 @@ import android.view.View;
 
 public class HomeActivity extends Activity {
 	LoginAux loginAux;
+	//Context applicationContext;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		View signView = findViewById(epic.easystock.R.id.sign_in_button);
-		Context context = this.getApplicationContext();
-		loginAux = new LoginAux(signView,context);
+		//applicationContext = this.getApplicationContext();
+		EndpointCall.init(this.getApplicationContext());
 		
+		
+		loginAux = new LoginAux(signView,this.getApplicationContext());
 	}
 	
 	@Override
