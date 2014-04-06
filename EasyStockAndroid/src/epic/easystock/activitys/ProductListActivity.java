@@ -12,16 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import epic.easystock.R;
 import epic.easystock.assist.EndpointCall;
-import epic.easystock.assist.ProductAUX;
 import epic.easystock.assist.ProductAdapter;
-import epic.easystock.apiEndpoint.model.Key;
 import epic.easystock.apiEndpoint.model.Product;
 
 public class ProductListActivity extends ListActivity {
 	
 	private View viewContainer;
 	private View xpto;
-	private ProductAUX product;
+	//private ProductAUX product;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +38,7 @@ public class ProductListActivity extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		product = (ProductAUX) getListAdapter().getItem(position);
+		Product product = (Product) getListAdapter().getItem(position);
 		//Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
 		xpto.setVisibility(View.VISIBLE);
 		TextView x = (TextView) findViewById(R.id.textView1);

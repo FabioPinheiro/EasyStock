@@ -46,7 +46,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 		TextView labelViewDescription = (TextView) rowView.findViewById(R.id.product_row_label_description);
 
 		// 4. Set the text for textView
-		labelViewIdProduct.setText(productArrayList.get(position).getKey().toString());
+		labelViewIdProduct.setText(productArrayList.get(position).getKey().getId().toString());
 		labelViewName.setText(productArrayList.get(position).getName());
 		labelViewBarCode.setText(productArrayList.get(position).getBarCode().toString());
 		labelViewDescription.setText(productArrayList.get(position).getDescription());

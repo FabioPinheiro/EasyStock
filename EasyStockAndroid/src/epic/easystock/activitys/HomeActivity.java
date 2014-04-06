@@ -1,23 +1,45 @@
 package epic.easystock.activitys;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import epic.easystock.MainActivity;
 import epic.easystock.R;
 import epic.easystock.RegisterActivity;
 import epic.easystock.R.layout;
+import epic.easystock.assist.LoginAux;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 
 public class HomeActivity extends Activity {
-
+	LoginAux loginAux;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
+		View signView = findViewById(epic.easystock.R.id.sign_in_button);
+		Context context = this.getApplicationContext();
+		loginAux = new LoginAux(signView,context);
+		
 	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		loginAux.getmGoogleApiClient().connect();
+	}
+	@Override
+	protected void onStop() {
+		super.onStop();
 
+		if (loginAux.getmGoogleApiClient().isConnected()) {
+			loginAux.getmGoogleApiClient().disconnect();
+		}
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -13,6 +14,7 @@ import com.google.api.client.json.jackson.JacksonFactory;
 
 import epic.easystock.CloudEndpointUtils;
 import epic.easystock.apiEndpoint.ApiEndpoint;
+import epic.easystock.apiEndpoint.model.MetaProduct;
 import epic.easystock.apiEndpoint.model.Product;
 import epic.easystock.apiEndpoint.model.CollectionResponseProduct;
 
@@ -43,20 +45,61 @@ public final class EndpointCall {
 	}
 	
 	static public void listProductTask(ProductAdapter adapter){
-		new EndpointTask2(adapter).execute();
+		new ListAllProductTask(adapter).execute();
+	}
+	
+	static public void listPantryProductTask(MetaProductAdapter adapter, Long pantryID){
+		new ListPantryProductTask(adapter, pantryID).execute();
 	}
 
 	// ##################################################################################
-	private static class EndpointTask2 extends AsyncTask<Void, Void, List<Product> > {
+	public static class ListPantryProductTask extends AsyncTask<Context, Integer, List<MetaProduct>> {
+		private MetaProductAdapter adapter;
+		private Long pantryID;
+		
+		public ListPantryProductTask(MetaProductAdapter adapter, Long pantryID) {
+			this.adapter = adapter;
+			this.pantryID = pantryID;
+		}
+		
+		@Override
+		protected void onPostExecute(List<MetaProduct> result) {
+			super.onPostExecute(result);
+			Collection<MetaProduct> aux = result;
+			if (result != null){
+				adapter.addAll(aux);
+			}else{; //FIXME null case...
+			}
+		}
+		
+		@Override
+		protected List<MetaProduct> doInBackground(Context... contexts) {
+			List<MetaProduct> products = null;
+			try {
+				 products =  EndpointCall.getApiEndpoint().getPantryProducts(pantryID)
+						.execute().getItems();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return products;
+		}
+	}
+	
+	
+	
+	private static class ListAllProductTask extends AsyncTask<Void, Void, List<Product> > {
 		private ProductAdapter adapter;
-		public EndpointTask2(ProductAdapter adapter) {
+		public ListAllProductTask(ProductAdapter adapter) {
 			this.adapter = adapter;
 		}
 		@Override
 		protected void onPostExecute(List<Product> result) {
 			super.onPostExecute(result);
 			Collection<Product> aux = result;
-			adapter.addAll(aux);
+			if (result != null){
+				adapter.addAll(aux);
+			}else{; //FIXME null case...
+			}
 		}
 
 		@Override
@@ -71,7 +114,7 @@ public final class EndpointCall {
 			if (result != null){
 				return result.getItems();
 			}else{
-				return null;
+				return null; //FIXME null case...
 			}
 		}
 

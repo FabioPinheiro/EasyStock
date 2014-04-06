@@ -55,7 +55,7 @@ public class ExampleActivity extends Activity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_example,
+			View rootView = inflater.inflate(R.layout.layout_fragment_edit_botons_product_list,
 					container, false);
 			return rootView;
 		}

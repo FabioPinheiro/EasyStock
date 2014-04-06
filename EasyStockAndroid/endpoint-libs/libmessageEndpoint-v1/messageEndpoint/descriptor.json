@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/messageEndpoint/v1/20140405005700/java/1.16.0-rc/easystock.epic-messageEndpoint-v1-20140405005700-java-1.16.0-rc-sources.jar", 
-      "path": "easystock.epic-messageEndpoint-v1-20140405005700-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/messageEndpoint/v1/20140406204505/java/1.16.0-rc/easystock.epic-messageEndpoint-v1-20140406204505-java-1.16.0-rc-sources.jar", 
+      "path": "easystock.epic-messageEndpoint-v1-20140406204505-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-04-05 00:57"
+      "timestamp": "2014-04-06 20:45"
     }, 
     {
-      "path": "easystock.epic-messageEndpoint-v1-20140405005700-java-1.16.0-rc.jar.properties", 
+      "path": "easystock.epic-messageEndpoint-v1-20140406204505-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -701,5 +701,5 @@
   "version": "v1", 
   "language_version": "1.16.0-rc", 
   "id": "messageEndpoint:v1", 
-  "revision": 20140405005700
+  "revision": 20140406204505
 }

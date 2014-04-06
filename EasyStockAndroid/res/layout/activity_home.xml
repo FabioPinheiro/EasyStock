@@ -9,7 +9,15 @@
     tools:context="epic.easystock.HomeActivity"
     tools:ignore="MergeRootFrame" 
     >
-	
+    
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:enabled="false" >
+    </com.google.android.gms.common.SignInButton>	
+    
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"

@@ -15,48 +15,54 @@
             android:layout_weight="0.64" >
         </ListView>
 
+        <!--
+             FIXME fragment android:name="layout_edit_botons_product_list"
+            android:id="@+id/product_activity_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" /
+        -->
+
         <RelativeLayout
             android:id="@+id/layout_edit_botons_product_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
                 android:gravity="left|center_vertical"
                 android:text="Select Item" />
-            
+
             <Button
                 android:id="@+id/buttonAddOne"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:textAlignment="center"
-                android:text="+1" />
+                android:text="+1"
+                android:textAlignment="center" />
 
             <Button
                 android:id="@+id/buttonRemoveOne"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/buttonAddOne"
-                android:textAlignment="center"
-                android:text="-1" />
-            
-           <EditText
+                android:text="-1"
+                android:textAlignment="center" />
+
+            <EditText
                 android:id="@+id/editText1"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:maxLength="2"
                 android:layout_toLeftOf="@id/buttonRemoveOne"
                 android:ems="10"
-                android:inputType="numberDecimal" >
+                android:inputType="numberDecimal"
+                android:maxLength="2" >
             </EditText>
-            
         </RelativeLayout>
     </LinearLayout>
 

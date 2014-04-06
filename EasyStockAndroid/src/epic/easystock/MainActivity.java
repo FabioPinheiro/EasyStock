@@ -1,9 +1,5 @@
 package epic.easystock;
 
-import java.util.ArrayList;
-
-import epic.easystock.assist.ProductAUX;
-import epic.easystock.assist.ProductAdapter;
 import android.app.ListActivity;
 import android.os.Bundle;
 
@@ -18,7 +14,8 @@ public class MainActivity extends ListActivity {
 		// 2. setListAdapter
 		//setListAdapter(adapter);
 	}
-
+	
+	/*LIXO
 	private ArrayList<ProductAUX> generateData() {
 		ArrayList<ProductAUX> productsList = new ArrayList<ProductAUX>();
 		productsList.add(new ProductAUX(1l, "name1", 11l, "description1"));
@@ -31,6 +28,6 @@ public class MainActivity extends ListActivity {
 		productsList.add(new ProductAUX(8l, "name8", 18l, "description8"));
 
 		return productsList;
-	}
+	}*/
 
 }
