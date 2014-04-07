@@ -18,7 +18,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 //metaproductendpoint
-@Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""))
+@Api(name = "apiEndpoint",
+	namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = "")
+		)
 public class MetaProductEndpoint {
 
 	/**
