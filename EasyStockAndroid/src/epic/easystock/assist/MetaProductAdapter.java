@@ -3,8 +3,6 @@ package epic.easystock.assist;
 import java.util.ArrayList;
 
 import epic.easystock.R;
-import epic.easystock.R.id;
-import epic.easystock.R.layout;
 import epic.easystock.apiEndpoint.model.MetaProduct;
 import epic.easystock.apiEndpoint.model.Product;
 import android.content.Context;

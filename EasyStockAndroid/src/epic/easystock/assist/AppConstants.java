@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 public class AppConstants {
 
-    public static final String WEB_CLIENT_ID = "450897529696.apps.googleusercontent.com";
+    public static final String WEB_CLIENT_ID = "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com";
 
     public static final String AUDIENCE = "server:client_id:" + WEB_CLIENT_ID;
 

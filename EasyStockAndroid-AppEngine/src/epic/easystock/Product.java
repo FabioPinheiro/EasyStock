@@ -1,6 +1,5 @@
 package epic.easystock;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -8,16 +7,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.Blob;
 
 @Entity
 public class Product {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key key;
+	private Long key;
 	
-	public Key getKey() {
+	public Long getKey() {
 		return key;
 	}
 
@@ -29,6 +28,8 @@ public class Product {
 	
 	private Date TimeStamp = new Date();
 
+	private Blob image;
+	
 	public String getName() {
 		return Name;
 	}
@@ -59,6 +60,14 @@ public class Product {
 
 	public void setBarCode(long barCode) {
 		BarCode = barCode;
+	}
+
+	public Blob getImage() {
+		return image;
+	}
+
+	public void setImage(Blob image) {
+		this.image = image;
 	}
 	
 }

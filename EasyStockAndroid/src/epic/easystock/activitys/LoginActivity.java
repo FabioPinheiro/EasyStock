@@ -27,6 +27,8 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
 import com.google.android.gms.plus.model.people.Person;
 
+import epic.easystock.R;
+
 public class LoginActivity extends Activity implements ConnectionCallbacks,
 		OnConnectionFailedListener, OnClickListener, OnAccessRevokedListener {
 
@@ -233,7 +235,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks,
 
 	public void onClick(View view) {
 		switch (view.getId()) {
-		case epic.easystock.R.id.sign_in_button:
+		case R.id.sign_in_button:
 			if (!mGoogleApiClient.isConnecting()) {
 				if (mConnectionResult != null) {
 					mSignInClicked = true;
@@ -242,7 +244,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks,
 					mGoogleApiClient.connect();
 			}
 			break;
-		case epic.easystock.R.id.sign_out_button:
+		case R.id.sign_out_button:
 			if (mGoogleApiClient.isConnected()) {
 				Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
 				mGoogleApiClient.disconnect();

@@ -1,83 +1,244 @@
 package epic.easystock.activitys;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.util.Strings;
+
 import epic.easystock.R;
-import epic.easystock.assist.EndpointCall;
+import epic.easystock.apiEndpoint.ApiEndpoint;
+import epic.easystock.apiEndpoint.model.Product;
+import epic.easystock.assist.AppConstants;
 
 public class TestAddToProductListActivity extends Activity {
 
 	private OnTouchListener addListener = null;
+	private static String mail;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test_add_to_product_list);
+		takePic = (Button) findViewById(R.id.take_pic_button);
+		imageView = (ImageView) findViewById(R.id.add_prod_pic);
+		mail = getIntent().getStringExtra("MAIL");
 	}
 
-	/*
-	 * Button addItemButton = (Button) findViewById(R.id.button1);
-	 * 
-	 * addListener = new OnTouchListener() {
-	 * 
-	 * @Override public boolean onTouch(View v, MotionEvent event) {
-	 * Itemendpoint.Builder endpointBuilder = new Itemendpoint.Builder(
-	 * AndroidHttp.newCompatibleTransport(), new JacksonFactory(), new
-	 * HttpRequestInitializer() { public void initialize(HttpRequest
-	 * httpRequest) { } }); Itemendpoint endpoint =
-	 * CloudEndpointUtils.updateBuilder( endpointBuilder).build(); try {
-	 * 
-	 * ItemData item = new ItemData(); String name = ((EditText)
-	 * findViewById(R.id.itemName)) .getText().toString(); item.setName(name);
-	 * 
-	 * String description = ((EditText) findViewById(R.id.descriptionText))
-	 * .getText().toString(); ; item.setDescription(description); ItemData
-	 * result = endpoint.insertItem(item).execute(); } catch (IOException e) {
-	 * e.printStackTrace(); } return true; } };
-	 * 
-	 * addItemButton.setOnTouchListener(addListener);
-	 */
+	Button takePic;
+	ImageView imageView;
+
+	static final int REQUEST_IMAGE_CAPTURE = 1;
+
+	public void takePic(View view) {
+		dispatchTakePictureIntent();
+	}
+
+	static String mCurrentPhotoPath;
+
+	private File createImageFile() throws IOException {
+		// Create an image file name
+		Toast.makeText(this, "createImageFile called!", Toast.LENGTH_SHORT)
+				.show();
+
+		String timeStamp = SimpleDateFormat.getDateTimeInstance().format(
+				new Date());
+		String imageFileName = "JPEG_" + timeStamp + "_";
+		File storageDir = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		File image = File.createTempFile(imageFileName, /* prefix */
+				".jpg", /* suffix */
+				storageDir /* directory */
+		);
+
+		// Save a file: path for use with ACTION_VIEW intents
+		mCurrentPhotoPath = image.getAbsolutePath();
+		Toast.makeText(this, image.getAbsolutePath(), Toast.LENGTH_SHORT)
+				.show();
+		Toast.makeText(this, mCurrentPhotoPath + " Cenas", Toast.LENGTH_SHORT)
+				.show();
+
+		return image;
+	}
+
+	static final int REQUEST_TAKE_PHOTO = 1;
+
+	private void dispatchTakePictureIntent() {
+		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		// Ensure that there's a camera activity to handle the intent
+		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+			// Create the File where the photo should go
+
+			File photoFile = null;
+			try {
+				photoFile = createImageFile();
+			} catch (IOException ex) {
+				Toast.makeText(this,
+						"IOException catched! \n " + ex.getLocalizedMessage(),
+						Toast.LENGTH_SHORT).show();
+			}
+			// Continue only if the File was successfully created
+			if (photoFile != null) {
+
+				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+						Uri.fromFile(photoFile));
+				startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+			} else
+				startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+			setPic();
+		}
+	}
+
+	private void setPic() {
+		// Get the dimensions of the View
+		int targetW = imageView.getWidth();
+		int targetH = imageView.getHeight();
+		Toast.makeText(this, "setPic called!", Toast.LENGTH_SHORT).show();
+		// Get the dimensions of the bitmap
+		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+		bmOptions.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+		int photoW = bmOptions.outWidth;
+		int photoH = bmOptions.outHeight;
+
+		// Determine how much to scale down the image
+		int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+		// Decode the image file into a Bitmap sized to fill the View
+		bmOptions.inJustDecodeBounds = false;
+		bmOptions.inSampleSize = scaleFactor;
+		bmOptions.inPurgeable = true;
+
+		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+		imageView.setImageBitmap(bitmap);
+		
+		Toast.makeText(this, mail, Toast.LENGTH_SHORT).show();
+
+	}
+
+	private static boolean isSignedIn() {
+		if (!Strings.isNullOrEmpty(mail)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public void addXPTO(View view) {
-		//new EndpointsTask().execute(getApplicationContext());
-		String name = ((EditText) findViewById(R.id.activity_test_add_to_product_list_name)).getText().toString();
-		Long barCode = Long.parseLong(((EditText) findViewById(R.id.activity_test_add_to_product_list_barCode)).getText().toString());
-		String description =  ((EditText) findViewById(R.id.activity_test_add_to_product_list_description)).getText().toString();
-		EndpointCall.addProductTask(name, barCode, description);
+		// new EndpointsTask().execute(getApplicationContext());
+		String name = ((EditText) findViewById(R.id.activity_test_add_to_product_list_name))
+				.getText().toString();
+		Long barCode = Long
+				.parseLong(((EditText) findViewById(R.id.activity_test_add_to_product_list_barCode))
+						.getText().toString());
+		String description = ((EditText) findViewById(R.id.activity_test_add_to_product_list_description))
+				.getText().toString();
+		mail = getIntent().getStringExtra("MAIL");
+		if (!AppConstants
+				.checkGooglePlayServicesAvailable(TestAddToProductListActivity.this)) {
+			return;
+		}
+		new EndpointsTask(TestAddToProductListActivity.this, getIntent(), mail)
+				.execute(new epic.easystock.activitys.TestAddToProductListActivity.EndpointsTask.Param(
+						name, barCode, description, mCurrentPhotoPath));
 	}
 
-	/*FIXME LIXO public class EndpointsTask extends AsyncTask<Context, Integer, Long> {
-		@Override
-		protected Long doInBackground(Context... contexts) {
-			Productendpoint.Builder endpointBuilder = new Productendpoint.Builder(
-					AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-					new HttpRequestInitializer() {
-						public void initialize(HttpRequest httpRequest) {
-						}
-					});
-			Productendpoint endpoint = CloudEndpointUtils.updateBuilder(
-					endpointBuilder).build();
-			try {
-				String name = ((EditText) findViewById(R.id.activity_test_add_to_product_list_name)).getText().toString();
-				Long barCode = Long.parseLong(((EditText) findViewById(R.id.activity_test_add_to_product_list_barCode)).getText().toString());
-				String description =  ((EditText) findViewById(R.id.activity_test_add_to_product_list_description)).getText().toString();
+	public static class EndpointsTask
+			extends
+			AsyncTask<epic.easystock.activitys.TestAddToProductListActivity.EndpointsTask.Param, Integer, Long> {
+		public static class Param {
+			String name;
+			Long barCode;
+			String description;
+			String image;
 
-				//Product productAux = new Product(idProduct, name, barCode, description);
-				
-				epic.easystock.productendpoint.model.Product content = new epic.easystock.productendpoint.model.Product();
-				
-				content.setName(name);
-				content.setBarCode(barCode);
-				content.setDescription(description);
-				
-				epic.easystock.productendpoint.model.Product result = endpoint.insertProduct(content).execute();
+			public Param(String name, Long barCode, String description,
+					String image) {
+				super();
+				this.name = name;
+				this.barCode = barCode;
+				this.description = description;
+				this.image = image;
+			}
+		}
+
+		Context context;
+		Intent intent;
+		String mail;
+
+		public EndpointsTask(Context incontext, Intent intent, String mail) {
+			context = incontext;
+			this.mail = mail;
+			this.intent = intent;
+		}
+
+		@Override
+		protected Long doInBackground(
+				epic.easystock.activitys.TestAddToProductListActivity.EndpointsTask.Param... params) {
+			try {
+				// Product productAux = new Product(idProduct, name, barCode,
+				// description);
+				if (!isSignedIn()) {
+					Log.i("ADD PRODUCT", "NOT SIGNED IN");
+					return null;
+				}
+
+				// Create a Google credential since this is an authenticated
+				// request
+				// to the API.
+				GoogleAccountCredential credential = GoogleAccountCredential
+						.usingAudience(context, AppConstants.AUDIENCE);
+				credential.setSelectedAccountName(mail);
+				ApiEndpoint endpoint = AppConstants
+						.getApiServiceHandle(credential);// FIXME
+
+				Product content = new Product();
+				content.setName(params[0].name);
+				content.setBarCode(params[0].barCode);
+				content.setDescription(params[0].description);
+				if (!Strings.isNullOrEmpty(params[0].image)) {
+					Bitmap bmp = BitmapFactory.decodeFile(params[0].image);
+					if (bmp != null && bmp.getByteCount() > 5) {
+						ByteArrayOutputStream stream = new ByteArrayOutputStream();
+						bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+						byte[] byteArray = stream.toByteArray();
+						content.encodeImage(byteArray);
+					}
+				}
+				Log.i("ADD PRODUCT", "TEST");
+				Product result = endpoint.insertProduct(content).execute();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return (long) 0;
+			return (long) 0; // FIXME
 		}
-	}*/
+	}
 }

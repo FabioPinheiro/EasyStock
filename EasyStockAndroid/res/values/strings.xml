@@ -31,5 +31,12 @@
     <string name="play_services_error">Google Play services is not available.  This application will close.</string>
     <string name="close">Close</string>
     <string name="profile_picture">User\'s profile picture.</string>
-    
+
+    <!-- Add product strings -->
+    <string name="take_pic">Take Picture</string>
+    <string name="product_name">Product Name</string>
+    <string name="product_id">Product ID</string>
+    <string name="product_description">Product Description</string>
+    <string name="title_activity_sign_in">SignInActivity</string>
+
 </resources>

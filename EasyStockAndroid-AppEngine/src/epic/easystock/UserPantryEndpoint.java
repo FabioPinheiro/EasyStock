@@ -17,16 +17,18 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
 //userpantryendpoint
-@Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""))
+@Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""), version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = {
+		Constants.WEB_CLIENT_ID, Constants.ANDROID_CLIENT_ID }, audiences = { Constants.ANDROID_AUDIENCE })
 public class UserPantryEndpoint {
 
 	/**
-	 * This method lists all the entities inserted in datastore.
-	 * It uses HTTP GET method and paging support.
-	 *
+	 * This method lists all the entities inserted in datastore. It uses HTTP
+	 * GET method and paging support.
+	 * 
 	 * @return A CollectionResponse class containing the list of all entities
-	 * persisted and a cursor to the next page.
+	 *         persisted and a cursor to the next page.
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "listUserPantry")
@@ -57,7 +59,8 @@ public class UserPantryEndpoint {
 			if (cursor != null)
 				cursorString = cursor.toWebSafeString();
 
-			// Tight loop for fetching all entities from datastore and accomodate
+			// Tight loop for fetching all entities from datastore and
+			// accomodate
 			// for lazy fetch.
 			for (UserPantry obj : execute)
 				;
@@ -70,9 +73,11 @@ public class UserPantryEndpoint {
 	}
 
 	/**
-	 * This method gets the entity having primary key id. It uses HTTP GET method.
-	 *
-	 * @param id the primary key of the java bean.
+	 * This method gets the entity having primary key id. It uses HTTP GET
+	 * method.
+	 * 
+	 * @param id
+	 *            the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
 	@ApiMethod(name = "getUserPantry")
@@ -88,11 +93,12 @@ public class UserPantryEndpoint {
 	}
 
 	/**
-	 * This inserts a new entity into App Engine datastore. If the entity already
-	 * exists in the datastore, an exception is thrown.
-	 * It uses HTTP POST method.
-	 *
-	 * @param userpantry the entity to be inserted.
+	 * This inserts a new entity into App Engine datastore. If the entity
+	 * already exists in the datastore, an exception is thrown. It uses HTTP
+	 * POST method.
+	 * 
+	 * @param userpantry
+	 *            the entity to be inserted.
 	 * @return The inserted entity.
 	 */
 	@ApiMethod(name = "insertUserPantry")
@@ -110,11 +116,12 @@ public class UserPantryEndpoint {
 	}
 
 	/**
-	 * This method is used for updating an existing entity. If the entity does not
-	 * exist in the datastore, an exception is thrown.
-	 * It uses HTTP PUT method.
-	 *
-	 * @param userpantry the entity to be updated.
+	 * This method is used for updating an existing entity. If the entity does
+	 * not exist in the datastore, an exception is thrown. It uses HTTP PUT
+	 * method.
+	 * 
+	 * @param userpantry
+	 *            the entity to be updated.
 	 * @return The updated entity.
 	 */
 	@ApiMethod(name = "updateUserPantry")
@@ -132,10 +139,11 @@ public class UserPantryEndpoint {
 	}
 
 	/**
-	 * This method removes the entity with primary key id.
-	 * It uses HTTP DELETE method.
-	 *
-	 * @param id the primary key of the entity to be deleted.
+	 * This method removes the entity with primary key id. It uses HTTP DELETE
+	 * method.
+	 * 
+	 * @param id
+	 *            the primary key of the entity to be deleted.
 	 */
 	@ApiMethod(name = "removeUserPantry")
 	public void removeUserPantry(@Named("id") Long id) {

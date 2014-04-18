@@ -2,9 +2,6 @@ package epic.easystock;
 
 import java.io.IOException;
 
-import epic.easystock.R;
-import epic.easystock.R.id;
-import epic.easystock.R.layout;
 import epic.easystock.messageEndpoint.MessageEndpoint;
 import epic.easystock.messageEndpoint.model.CollectionResponseMessageData;
 import epic.easystock.messageEndpoint.model.MessageData;

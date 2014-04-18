@@ -3,8 +3,6 @@ package epic.easystock.assist;
 import java.util.ArrayList;
 
 import epic.easystock.R;
-import epic.easystock.R.id;
-import epic.easystock.R.layout;
 import epic.easystock.apiEndpoint.model.Product;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -46,7 +44,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 		TextView labelViewDescription = (TextView) rowView.findViewById(R.id.product_row_label_description);
 
 		// 4. Set the text for textView
-		labelViewIdProduct.setText(productArrayList.get(position).getKey().getId().toString());
+		labelViewIdProduct.setText(productArrayList.get(position).getKey().toString());
 		labelViewName.setText(productArrayList.get(position).getName());
 		labelViewBarCode.setText(productArrayList.get(position).getBarCode().toString());
 		labelViewDescription.setText(productArrayList.get(position).getDescription());

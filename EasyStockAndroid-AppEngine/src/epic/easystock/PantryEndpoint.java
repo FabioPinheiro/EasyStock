@@ -10,7 +10,7 @@ import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
 
 import java.util.List;
-
+import epic.easystock.Constants;
 import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.persistence.EntityExistsException;
@@ -18,7 +18,11 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 //pantryendpoint
-@Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""))
+
+@Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""),version = "v1",
+scopes = {Constants.EMAIL_SCOPE},
+clientIds = {Constants.WEB_CLIENT_ID, Constants.ANDROID_CLIENT_ID},
+audiences = {Constants.ANDROID_AUDIENCE})
 public class PantryEndpoint {
 
 	/**

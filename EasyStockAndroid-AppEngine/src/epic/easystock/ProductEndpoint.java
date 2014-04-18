@@ -17,16 +17,17 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-//productendpoint
-@Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""))
+
+@Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""), version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = {
+		Constants.WEB_CLIENT_ID, Constants.ANDROID_CLIENT_ID }, audiences = { Constants.ANDROID_AUDIENCE })
 public class ProductEndpoint {
 
 	/**
-	 * This method lists all the entities inserted in datastore.
-	 * It uses HTTP GET method and paging support.
-	 *
+	 * This method lists all the entities inserted in datastore. It uses HTTP
+	 * GET method and paging support.
+	 * 
 	 * @return A CollectionResponse class containing the list of all entities
-	 * persisted and a cursor to the next page.
+	 *         persisted and a cursor to the next page.
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "listProduct")
@@ -56,7 +57,8 @@ public class ProductEndpoint {
 			if (cursor != null)
 				cursorString = cursor.toWebSafeString();
 
-			// Tight loop for fetching all entities from datastore and accomodate
+			// Tight loop for fetching all entities from datastore and
+			// accomodate
 			// for lazy fetch.
 			for (Product obj : execute)
 				;
@@ -69,9 +71,11 @@ public class ProductEndpoint {
 	}
 
 	/**
-	 * This method gets the entity having primary key id. It uses HTTP GET method.
-	 *
-	 * @param id the primary key of the java bean.
+	 * This method gets the entity having primary key id. It uses HTTP GET
+	 * method.
+	 * 
+	 * @param id
+	 *            the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
 	@ApiMethod(name = "getProduct")
@@ -87,11 +91,12 @@ public class ProductEndpoint {
 	}
 
 	/**
-	 * This inserts a new entity into App Engine datastore. If the entity already
-	 * exists in the datastore, an exception is thrown.
-	 * It uses HTTP POST method.
-	 *
-	 * @param product the entity to be inserted.
+	 * This inserts a new entity into App Engine datastore. If the entity
+	 * already exists in the datastore, an exception is thrown. It uses HTTP
+	 * POST method.
+	 * 
+	 * @param product
+	 *            the entity to be inserted.
 	 * @return The inserted entity.
 	 */
 	@ApiMethod(name = "insertProduct")
@@ -109,11 +114,12 @@ public class ProductEndpoint {
 	}
 
 	/**
-	 * This method is used for updating an existing entity. If the entity does not
-	 * exist in the datastore, an exception is thrown.
-	 * It uses HTTP PUT method.
-	 *
-	 * @param product the entity to be updated.
+	 * This method is used for updating an existing entity. If the entity does
+	 * not exist in the datastore, an exception is thrown. It uses HTTP PUT
+	 * method.
+	 * 
+	 * @param product
+	 *            the entity to be updated.
 	 * @return The updated entity.
 	 */
 	@ApiMethod(name = "updateProduct")
@@ -131,10 +137,11 @@ public class ProductEndpoint {
 	}
 
 	/**
-	 * This method removes the entity with primary key id.
-	 * It uses HTTP DELETE method.
-	 *
-	 * @param id the primary key of the entity to be deleted.
+	 * This method removes the entity with primary key id. It uses HTTP DELETE
+	 * method.
+	 * 
+	 * @param id
+	 *            the primary key of the entity to be deleted.
 	 */
 	@ApiMethod(name = "removeProduct")
 	public void removeProduct(@Named("id") Long id) {
@@ -151,8 +158,9 @@ public class ProductEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			if(product.getKey()==null)
+			if(product == null || product.getKey() == null){
 				return false;
+			}
 			Product item = mgr.find(Product.class, product.getKey());
 			if (item == null) {
 				contains = false;
