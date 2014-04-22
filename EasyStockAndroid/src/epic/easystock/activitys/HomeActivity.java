@@ -97,7 +97,12 @@ public class HomeActivity extends Activity {
 		intent.putExtra("MAIL", mail);
 		startActivity(intent);
 	}
-
+	
+	public void changeToMyPantriesActivity(View view) {
+		Intent intent = new Intent(this, MyPantriesActivity.class);
+		intent.putExtra("MAIL", mail);
+		startActivity(intent);
+	}
 	public void changeToMainActivity(View view) {
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("MAIL", mail);

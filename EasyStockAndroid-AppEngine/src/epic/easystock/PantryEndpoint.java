@@ -174,6 +174,8 @@ public class PantryEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
+			if(pantry == null)
+				return false;
 			Pantry item = mgr.find(Pantry.class, pantry.getKey());
 			if (item == null) {
 				contains = false;

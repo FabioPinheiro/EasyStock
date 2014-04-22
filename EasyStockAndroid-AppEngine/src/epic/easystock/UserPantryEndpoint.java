@@ -93,6 +93,40 @@ public class UserPantryEndpoint {
 	}
 
 	/**
+	 * This method gets the entity having primary key id. It uses HTTP GET
+	 * method.
+	 * 
+	 * @param id
+	 *            the primary key of the java bean.
+	 * @return The entity with primary key id.
+	 */
+	@SuppressWarnings("unchecked")
+	@ApiMethod(name = "getPantryIdByMail")
+	public Pantry getPantryIdByMail(@Named("mail") String mail) {
+		EntityManager mgr = null;
+		List<UserPantry> execute = null;
+
+		try {
+			mgr = getEntityManager();
+			Query query = mgr
+					.createQuery("select from UserPantry as UserPantry");
+
+			execute = (List<UserPantry>) query.getResultList();
+
+			// Tight loop for fetching all entities from datastore and
+			// accomodate
+			// for lazy fetch.
+			for (UserPantry obj : execute)
+				if(obj.getUser().getEmail().equals(mail))
+					return obj.getPantry();
+				;
+		} finally {
+			mgr.close();
+		}
+		return null;
+	}
+
+	/**
 	 * This inserts a new entity into App Engine datastore. If the entity
 	 * already exists in the datastore, an exception is thrown. It uses HTTP
 	 * POST method.
@@ -160,6 +194,8 @@ public class UserPantryEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
+			if(userpantry == null)
+				return false;
 			UserPantry item = mgr.find(UserPantry.class, userpantry.getKey());
 			if (item == null) {
 				contains = false;

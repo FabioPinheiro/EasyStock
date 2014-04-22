@@ -53,7 +53,7 @@ public class ProductListActivity extends ListActivity {
 		Product product = (Product) getListAdapter().getItem(position);
 		//Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
 		xpto.setVisibility(View.VISIBLE);
-		TextView x = (TextView) findViewById(R.id.textView1);
+		TextView x = (TextView) findViewById(R.id.myMail);
 		x.setText(product.getName());
 	}
 

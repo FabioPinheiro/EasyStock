@@ -9,6 +9,11 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <permission
         android:name="epic.easystock.permission.C2D_MESSAGE"
@@ -29,8 +34,8 @@
             android:value="@integer/google_play_services_version" />
         <!-- android:theme="@style/AppTheme" -->
         <activity
-            android:name="epic.easystock.activitys.HomeActivity"
-            android:label="@string/title_activity_home" >
+            android:name="epic.easystock.activitys.SignInActivity"
+            android:label="@string/title_activity_sign_in" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,6 +87,14 @@
             android:name="epic.easystock.activitys.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name="epic.easystock.activitys.HomeActivity"
+            android:label="@string/title_activity_home" >
+        </activity>
+        <activity
+            android:name="epic.easystock.activitys.MyPantriesActivity"
+            android:label="@string/title_activity_my_pantries" >
         </activity>
     </application>
 

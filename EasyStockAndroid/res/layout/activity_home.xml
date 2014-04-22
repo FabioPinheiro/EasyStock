@@ -21,7 +21,7 @@
     </com.google.android.gms.common.SignInButton>	
     
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/ProductList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
@@ -49,8 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:text="MainActivity" 
-        android:onClick="changeToMainActivity"/>
+        android:text="My Pantries" 
+        android:onClick="changeToMyPantriesActivity"/>
     
     <Button
         android:id="@+id/button5"

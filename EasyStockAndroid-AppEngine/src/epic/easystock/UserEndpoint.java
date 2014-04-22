@@ -93,7 +93,7 @@ public class UserEndpoint {
 
 	/**
 	 * This inserts a new entity into App Engine datastore. If the entity
-	 * already exists in the datastore, an exception is thrown. It uses HTTP
+	 * already exists in the datastore, an excepti on is thrown. It uses HTTP
 	 * POST method.
 	 * 
 	 * @param user
@@ -159,7 +159,9 @@ public class UserEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			User item = mgr.find(User.class, user.getKey());
+			if (user == null)
+				return false;
+			User item = findUserByMail(user);
 			if (item == null) {
 				contains = false;
 			}
@@ -167,6 +169,29 @@ public class UserEndpoint {
 			mgr.close();
 		}
 		return contains;
+	}
+
+	private User findUserByMail(User user) {
+		EntityManager mgr = null;
+		User execute = null;
+
+		try {
+			mgr = getEntityManager();
+			Query query = mgr
+					.createQuery("SELECT u FROM User u WHERE u.email LIKE :email");
+			query.setParameter("email", user.getEmail());
+
+			query.setFirstResult(0);
+			query.setMaxResults(1);
+
+			execute = (User) query.getResultList();
+			if (true)
+				throw new NullPointerException("RESULTADO DO SELECT É NULL");
+		} finally {
+			mgr.close();
+		}
+
+		return execute;
 	}
 
 	private static EntityManager getEntityManager() {
