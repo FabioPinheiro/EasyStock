@@ -8,12 +8,14 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.internal.en;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.Strings;
 
@@ -24,6 +26,7 @@ import epic.easystock.apiEndpoint.model.MetaProduct;
 import epic.easystock.apiEndpoint.model.Pantry;
 //github.com/FabioPinheiro/EasyStock.git
 import epic.easystock.apiEndpoint.model.Product;
+import epic.easystock.apiEndpoint.model.UserPantry;
 import epic.easystock.assist.AppConstants;
 
 public class PantyActivity extends ListActivity {
@@ -34,19 +37,17 @@ public class PantyActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(epic.easystock.R.layout.activity_panty);
-		
+		mail = getIntent().getStringExtra("MAIL");
 		addProduct = (Button) findViewById(R.id.AddProduct);
-		
+		new ListPantryTask().execute(getApplicationContext());
+
 		addProduct.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Log.i("ADDPRODUCT PANTRY", "new AddProductTask: " + mail);
 				new AddProductTask().execute(getApplicationContext());
 			}
 		});
-
-		mail = getIntent().getStringExtra("MAIL");
-		new ListPantryTask().execute(getApplicationContext());
-
 	}
 
 	private boolean isSignedIn() {
@@ -60,7 +61,7 @@ public class PantyActivity extends ListActivity {
 	public class ListPantryTask extends AsyncTask<Context, Integer, Void> {
 		@Override
 		protected Void doInBackground(Context... contexts) {
-
+			Log.i("ListPantryTask PANTRY", "new ListPantryTask: " + mail);
 			if (!isSignedIn()) {
 				return null;
 			}
@@ -79,15 +80,23 @@ public class PantyActivity extends ListActivity {
 			ApiEndpoint endpoint = AppConstants.getApiServiceHandle(credential);// FIXME
 
 			List<MetaProduct> products = null;
-			Long pantryId = 0l;
 			try {
-				Pantry pantry = endpoint.getPantryIdByMail(mail).execute();
-				products = endpoint.getPantryProducts(pantry.getKey().getId())
-						.execute().getItems();
+				Pantry pantry = endpoint.getMyPantryByMail(mail).execute();
+
+				products = pantry.getProducts();
+				if (products == null) {
+					Log.i("ListPantryTask PANTRY", "products == null");
+					products = new ArrayList<MetaProduct>();
+					pantry.setProducts(products);
+					endpoint.updatePantry(pantry).execute();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			ArrayList<Product> list = new ArrayList<Product>(products.size());
+
+			ArrayList<Product> list = new ArrayList<Product>();
 			for (MetaProduct mp : products) {
 				Product aux = new Product();
 				aux.setName(mp.getProduct().getName());
@@ -96,12 +105,6 @@ public class PantyActivity extends ListActivity {
 				aux.setKey(mp.getProduct().getKey());
 				list.add(aux);
 			}
-			// FIXME ProductAdapter adapter = new ProductAdapter(contexts[0],
-			// list);
-
-			// 2. setListAdapter
-			// FIXME setListAdapter(adapter);
-
 			return null;
 		}
 	}
@@ -109,17 +112,17 @@ public class PantyActivity extends ListActivity {
 	public class AddProductTask extends AsyncTask<Context, Integer, Void> {
 		@Override
 		protected Void doInBackground(Context... contexts) {
-
+			Log.i("ADDPRODUCT PANTRY", "doInBackground" + mail);
 			if (!isSignedIn()) {
 				return null;
 			}
-
+			Log.i("ADDPRODUCT PANTRY", "isSignedIn");
 			if (!AppConstants
 					.checkGooglePlayServicesAvailable(PantyActivity.this)) {
 
 				return null;
 			}
-
+			Log.i("ADDPRODUCT PANTRY", " GooglePlayServices isAvailable");
 			// Create a Google credential since this is an authenticated request
 			// to the API.
 			GoogleAccountCredential credential = GoogleAccountCredential
@@ -127,19 +130,26 @@ public class PantyActivity extends ListActivity {
 			credential.setSelectedAccountName(mail);
 			ApiEndpoint endpoint = AppConstants.getApiServiceHandle(credential);// FIXME
 
-			Long pantryId = Long
+			Long productId = Long
 					.valueOf(((EditText) findViewById(R.id.NumberId)).getText()
 							.toString());
+			Log.i("ADDPRODUCT PANTRY", "productId " + productId);
 			try {
-				Pantry pantry = endpoint.getPantryIdByMail(mail).execute();
-
+				Pantry pantry = endpoint.getMyPantryByMail(mail).execute();
 				List<MetaProduct> newList = pantry.getProducts();
-				newList.add(new MetaProduct().setProduct(endpoint.getProduct(
-						pantryId).execute()));
+				if (newList == null)
+					newList = new ArrayList<MetaProduct>();
+				MetaProduct metaP = new MetaProduct();
+				Product newProd = endpoint.getProductByBarCode(productId).execute();
+				metaP.setProduct(newProd);
+				endpoint.insertMetaProduct(metaP).execute();
+				newList.add(metaP);
 				pantry.setProducts(newList);
-				endpoint.updatePantry(pantry);
+				endpoint.updatePantry(pantry).execute();
 
+				Log.i("ADDPRODUCT PANTRY", "Product added to pantry");
 			} catch (IOException e) {
+				Log.i("ADDPRODUCT PANTRY", "Product NOT added to pantry");
 				e.printStackTrace();
 			}
 

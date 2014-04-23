@@ -88,7 +88,7 @@ public class HomeActivity extends Activity {
 
 	public void changeToPantyActivity(View view) {
 		Intent intent = new Intent(this, PantyActivity.class);
-		intent.putExtra("MAIL", "");
+		intent.putExtra("MAIL", mail);
 		startActivity(intent);
 	}
 

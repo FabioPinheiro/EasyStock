@@ -80,7 +80,7 @@ public class UserPantryEndpoint {
 	 *            the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
-	@ApiMethod(name = "getUserPantry")
+	@ApiMethod(name = "getUserPantry", path = "getUserPantry")
 	public UserPantry getUserPantry(@Named("id") Long id) {
 		EntityManager mgr = getEntityManager();
 		UserPantry userpantry = null;
@@ -101,8 +101,8 @@ public class UserPantryEndpoint {
 	 * @return The entity with primary key id.
 	 */
 	@SuppressWarnings("unchecked")
-	@ApiMethod(name = "getPantryIdByMail")
-	public Pantry getPantryIdByMail(@Named("mail") String mail) {
+	@ApiMethod(name = "getMyPantryByMail", path = "getPantryByMail")
+	public Pantry getMyPantryByMail(@Named("mail") String mail) {
 		EntityManager mgr = null;
 		List<UserPantry> execute = null;
 
@@ -116,10 +116,17 @@ public class UserPantryEndpoint {
 			// Tight loop for fetching all entities from datastore and
 			// accomodate
 			// for lazy fetch.
+			Pantry ret = null;
 			for (UserPantry obj : execute)
-				if(obj.getUser().getEmail().equals(mail))
-					return obj.getPantry();
-				;
+				if (obj.getUser().getEmail().equals(mail)) {
+					ret = obj.getPantry();
+					break;
+				}
+			if (ret != null) {
+				for (MetaProduct p : ret.getProducts())
+					p.getProduct();
+				return ret;
+			}
 		} finally {
 			mgr.close();
 		}
@@ -194,8 +201,9 @@ public class UserPantryEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			if(userpantry == null)
+			if (userpantry == null || userpantry.getKey() == null) {
 				return false;
+			}
 			UserPantry item = mgr.find(UserPantry.class, userpantry.getKey());
 			if (item == null) {
 				contains = false;

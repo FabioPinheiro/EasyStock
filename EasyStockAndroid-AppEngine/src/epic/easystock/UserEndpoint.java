@@ -76,6 +76,8 @@ public class UserEndpoint {
 	 * method.
 	 * 
 	 * @param id
+	 *            return false;
+	 * 
 	 *            the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
@@ -159,8 +161,9 @@ public class UserEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			if (user == null)
+			if (user == null) {
 				return false;
+			}
 			User item = findUserByMail(user);
 			if (item == null) {
 				contains = false;
@@ -173,25 +176,24 @@ public class UserEndpoint {
 
 	private User findUserByMail(User user) {
 		EntityManager mgr = null;
-		User execute = null;
+		List<User> execute = null;
 
 		try {
 			mgr = getEntityManager();
-			Query query = mgr
-					.createQuery("SELECT u FROM User u WHERE u.email LIKE :email");
-			query.setParameter("email", user.getEmail());
+			Query query = mgr.createQuery(
+					"SELECT u FROM User u WHERE u.email=:email").setParameter(
+					"email", user.getEmail());
 
 			query.setFirstResult(0);
 			query.setMaxResults(1);
 
-			execute = (User) query.getResultList();
-			if (true)
-				throw new NullPointerException("RESULTADO DO SELECT É NULL");
+			execute = query.getResultList();
 		} finally {
 			mgr.close();
 		}
-
-		return execute;
+		if (execute.size() == 1)
+			return execute.get(0);
+		return null;
 	}
 
 	private static EntityManager getEntityManager() {

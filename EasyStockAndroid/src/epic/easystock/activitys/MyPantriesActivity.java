@@ -1,8 +1,12 @@
 package epic.easystock.activitys;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
+
+import com.google.android.gms.internal.en;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.Strings;
 
@@ -22,6 +26,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,34 +41,29 @@ import android.os.Build;
 public class MyPantriesActivity extends Activity {
 	String mail;
 	Button newPantry;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_pantries);
-		
+
 		mail = getIntent().getStringExtra("MAIL");
 
 		TextView myMail = (TextView) findViewById(R.id.myMail);
 		myMail.setText(mail);
-		
+
 		newPantry = (Button) findViewById(R.id.createpantry);
-		
+
 		newPantry.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				new NewPantryTask().execute(getApplicationContext());
 			}
 		});
-		
-		
+
 	}
 
-	
-	
-	
-	
-	
 	private boolean isSignedIn() {
 		if (!Strings.isNullOrEmpty(mail)) {
 			return true;
@@ -71,7 +71,7 @@ public class MyPantriesActivity extends Activity {
 			return false;
 		}
 	}
-	
+
 	public class NewPantryTask extends AsyncTask<Context, Integer, Void> {
 		@Override
 		protected Void doInBackground(Context... contexts) {
@@ -89,45 +89,52 @@ public class MyPantriesActivity extends Activity {
 			// Create a Google credential since this is an authenticated request
 			// to the API.
 			GoogleAccountCredential credential = GoogleAccountCredential
-					.usingAudience(MyPantriesActivity.this, AppConstants.AUDIENCE);
+					.usingAudience(MyPantriesActivity.this,
+							AppConstants.AUDIENCE);
 			credential.setSelectedAccountName(mail);
 			ApiEndpoint endpoint = AppConstants.getApiServiceHandle(credential);// FIXME
 
 			try {
-				
-				Pantry myNewPantry = new Pantry();
+
+				Pantry myNewPantry;
 				UserPantry newUP = new UserPantry();
 				User user = new User();
 				user.setEmail(mail);
 				String[] uMail = mail.split("@");
 				user.setNick(uMail[0]);
 				newUP.setUser(user);
+				myNewPantry = endpoint.getMyPantryByMail(mail).execute();
+				if (myNewPantry == null) {
+					myNewPantry = new Pantry();
+					Log.i("NewPantryTask PANTRY", "myNewPantry == null" + myNewPantry.getKey());
+				}
+				myNewPantry.setProducts(new ArrayList<MetaProduct>());
 				newUP.setPantry(myNewPantry);
-				
-				endpoint.insertUser(user).execute();
-				endpoint.insertPantry(myNewPantry);
-				endpoint.insertUserPantry(newUP);
-				
 
-			} catch (IOException e) {
+				try {
+					endpoint.insertUser(user).execute();
+				} catch (Exception e) {
+					endpoint.updateUser(user).execute();
+				}
+				try {
+					endpoint.insertPantry(myNewPantry).execute();
+				} catch (Exception e) {
+					endpoint.updatePantry(myNewPantry).execute();
+				}
+				try {
+					endpoint.insertUserPantry(newUP).execute();
+				} catch (Exception e) {
+					endpoint.updateUserPantry(newUP).execute();
+				}
+
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			return null;
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 

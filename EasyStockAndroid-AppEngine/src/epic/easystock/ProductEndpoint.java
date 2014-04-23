@@ -89,7 +89,28 @@ public class ProductEndpoint {
 		}
 		return product;
 	}
+	@ApiMethod(name = "getProductByBarCode", path="getProductByBarCode")
+	public Product getProductByBarCode(@Named("id") Long id) {
+		EntityManager mgr = null;
+		List<Product> execute = null;
 
+		try {
+			mgr = getEntityManager();
+			Query query = mgr.createQuery(
+					"SELECT u FROM User u WHERE u.email=:email").setParameter(
+					"email", id);
+
+			query.setFirstResult(0);
+			query.setMaxResults(1);
+
+			execute = query.getResultList();
+		} finally {
+			mgr.close();
+		}
+		if (execute.size() == 1)
+			return execute.get(0);
+		return null;
+	}
 	/**
 	 * This inserts a new entity into App Engine datastore. If the entity
 	 * already exists in the datastore, an exception is thrown. It uses HTTP
@@ -158,7 +179,7 @@ public class ProductEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			if(product == null || product.getKey() == null){
+			if (product == null || product.getKey() == null) {
 				return false;
 			}
 			Product item = mgr.find(Product.class, product.getKey());

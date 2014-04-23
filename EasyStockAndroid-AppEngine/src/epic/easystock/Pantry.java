@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -17,11 +18,11 @@ public class Pantry {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key key;
+	private Long key;
 	
 	private Date TimeStamp;
 	
-	@OneToMany(mappedBy = "Pantry", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "pantry", cascade = CascadeType.ALL)
 	private List<MetaProduct> products;
 
 	public Date getTimeStamp() {
@@ -41,7 +42,7 @@ public class Pantry {
 		this.products = products;
 	}
 
-	public Key getKey() {
+	public Long getKey() {
 		return key;
 	}
 	
