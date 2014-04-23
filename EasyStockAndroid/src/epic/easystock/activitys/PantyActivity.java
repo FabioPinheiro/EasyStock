@@ -133,7 +133,7 @@ public class PantyActivity extends ListActivity {
 			Long productId = Long
 					.valueOf(((EditText) findViewById(R.id.NumberId)).getText()
 							.toString());
-			Log.i("ADDPRODUCT PANTRY", "productId " + productId);
+			Log.i("ADDPRODUCT PANTRY", "productId ");
 			try {
 				Pantry pantry = endpoint.getMyPantryByMail(mail).execute();
 				List<MetaProduct> newList = pantry.getProducts();
