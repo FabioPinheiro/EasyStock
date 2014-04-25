@@ -81,10 +81,6 @@
             android:label="@string/title_activity_panty" >
         </activity>
         <activity
-            android:name="epic.easystock.ExampleActivity"
-            android:label="@string/title_activity_example" >
-        </activity>
-        <activity
             android:name="epic.easystock.activitys.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
