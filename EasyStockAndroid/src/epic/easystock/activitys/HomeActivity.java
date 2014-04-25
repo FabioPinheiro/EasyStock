@@ -6,6 +6,7 @@ import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMultiplayer.I
 import epic.easystock.MainActivity;
 import epic.easystock.RegisterActivity;
 import epic.easystock.assist.LoginAux;
+import epic.easystock.assist.SignInAux;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -54,8 +55,9 @@ public class HomeActivity extends Activity {
 	}
 
 	public void signIn(View view) {
-		new SignInActivity().onClickSignIn(null);
 		Toast.makeText(this, "signIn HOME", Toast.LENGTH_SHORT);
+		String myMail = new SignInAux().signIn(view, this);
+		Toast.makeText(this, "signIn HOME" + myMail, Toast.LENGTH_SHORT);
 	}
 
 	@Override

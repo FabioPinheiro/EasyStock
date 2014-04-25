@@ -2,32 +2,28 @@ package epic.easystock.activitys;
 
 import java.io.IOException;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Build;
-import epic.easystock.R;
-import epic.easystock.assist.*;
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.Intent;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.Strings;
+
+import epic.easystock.R;
+import epic.easystock.assist.AppConstants;
+
 
 public class SignInActivity extends Activity {
 	private static final int ACTIVITY_RESULT_FROM_ACCOUNT_SELECTION = 2222;
@@ -92,6 +88,8 @@ public class SignInActivity extends Activity {
 				R.id.email_address_tv);
 		Toast.makeText(this, "onClickSignIn", Toast.LENGTH_LONG).show();
 		// Check to see how many Google accounts are registered with the device.
+		//String myMail = new SignInAux().signIn(view, this);
+		
 		int googleAccounts = AppConstants.countGoogleAccounts(this);
 		if (googleAccounts == 0) {
 			// No accounts registered, nothing to do.
