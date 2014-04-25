@@ -89,7 +89,8 @@ public class ProductEndpoint {
 		}
 		return product;
 	}
-	@ApiMethod(name = "getProductByBarCode", path="getProductByBarCode")
+
+	@ApiMethod(name = "getProductByBarCode", path = "getProductByBarCode")
 	public Product getProductByBarCode(@Named("id") Long id) {
 		EntityManager mgr = null;
 		List<Product> execute = null;
@@ -111,6 +112,7 @@ public class ProductEndpoint {
 			return execute.get(0);
 		return null;
 	}
+
 	/**
 	 * This inserts a new entity into App Engine datastore. If the entity
 	 * already exists in the datastore, an exception is thrown. It uses HTTP
