@@ -12,7 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.Strings;
@@ -60,6 +62,8 @@ public class MyPantriesActivity extends Activity {
 	}
 
 	public class NewPantryTask extends AsyncTask<Context, Integer, Void> {
+		private String name;
+
 		@Override
 		protected Void doInBackground(Context... contexts) {
 
@@ -72,29 +76,34 @@ public class MyPantriesActivity extends Activity {
 
 				return null;
 			}
-
+			name = ((EditText) findViewById(R.id.pantryName)).getText()
+					.toString();
+			if (Strings.isNullOrEmpty(name)) {
+				name = "default";
+			}
 			// Create a Google credential since this is an authenticated request
 			// to the API.
 			GoogleAccountCredential credential = GoogleAccountCredential
 					.usingAudience(MyPantriesActivity.this,
 							AppConstants.AUDIENCE);
 			credential.setSelectedAccountName(mail);
-			ApiEndpoint endpoint = AppConstants.getApiServiceHandle(credential);// FIXME
+			ApiEndpoint endpoint = AppConstants.getApiServiceHandle(credential);
 
 			try {
-
-				Pantry myNewPantry;
+					
+				Pantry myNewPantry = endpoint
+						.getPantryByMailAndName(mail, name).execute();
+				if (myNewPantry != null) {
+					Log.e("CREATE PANTRY", "User have a pantry with "+ name+" as name");
+					return null;
+				}
 				UserPantry newUP = new UserPantry();
 				User user = new User();
 				user.setEmail(mail);
 				String[] uMail = mail.split("@");
 				user.setNick(uMail[0]);
-				myNewPantry = endpoint.getMyPantryByMail(mail).execute();
-				if (myNewPantry == null) {
-					myNewPantry = new Pantry();
-					Log.i("NewPantryTask PANTRY", "myNewPantry == null"
-							+ myNewPantry.getKey());
-				}
+				myNewPantry = new Pantry();
+				myNewPantry.setName(name);
 				myNewPantry.setProducts(new ArrayList<MetaProduct>());
 
 				try {
@@ -105,7 +114,8 @@ public class MyPantriesActivity extends Activity {
 				try {
 					myNewPantry = endpoint.insertPantry(myNewPantry).execute();
 				} catch (Exception e) {
-					//myNewPantry = endpoint.updatePantry(myNewPantry).execute();
+					// myNewPantry =
+					// endpoint.updatePantry(myNewPantry).execute();
 					e.printStackTrace();
 				}
 				try {

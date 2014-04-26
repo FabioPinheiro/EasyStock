@@ -43,7 +43,7 @@ RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:textAlignment="center" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/pantryName"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/buttonRemoveOne"

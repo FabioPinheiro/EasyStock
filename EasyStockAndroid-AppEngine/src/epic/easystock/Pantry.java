@@ -22,6 +22,8 @@ public class Pantry {
 	
 	private Date TimeStamp;
 	
+	private String name;
+	
 	@OneToMany(mappedBy = "pantry", cascade = CascadeType.ALL)
 	private List<MetaProduct> products;
 
@@ -44,6 +46,14 @@ public class Pantry {
 
 	public Long getKey() {
 		return key;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }

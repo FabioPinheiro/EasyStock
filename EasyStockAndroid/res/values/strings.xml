@@ -38,5 +38,7 @@
     <string name="product_description">Product Description</string>
     <string name="title_activity_sign_in">SignInActivity</string>
     <string name="title_activity_my_pantries">MyPantriesActivity</string>
+    <string name="create_pantry">create pantry</string>
+    <string name="pantryName">Pantry Name</string>
 
 </resources>

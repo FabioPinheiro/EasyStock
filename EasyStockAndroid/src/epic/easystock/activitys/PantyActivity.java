@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
 import android.os.AsyncTask;
@@ -34,6 +36,8 @@ import epic.easystock.data.LocalMetaProduct;
 public class PantyActivity extends ListActivity {
 	String mail;
 	Button addProduct;
+	private String name;
+	MetaProductAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +45,10 @@ public class PantyActivity extends ListActivity {
 		setContentView(epic.easystock.R.layout.activity_panty);
 		mail = getIntent().getStringExtra("MAIL");
 		addProduct = (Button) findViewById(R.id.AddProduct);
-		final MetaProductAdapter adapter = new MetaProductAdapter(this, new ArrayList<LocalMetaProduct>());
+		adapter = new MetaProductAdapter(this,
+				new ArrayList<LocalMetaProduct>());
 		setListAdapter(adapter);
-		if (isConnected()) {
-			new ListPantryTask(adapter).execute(getApplicationContext());
-		} else {
-			new LocalListPantryTask(adapter).execute(getApplicationContext());
-		}
+		selectPantry();
 
 		addProduct.setOnClickListener(new OnClickListener() {
 			@Override
@@ -56,6 +57,43 @@ public class PantyActivity extends ListActivity {
 				new AddProductTask(adapter).execute(getApplicationContext());
 			}
 		});
+
+	}
+
+	private void selectPantry() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Title");
+		alert.setMessage("Message");
+
+		// Set an EditText view to get user input
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				name = input.getText().toString();
+				if (Strings.isNullOrEmpty(name))
+					name = "default";
+				if (isConnected()) {
+					new ListPantryTask(adapter)
+							.execute(getApplicationContext());
+				} else {
+					new LocalListPantryTask(adapter)
+							.execute(getApplicationContext());
+				}
+
+			}
+		});
+
+		alert.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						name = "default";
+					}
+				});
+
+		alert.show();
 	}
 
 	private boolean isConnected() {
@@ -124,6 +162,7 @@ public class PantyActivity extends ListActivity {
 			AsyncTask<Context, Integer, List<LocalMetaProduct>> {
 		private MetaProductAdapter adapter;
 		private PantryDbAdapter dbAdapter;
+
 		public ListPantryTask(MetaProductAdapter adapter) {
 			this.adapter = adapter;
 			dbAdapter = new PantryDbAdapter(PantyActivity.this);
@@ -131,7 +170,15 @@ public class PantyActivity extends ListActivity {
 		}
 
 		@Override
-		protected void onPostExecute(List<LocalMetaProduct> result) { //FIXME passar o localProducts por  return(mas não há problema)
+		protected void onPostExecute(List<LocalMetaProduct> result) { // FIXME
+																		// passar
+																		// o
+																		// localProducts
+																		// por
+																		// return(mas
+																		// não
+																		// há
+																		// problema)
 			super.onPostExecute(result);
 			dbAdapter.putAllProducts(result);
 			Collection<LocalMetaProduct> localProducts = result;
@@ -142,14 +189,17 @@ public class PantyActivity extends ListActivity {
 		protected List<LocalMetaProduct> doInBackground(Context... contexts) {
 			Log.i("PantyActivity", "new ListPantryTask: " + mail);
 			if (!isSignedIn()) {
-				Log.e("PantyActivity", "!isSignedIn()="+ !isSignedIn() + " email" + mail);
-				return null; //FIXME falta informar o utilizador
+				Log.e("PantyActivity", "!isSignedIn()=" + !isSignedIn()
+						+ " email" + mail);
+				return null; // FIXME falta informar o utilizador
 			}
 
 			if (!AppConstants
 					.checkGooglePlayServicesAvailable(PantyActivity.this)) {
-				Log.e("PantyActivity", "fail to checkGooglePlayServicesAvailable"+ " email" + mail);
-				return null; //FIXME informar o utilizador
+				Log.e("PantyActivity",
+						"fail to checkGooglePlayServicesAvailable" + " email"
+								+ mail);
+				return null; // FIXME informar o utilizador
 			}
 
 			// Create a Google credential since this is an authenticated request
@@ -158,17 +208,19 @@ public class PantyActivity extends ListActivity {
 					.usingAudience(PantyActivity.this, AppConstants.AUDIENCE);
 			credential.setSelectedAccountName(mail);
 			ApiEndpoint endpoint = AppConstants.getApiServiceHandle(credential);// FIXME
-			
+
 			List<MetaProduct> products = null;
 			try {
-				Pantry pantry = endpoint.getMyPantryByMail(mail).execute();
+				Pantry pantry = endpoint.getPantryByMailAndName(mail, name)
+						.execute();
 
 				products = pantry.getProducts();
 				if (products == null) {
-					Log.e("PantyActivity","ListPantryTask PANTRY " + "products == null");
-					//products = new ArrayList<MetaProduct>();
-					//pantry.setProducts(products);
-					//endpoint.updatePantry(pantry).execute();
+					Log.e("PantyActivity", "ListPantryTask PANTRY "
+							+ "products == null");
+					products = new ArrayList<MetaProduct>();
+					pantry.setProducts(products);
+					endpoint.updatePantry(pantry).execute();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -186,15 +238,22 @@ public class PantyActivity extends ListActivity {
 					e.printStackTrace();
 					continue;
 				}
-				localProducts.add(new LocalMetaProduct(aux.getBarCode(), aux.getName(), aux.getDescription(), aux.getKey(),mp.getAmount()));
+				localProducts.add(new LocalMetaProduct(aux.getBarCode(), aux
+						.getName(), aux.getDescription(), aux.getKey(), mp
+						.getAmount()));
 			}
 			return localProducts;
 		}
 	}
 
-	
-	public class AddProductTask extends AsyncTask<Context, Integer, LocalMetaProduct> { //FIXME isto tem muito problemas de syscronização (falar com o fabio)
+	public class AddProductTask extends
+			AsyncTask<Context, Integer, LocalMetaProduct> { // FIXME isto tem
+															// muito problemas
+															// de syscronização
+															// (falar com o
+															// fabio)
 		MetaProductAdapter adapter;
+
 		public AddProductTask(MetaProductAdapter adapter) {
 			this.adapter = adapter;
 		}
@@ -203,14 +262,17 @@ public class PantyActivity extends ListActivity {
 		protected LocalMetaProduct doInBackground(Context... contexts) {
 			Log.i("PantyActivity", "new ListPantryTask: " + mail);
 			if (!isSignedIn()) {
-				Log.e("PantyActivity", "!isSignedIn()="+ !isSignedIn() + " email" + mail);
-				return null; //FIXME falta informar o utilizador
+				Log.e("PantyActivity", "!isSignedIn()=" + !isSignedIn()
+						+ " email" + mail);
+				return null; // FIXME falta informar o utilizador
 			}
 
 			if (!AppConstants
 					.checkGooglePlayServicesAvailable(PantyActivity.this)) {
-				Log.e("PantyActivity", "fail to checkGooglePlayServicesAvailable"+ " email" + mail);
-				return null; //FIXME informar o utilizador
+				Log.e("PantyActivity",
+						"fail to checkGooglePlayServicesAvailable" + " email"
+								+ mail);
+				return null; // FIXME informar o utilizador
 			}
 
 			// Create a Google credential since this is an authenticated request
@@ -225,11 +287,12 @@ public class PantyActivity extends ListActivity {
 							.toString());
 			Log.i("PantyActivity", "AddProductTask:" + "productId " + productId);
 			try {
-				Pantry pantry = endpoint.getMyPantryByMail(mail).execute();
+				Pantry pantry = endpoint.getPantryByMailAndName(mail, name).execute();
 				List<MetaProduct> newList = pantry.getProducts();
-				if (newList == null){
+				if (newList == null) {
 					Log.e("PantyActivity", "AddProductTask: newList=null");
-					newList = new ArrayList<MetaProduct>();  //FIXME into nuca devia de ser null
+					newList = new ArrayList<MetaProduct>(); // FIXME into nuca
+															// devia de ser null
 				}
 				MetaProduct metaP = new MetaProduct();
 				Product newProd = endpoint.getProductByBarCode(productId)
@@ -240,10 +303,14 @@ public class PantyActivity extends ListActivity {
 				newList.add(metaP);
 				pantry.setProducts(newList);
 				endpoint.updatePantry(pantry).execute();
-				Log.i("PantyActivity", "AddProductTask:" + "Product added to pantry");
-				return new LocalMetaProduct(newProd.getBarCode(), newProd.getName(), newProd.getDescription(), newProd.getKey(),metaP.getAmount());
+				Log.i("PantyActivity", "AddProductTask:"
+						+ "Product added to pantry");
+				return new LocalMetaProduct(newProd.getBarCode(),
+						newProd.getName(), newProd.getDescription(),
+						newProd.getKey(), metaP.getAmount());
 			} catch (IOException e) {
-				Log.e("PantyActivity", "AddProductTask:" + "Product NOT added to pantry");
+				Log.e("PantyActivity", "AddProductTask:"
+						+ "Product NOT added to pantry");
 				e.printStackTrace();
 			}
 
@@ -254,6 +321,7 @@ public class PantyActivity extends ListActivity {
 		protected void onPostExecute(LocalMetaProduct result) {
 			super.onPostExecute(result);
 			adapter.add(result);
+			((EditText) findViewById(R.id.NumberId)).setText("");
 		}
 
 	}

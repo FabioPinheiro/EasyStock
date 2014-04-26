@@ -9,8 +9,11 @@ import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import epic.easystock.Constants;
+
 import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.persistence.EntityExistsException;
@@ -20,8 +23,12 @@ import javax.persistence.Query;
 
 //pantryendpoint
 
-@Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""), version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = {
-		Constants.WEB_CLIENT_ID/*, Constants.ANDROID_CLIENT_ID*/ }, audiences = { Constants.ANDROID_AUDIENCE })
+@Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""), version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = { Constants.WEB_CLIENT_ID /*
+																																																								 * ,
+																																																								 * Constants
+																																																								 * .
+																																																								 * ANDROID_CLIENT_ID
+																																																								 */}, audiences = { Constants.ANDROID_AUDIENCE })
 public class PantryEndpoint {
 
 	/**
@@ -90,6 +97,51 @@ public class PantryEndpoint {
 			mgr.close();
 		}
 		return pantry;
+	}
+
+	@SuppressWarnings({ "unchecked", "unused" })
+	@ApiMethod(name = "getPantryByMailAndName")
+	public Pantry getPantryByMailAndName(@Named("mail") String mail,
+			@Named("name") String name) {
+		EntityManager mgr = null;
+		List<UserPantry> userPantries = null;
+		List<Pantry> pantries = null;
+		List<User> users = null;
+		Pantry ret = null;
+		try {
+			mgr = getEntityManager();
+			Query query1 = mgr.createQuery(
+					"SELECT u FROM User u WHERE u.email=:email").setParameter(
+					"email", mail);
+
+			query1.setFirstResult(0);
+			users = query1.getResultList();
+			User user = users.get(0);
+
+			Query query2 = mgr.createQuery(
+					"SELECT u FROM UserPantry u WHERE u.user=:user")
+					.setParameter("user", user.getKey().getId());
+
+			query2.setFirstResult(0);
+			userPantries = query2.getResultList();
+			pantries = new ArrayList<Pantry>();
+
+			for (UserPantry up : userPantries) {
+				pantries.add(mgr.find(Pantry.class, up.getPantry()));
+			}
+
+			for (Pantry p : pantries) {
+				if (p.getName().equals(name))
+					ret = p;
+			}
+			if (ret != null)
+				for (MetaProduct p : ret.getProducts()) {
+				}
+
+		} finally {
+			mgr.close();
+		}
+		return ret;
 	}
 
 	/**
