@@ -48,14 +48,14 @@ public class PantyActivity extends ListActivity {
 		mail = getIntent().getStringExtra("MAIL");
 		addProduct = (Button) findViewById(R.id.AddProduct);
 
-		if (isConnected()) {
+		if (false/*isConnected()*/) {
 			ProductAdapter adapter = new ProductAdapter(this,
 					new ArrayList<Product>());
 			setListAdapter(adapter);
 			new ListPantryTask(adapter).execute(getApplicationContext());
 		} else {
 			ArrayAdapter<LocalMetaProduct> adapter = new ArrayAdapter<LocalMetaProduct>(
-					this, android.R.layout.simple_list_item_1);
+					this, android.R.layout.simple_selectable_list_item);
 			setListAdapter(adapter);
 			new LocalListPantryTask().execute(getApplicationContext());
 		}

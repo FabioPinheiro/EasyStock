@@ -65,4 +65,9 @@ public class LocalMetaProduct {
 		this.amount = amount;
 	}
 
+	@Override
+	public String toString() {
+		return name + "\t\t" + description + "\t\tAmount: " + amount;
+	}
+
 }

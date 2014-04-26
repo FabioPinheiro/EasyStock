@@ -19,6 +19,8 @@ package epic.easystock.assist;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.android.gms.internal.ar;
+
 import epic.easystock.apiEndpoint.model.MetaProduct;
 import epic.easystock.data.LocalMetaProduct;
 import android.content.ContentValues;
@@ -177,6 +179,8 @@ public class PantryDbAdapter {
 				createProduct(lmp.getName(), lmp.getDescription(),
 						lmp.getBarcode(), lmp.getId(), lmp.getAmount());
 			} catch (SQLiteConstraintException e) {
+				updateProduct(lmp.getName(), lmp.getDescription(),
+						lmp.getBarcode(), lmp.getId(), lmp.getAmount()+1);
 			}
 		}
 
@@ -245,20 +249,22 @@ public class PantryDbAdapter {
 	 * 
 	 * @param id
 	 *            id of note to update
+	 * @param amount
 	 * @param title
 	 *            value to set note title to
 	 * @param body
 	 *            value to set note body to
 	 * @return true if the note was successfully updated, false otherwise
 	 */
-	public boolean updateNote(String name, String description, Long barcode,
-			Long id) {
+	public boolean updateProduct(String name, String description, Long barcode,
+			Long id, Double amount) {
 		ContentValues args = new ContentValues();
 		args.put(PROD_NAME, name);
 		args.put(PROD_DESCRIPTION, description);
 		args.put(PROD_BARCODE, barcode);
 		args.put(PROD_ID, id);
-
+		args.put(PROD_AMOUNT, amount);
 		return mDb.update(DATABASE_TABLE, args, PROD_ID + "=" + id, null) > 0;
+
 	}
 }
