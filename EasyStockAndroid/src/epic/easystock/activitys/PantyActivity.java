@@ -280,27 +280,48 @@ public class PantyActivity extends ListActivity {
 			GoogleAccountCredential credential = GoogleAccountCredential
 					.usingAudience(PantyActivity.this, AppConstants.AUDIENCE);
 			credential.setSelectedAccountName(mail);
-			ApiEndpoint endpoint = AppConstants.getApiServiceHandle(credential);// FIXME
+			ApiEndpoint endpoint = AppConstants.getApiServiceHandle(credential);
 
 			Long productId = Long
 					.valueOf(((EditText) findViewById(R.id.NumberId)).getText()
 							.toString());
 			Log.i("PantyActivity", "AddProductTask:" + "productId " + productId);
 			try {
-				Pantry pantry = endpoint.getPantryByMailAndName(mail, name).execute();
+				Pantry pantry = endpoint.getPantryByMailAndName(mail, name)
+						.execute();
 				List<MetaProduct> newList = pantry.getProducts();
 				if (newList == null) {
 					Log.e("PantyActivity", "AddProductTask: newList=null");
-					newList = new ArrayList<MetaProduct>(); // FIXME into nuca
+					newList = new ArrayList<MetaProduct>(); // FIXME isto nunca
 															// devia de ser null
 				}
-				MetaProduct metaP = new MetaProduct();
-				Product newProd = endpoint.getProductByBarCode(productId)
-						.execute();
-				metaP.setProduct(newProd.getKey());
-				metaP.setAmount(0.0);
-				endpoint.insertMetaProduct(metaP).execute();
-				newList.add(metaP);
+				MetaProduct metaP = null;
+				Product newProd = null;
+				boolean exist = false;
+				for (MetaProduct mp : newList) {
+					newProd = endpoint.getProductByBarCode(productId)
+							.execute();
+					if (mp.getProduct().equals(newProd.getKey())) {
+						newList.remove(mp);
+						exist = true;
+						metaP = mp;
+						mp.setAmount(mp.getAmount() + 1);
+
+						endpoint.removeMetaProduct(mp.getKey().getId());
+						//newList.add(mp);
+						Log.i("PantyActivity",
+								"AddProductTask: Product was in the list");
+						break;
+					}
+				}
+				if (!exist) {
+					metaP = new MetaProduct();
+					newProd = endpoint.getProductByBarCode(productId).execute();
+					metaP.setProduct(newProd.getKey());
+					metaP.setAmount(0.0);
+					// endpoint.insertMetaProduct(metaP).execute();
+					newList.add(metaP);
+				}
 				pantry.setProducts(newList);
 				endpoint.updatePantry(pantry).execute();
 				Log.i("PantyActivity", "AddProductTask:"

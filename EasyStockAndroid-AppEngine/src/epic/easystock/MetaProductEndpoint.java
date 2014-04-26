@@ -158,7 +158,7 @@ public class MetaProductEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			if (metaproduct == null || metaproduct.getKey() == null)
+			if (metaproduct == null)
 				return false;
 			MetaProduct item = containsByProduct(metaproduct);
 			if (item == null) {
