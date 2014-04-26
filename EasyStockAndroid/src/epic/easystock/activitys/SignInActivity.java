@@ -45,13 +45,50 @@ public class SignInActivity extends Activity {
 				onClickSignIn(v);
 			}
 		});
+		button.callOnClick();
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		button.callOnClick();
+		
+		Log.i(LOG_TAG, "On Start");
+		Toast.makeText(this, "onClickSignIn", Toast.LENGTH_LONG).show();
+		// Check to see how many Googledom drawing from among all eligible Entries received throughout the Promotion Period. The random drawing will be condu accounts are registered with the device.
+		//String myMail = new SignInAux().signIn(view, this);
+		
+		int googleAccounts = AppConstants.countGoogleAccounts(this);
+		if (googleAccounts == 0) {
+			// No accounts registered, nothing to do.
+			Toast.makeText(this, "no_google_accounts_registered",
+					Toast.LENGTH_LONG).show();
+		} else if (googleAccounts == 1) {
+			// If only one account then select it.
+			AccountManager am = AccountManager.get(this);
+			Account[] accounts = am
+					.getAccountsByType(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+			if (accounts != null && accounts.length > 0) {
+				// Select account and perform authorization check.
+				mEmailAccount = accounts[0].name;
+				performAuthCheck(accounts[0].name);
+			}
+		} else {
+			// More than one Google Account is present, a chooser is necessary.
 
+			// Reset selected account.
+
+			// Invoke an {@code Intent} to allow the user to select a Google
+			// account.
+			Intent accountSelector = AccountPicker.newChooseAccountIntent(null,
+					null, new String[] { GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE },
+					false, "Select the account to access the EasyStock API.",
+					null, null, null);
+			startActivityForResult(accountSelector,
+					ACTIVITY_RESULT_FROM_ACCOUNT_SELECTION);
+		}
+		Intent intent = new Intent(this, HomeActivity.class);
+		intent.putExtra("MAIL", mEmailAccount);
+		startActivity(intent);
 	}
 
 	@Override
@@ -87,7 +124,7 @@ public class SignInActivity extends Activity {
 		TextView emailAddressTV = (TextView) view.getRootView().findViewById(
 				R.id.email_address_tv);
 		Toast.makeText(this, "onClickSignIn", Toast.LENGTH_LONG).show();
-		// Check to see how many Google accounts are registered with the device.
+		// Check to see how many Googledom drawing from among all eligible Entries received throughout the Promotion Period. The random drawing will be condu accounts are registered with the device.
 		//String myMail = new SignInAux().signIn(view, this);
 		
 		int googleAccounts = AppConstants.countGoogleAccounts(this);
