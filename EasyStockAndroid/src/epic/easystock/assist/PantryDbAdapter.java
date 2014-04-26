@@ -177,10 +177,10 @@ public class PantryDbAdapter {
 		for (LocalMetaProduct lmp : products) {
 			try {
 				createProduct(lmp.getName(), lmp.getDescription(),
-						lmp.getBarcode(), lmp.getId(), lmp.getAmount());
+						lmp.getBarCode(), lmp.getId(), lmp.getAmount());
 			} catch (SQLiteConstraintException e) {
 				updateProduct(lmp.getName(), lmp.getDescription(),
-						lmp.getBarcode(), lmp.getId(), lmp.getAmount()+1);
+						lmp.getBarCode(), lmp.getId(), lmp.getAmount()+1);
 			}
 		}
 

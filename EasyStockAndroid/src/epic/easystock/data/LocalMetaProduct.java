@@ -25,7 +25,7 @@ public class LocalMetaProduct {
 		this.setAmount(amount);
 	}
 
-	public Long getBarcode() {
+	public Long getBarCode() {
 		return BarCode;
 	}
 

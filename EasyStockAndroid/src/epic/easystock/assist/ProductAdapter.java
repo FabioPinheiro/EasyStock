@@ -2,14 +2,14 @@ package epic.easystock.assist;
 
 import java.util.ArrayList;
 
-import epic.easystock.R;
-import epic.easystock.apiEndpoint.model.Product;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import epic.easystock.R;
+import epic.easystock.apiEndpoint.model.Product;
 
 /**
  * @author fabio
@@ -20,7 +20,6 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 	private final Context context;
 	private final ArrayList<Product> productArrayList;
 	public ProductAdapter(Context context, ArrayList<Product> itemsArrayList) {
-
 		super(context, R.layout.layout_list_product_row, itemsArrayList);
 
 		this.context = context;
