@@ -51,11 +51,12 @@
         android:layout_gravity="center_vertical|center_horizontal"
         android:text="PantyActivity" 
         android:onClick="changeToPantyActivity"/>
-    <Button
+    
+    <!--Button
         android:id="@+id/buttonLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:text="LogIn"
-        android:onClick="changeToLogInActivity" />
+        android:onClick="changeToLogInActivity" /-->
 </LinearLayout>
