@@ -4,7 +4,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMultiplayer.InitiateMatchResult;
 
 import epic.easystock.MainActivity;
-import epic.easystock.RegisterActivity;
 import epic.easystock.assist.LoginAux;
 import epic.easystock.assist.SignInAux;
 import android.app.Activity;
@@ -76,11 +75,11 @@ public class HomeActivity extends Activity {
 		}
 	}
 
-	public void changeRegisterActivity(View view) {
+	/*public void changeRegisterActivity(View view) {
 		Intent intent = new Intent(this, RegisterActivity.class);
 		intent.putExtra("MAIL", mail);
 		startActivity(intent);
-	}
+	}*/
 
 	public void changeToTestAddToProductListActivity(View view) {
 		Intent intent = new Intent(this, TestAddToProductListActivity.class);

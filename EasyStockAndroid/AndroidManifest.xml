@@ -8,20 +8,19 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="17" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
 
-    <permission
+    <!--permission
         android:name="epic.easystock.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="epic.easystock.permission.C2D_MESSAGE" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+        android:protectionLevel="signature" /-->
+        
+    <!--uses-permission android:name="epic.easystock.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -44,9 +43,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name="epic.easystock.GCMIntentService" />
+        <!--service android:name="epic.easystock.GCMIntentService" /-->
 
-        <receiver
+        <!--receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
@@ -59,15 +58,12 @@
 
                 <category android:name="epic.easystock" />
             </intent-filter>
-        </receiver>
+        </receiver-->
 
         <activity
             android:name="epic.easystock.MainActivity"
             android:label="@string/app_name" >
         </activity>
-        <activity
-            android:name="epic.easystock.RegisterActivity"
-            android:launchMode="singleTop" />
         <activity
             android:name="epic.easystock.activitys.ProductListActivity"
             android:label="@string/title_activity_product_list" >

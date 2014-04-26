@@ -32,7 +32,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.UserPantryEndpoint.updateUserPantry",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -48,7 +48,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.UserPantryEndpoint.getMyPantryByMail",
       "request" : {
         "parameters" : {
@@ -64,12 +64,12 @@
       }
     },
     "apiEndpoint.getUserPantry" : {
-      "path" : "getUserPantry",
+      "path" : "userpantry/{id}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.UserPantryEndpoint.getUserPantry",
       "request" : {
         "parameters" : {
@@ -90,7 +90,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.UserPantryEndpoint.listUserPantry",
       "request" : {
         "parameters" : {
@@ -115,7 +115,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.UserPantryEndpoint.insertUserPantry",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -131,7 +131,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.UserPantryEndpoint.removeUserPantry",
       "request" : {
         "parameters" : {
@@ -152,7 +152,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.MetaProductEndpoint.updateMetaProduct",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -168,7 +168,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.MetaProductEndpoint.listMetaProduct",
       "request" : {
         "parameters" : {
@@ -193,7 +193,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.MetaProductEndpoint.getMetaProduct",
       "request" : {
         "parameters" : {
@@ -214,7 +214,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.MetaProductEndpoint.insertMetaProduct",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -230,7 +230,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.MetaProductEndpoint.removeMetaProduct",
       "request" : {
         "parameters" : {
@@ -245,13 +245,29 @@
         "body" : "empty"
       }
     },
+    "apiEndpoint.findUserByMail" : {
+      "path" : "findUserByMail",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.UserEndpoint.findUserByMail",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "apiEndpoint.removeUser" : {
       "path" : "user/{id}",
       "httpMethod" : "DELETE",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.UserEndpoint.removeUser",
       "request" : {
         "parameters" : {
@@ -272,7 +288,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.UserEndpoint.listUser",
       "request" : {
         "parameters" : {
@@ -297,7 +313,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.UserEndpoint.getUser",
       "request" : {
         "parameters" : {
@@ -318,7 +334,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.UserEndpoint.insertUser",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -334,7 +350,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.UserEndpoint.updateUser",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -350,7 +366,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.PantryEndpoint.getPantryProducts",
       "request" : {
         "parameters" : {
@@ -371,7 +387,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.PantryEndpoint.updatePantry",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -387,7 +403,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.PantryEndpoint.insertPantry",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -403,7 +419,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.PantryEndpoint.getPantry",
       "request" : {
         "parameters" : {
@@ -424,7 +440,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.PantryEndpoint.listPantry",
       "request" : {
         "parameters" : {
@@ -449,7 +465,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.PantryEndpoint.removePantry",
       "request" : {
         "parameters" : {
@@ -470,7 +486,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.ProductEndpoint.getProduct",
       "request" : {
         "parameters" : {
@@ -491,24 +507,8 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.ProductEndpoint.insertProduct",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "apiEndpoint.updateProduct" : {
-      "path" : "product",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.ProductEndpoint.updateProduct",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -523,7 +523,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.ProductEndpoint.removeProduct",
       "request" : {
         "parameters" : {
@@ -538,13 +538,29 @@
         "body" : "empty"
       }
     },
+    "apiEndpoint.updateProduct" : {
+      "path" : "product",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ProductEndpoint.updateProduct",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "apiEndpoint.getProductByBarCode" : {
       "path" : "getProductByBarCode",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.ProductEndpoint.getProductByBarCode",
       "request" : {
         "parameters" : {
@@ -565,7 +581,7 @@
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com", "450897529696-spgr80aclbaa3d8dqls9q27mptqafn0i.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "rosyMethod" : "epic.easystock.ProductEndpoint.listProduct",
       "request" : {
         "parameters" : {
@@ -595,10 +611,12 @@
             "$ref" : "Key"
           },
           "pantry" : {
-            "$ref" : "Pantry"
+            "type" : "string",
+            "format" : "int64"
           },
           "user" : {
-            "$ref" : "User"
+            "type" : "string",
+            "format" : "int64"
           },
           "permissionType" : {
             "$ref" : "PermissionType"
@@ -622,16 +640,21 @@
           "name" : {
             "type" : "string"
           },
-          "parent" : {
-            "$ref" : "Key"
-          },
           "complete" : {
             "type" : "boolean"
           },
           "namespace" : {
             "type" : "string"
+          },
+          "parent" : {
+            "$ref" : "Key"
           }
         }
+      },
+      "PermissionType" : {
+        "id" : "PermissionType",
+        "type" : "string",
+        "enum" : [ "OWNER", "EDITOR", "READER" ]
       },
       "Pantry" : {
         "id" : "Pantry",
@@ -661,7 +684,8 @@
             "$ref" : "Key"
           },
           "product" : {
-            "$ref" : "Product"
+            "type" : "string",
+            "format" : "int64"
           },
           "amount" : {
             "type" : "number"
@@ -671,54 +695,6 @@
             "format" : "date-time"
           }
         }
-      },
-      "Product" : {
-        "id" : "Product",
-        "type" : "object",
-        "properties" : {
-          "key" : {
-            "type" : "string",
-            "format" : "int64"
-          },
-          "image" : {
-            "type" : "string",
-            "format" : "byte"
-          },
-          "barCode" : {
-            "type" : "string",
-            "format" : "int64"
-          },
-          "description" : {
-            "type" : "string"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "timeStamp" : {
-            "type" : "string",
-            "format" : "date-time"
-          }
-        }
-      },
-      "User" : {
-        "id" : "User",
-        "type" : "object",
-        "properties" : {
-          "key" : {
-            "$ref" : "Key"
-          },
-          "nick" : {
-            "type" : "string"
-          },
-          "email" : {
-            "type" : "string"
-          }
-        }
-      },
-      "PermissionType" : {
-        "id" : "PermissionType",
-        "type" : "string",
-        "enum" : [ "OWNER", "EDITOR", "READER" ]
       },
       "CollectionResponse_UserPantry" : {
         "id" : "CollectionResponse_UserPantry",
@@ -746,6 +722,21 @@
             }
           },
           "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      },
+      "User" : {
+        "id" : "User",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "nick" : {
+            "type" : "string"
+          },
+          "email" : {
             "type" : "string"
           }
         }
@@ -788,6 +779,34 @@
             }
           },
           "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Product" : {
+        "id" : "Product",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "image" : {
+            "type" : "string",
+            "format" : "byte"
+          },
+          "barCode" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "timeStamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "name" : {
             "type" : "string"
           }
         }
@@ -870,6 +889,14 @@
       },
       "epic.easystock.MetaProductEndpoint.removeMetaProduct" : {
       },
+      "epic.easystock.UserEndpoint.findUserByMail" : {
+        "request" : {
+          "$ref" : "User"
+        },
+        "response" : {
+          "$ref" : "User"
+        }
+      },
       "epic.easystock.UserEndpoint.removeUser" : {
       },
       "epic.easystock.UserEndpoint.listUser" : {
@@ -944,6 +971,8 @@
           "$ref" : "Product"
         }
       },
+      "epic.easystock.ProductEndpoint.removeProduct" : {
+      },
       "epic.easystock.ProductEndpoint.updateProduct" : {
         "request" : {
           "$ref" : "Product"
@@ -951,8 +980,6 @@
         "response" : {
           "$ref" : "Product"
         }
-      },
-      "epic.easystock.ProductEndpoint.removeProduct" : {
       },
       "epic.easystock.ProductEndpoint.getProductByBarCode" : {
         "response" : {

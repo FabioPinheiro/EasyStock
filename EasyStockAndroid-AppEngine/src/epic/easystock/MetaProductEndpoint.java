@@ -16,7 +16,7 @@ import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
 
 @Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""), version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = {
-		Constants.WEB_CLIENT_ID, Constants.ANDROID_CLIENT_ID }, audiences = { Constants.ANDROID_AUDIENCE })
+		Constants.WEB_CLIENT_ID/*, Constants.ANDROID_CLIENT_ID */}, audiences = { Constants.ANDROID_AUDIENCE })
 public class MetaProductEndpoint {
 
 	/**
