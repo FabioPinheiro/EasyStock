@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -19,7 +20,7 @@ public class MetaProduct {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key key;
 	
-	private Product product;
+	private Long product;
 	
 	private double amount;
 	
@@ -28,11 +29,11 @@ public class MetaProduct {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Pantry pantry;
 	
-	public Product getProduct() {
+	public Long getProduct() {
 		return product;
 	}
 
-	public void setProduct(Product product) {
+	public void setProduct(Long product) {
 		this.product = product;
 	}
 

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import com.google.appengine.api.datastore.Key;
@@ -18,26 +19,26 @@ public class UserPantry {
 	private Key key;
 	
 	@OneToOne(cascade=CascadeType.ALL)
-	private Pantry pantry;
+	private Long pantry;
 	
 	@OneToOne(cascade=CascadeType.ALL)
-	private User user;
+	private Long user;
 	
 	private PermissionType permissionType;
 
-	public Pantry getPantry() {
+	public Long getPantry() {
 		return pantry;
 	}
 
-	public void setPantry(Pantry pantry) {
+	public void setPantry(Long pantry) {
 		this.pantry = pantry;
 	}
 
-	public User getUser() {
+	public Long getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(Long user) {
 		this.user = user;
 	}
 

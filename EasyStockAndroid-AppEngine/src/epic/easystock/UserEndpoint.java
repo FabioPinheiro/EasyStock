@@ -173,8 +173,9 @@ public class UserEndpoint {
 		}
 		return contains;
 	}
-
-	private User findUserByMail(User user) {
+	@SuppressWarnings("unchecked")
+	@ApiMethod(name = "findUserByMail")
+	public User findUserByMail(User user) {
 		EntityManager mgr = null;
 		List<User> execute = null;
 
@@ -185,13 +186,12 @@ public class UserEndpoint {
 					"email", user.getEmail());
 
 			query.setFirstResult(0);
-			query.setMaxResults(1);
 
 			execute = query.getResultList();
 		} finally {
 			mgr.close();
 		}
-		if (execute.size() == 1)
+		if (execute.size() > 0)
 			return execute.get(0);
 		return null;
 	}

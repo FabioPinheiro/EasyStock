@@ -18,7 +18,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-//userpantryendpoint
 @Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""), version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = {
 		Constants.WEB_CLIENT_ID, Constants.ANDROID_CLIENT_ID }, audiences = { Constants.ANDROID_AUDIENCE })
 public class UserPantryEndpoint {
@@ -80,7 +79,7 @@ public class UserPantryEndpoint {
 	 *            the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
-	@ApiMethod(name = "getUserPantry", path = "getUserPantry")
+	@ApiMethod(name = "getUserPantry")
 	public UserPantry getUserPantry(@Named("id") Long id) {
 		EntityManager mgr = getEntityManager();
 		UserPantry userpantry = null;
@@ -90,47 +89,6 @@ public class UserPantryEndpoint {
 			mgr.close();
 		}
 		return userpantry;
-	}
-
-	/**
-	 * This method gets the entity having primary key id. It uses HTTP GET
-	 * method.
-	 * 
-	 * @param id
-	 *            the primary key of the java bean.
-	 * @return The entity with primary key id.
-	 */
-	@SuppressWarnings("unchecked")
-	@ApiMethod(name = "getMyPantryByMail", path = "getPantryByMail")
-	public Pantry getMyPantryByMail(@Named("mail") String mail) {
-		EntityManager mgr = null;
-		List<UserPantry> execute = null;
-
-		try {
-			mgr = getEntityManager();
-			Query query = mgr
-					.createQuery("select from UserPantry as UserPantry");
-
-			execute = (List<UserPantry>) query.getResultList();
-
-			// Tight loop for fetching all entities from datastore and
-			// accomodate
-			// for lazy fetch.
-			Pantry ret = null;
-			for (UserPantry obj : execute)
-				if (obj.getUser().getEmail().equals(mail)) {
-					ret = obj.getPantry();
-					break;
-				}
-			if (ret != null) {
-				for (MetaProduct p : ret.getProducts())
-					p.getProduct();
-				return ret;
-			}
-		} finally {
-			mgr.close();
-		}
-		return null;
 	}
 
 	/**
@@ -204,7 +162,7 @@ public class UserPantryEndpoint {
 			if (userpantry == null || userpantry.getKey() == null) {
 				return false;
 			}
-			UserPantry item = mgr.find(UserPantry.class, userpantry.getKey());
+			UserPantry item = findUserPantryByIds(userpantry);
 			if (item == null) {
 				contains = false;
 			}
@@ -213,9 +171,64 @@ public class UserPantryEndpoint {
 		}
 		return contains;
 	}
+	
+	@SuppressWarnings({ "unchecked", "unused" })
+	private UserPantry findUserPantryByIds(UserPantry userpantry) {
+		EntityManager mgr = null;
+		List<UserPantry> execute = null;
+		
+		try {
+			mgr = getEntityManager();
+			Query query = mgr.createQuery(
+					"select up from UserPantry up WHERE up.pantry=:pantry AND up.user=:user").setParameter(
+					"user", userpantry.getUser()).setParameter("pantry", userpantry.getPantry());
+
+			query.setFirstResult(0);
+
+			execute = query.getResultList();
+		} finally {
+			mgr.close();
+		}
+		if (execute.size() > 0)
+			return execute.get(0);
+		return null;
+	}
 
 	private static EntityManager getEntityManager() {
 		return EMF.get().createEntityManager();
 	}
 
+	@SuppressWarnings("unchecked")
+	@ApiMethod(name = "getMyPantryByMail", path = "getPantryByMail")
+	public Pantry getMyPantryByMail(@Named("mail") String mail) {
+		EntityManager mgr = null;
+		List<UserPantry> execute = null;
+
+		try {
+			mgr = getEntityManager();
+			Query queryUP = mgr
+					.createQuery("select from UserPantry as UserPantry");
+			execute = (List<UserPantry>) queryUP.getResultList();
+
+			// Tight loop for fetching all entities from datastore and
+			// accomodate
+			// for lazy fetch.
+			Pantry ret = null;
+			for (UserPantry obj : execute) {
+				User usr = mgr.find(User.class, obj.getUser());
+				if (usr != null && usr.getEmail().equals(mail)) {
+					ret = mgr.find(Pantry.class, obj.getPantry());
+					break;
+				}
+			}
+			if (ret != null) {
+				for (MetaProduct p : ret.getProducts())
+					p.getProduct();
+				return ret;
+			}
+		} finally {
+			mgr.close();
+		}
+		return null;
+	}
 }

@@ -98,8 +98,8 @@ public class ProductEndpoint {
 		try {
 			mgr = getEntityManager();
 			Query query = mgr.createQuery(
-					"SELECT u FROM User u WHERE u.email=:email").setParameter(
-					"email", id);
+					"SELECT p FROM Product p WHERE p.BarCode=:BarCode").setParameter(
+					"BarCode", id);
 
 			query.setFirstResult(0);
 			query.setMaxResults(1);

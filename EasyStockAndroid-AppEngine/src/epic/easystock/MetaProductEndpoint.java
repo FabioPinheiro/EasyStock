@@ -1,6 +1,12 @@
 package epic.easystock;
 
-import epic.easystock.EMF;
+import java.util.List;
+
+import javax.annotation.Nullable;
+import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -9,16 +15,6 @@ import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-import javax.inject.Named;
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-//metaproductendpoint
 @Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""), version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = {
 		Constants.WEB_CLIENT_ID, Constants.ANDROID_CLIENT_ID }, audiences = { Constants.ANDROID_AUDIENCE })
 public class MetaProductEndpoint {
@@ -106,7 +102,9 @@ public class MetaProductEndpoint {
 		EntityManager mgr = getEntityManager();
 		try {
 			if (containsMetaProduct(metaproduct)) {
-				throw new EntityExistsException("Object already exists");
+				metaproduct.setAmount(metaproduct.getAmount() + 1);
+				updateMetaProduct(metaproduct);
+				return metaproduct;
 			}
 			mgr.persist(metaproduct);
 		} finally {
@@ -160,11 +158,9 @@ public class MetaProductEndpoint {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
 		try {
-			if (metaproduct == null || metaproduct.getKey() == null){
+			if (metaproduct == null || metaproduct.getKey() == null)
 				return false;
-			}
-			MetaProduct item = mgr
-					.find(MetaProduct.class, metaproduct.getKey());
+			MetaProduct item = containsByProduct(metaproduct);
 			if (item == null) {
 				contains = false;
 			}
@@ -172,6 +168,28 @@ public class MetaProductEndpoint {
 			mgr.close();
 		}
 		return contains;
+	}
+
+	@SuppressWarnings({ "unused", "unchecked" })
+	private MetaProduct containsByProduct(MetaProduct metaproduct) {
+		EntityManager mgr = null;
+		List<MetaProduct> execute = null;
+
+		try {
+			mgr = getEntityManager();
+			Query query = mgr.createQuery(
+					"SELECT m FROM MetaProduct m WHERE m.product=:product")
+					.setParameter("product", metaproduct.getProduct());
+
+			query.setFirstResult(0);
+
+			execute = query.getResultList();
+		} finally {
+			mgr.close();
+		}
+		if (execute.size() > 0)
+			return execute.get(0);
+		return null;
 	}
 
 	private static EntityManager getEntityManager() {

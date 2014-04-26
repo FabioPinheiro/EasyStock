@@ -1,42 +1,29 @@
 package epic.easystock.activitys;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.EntityExistsException;
+import android.app.Activity;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
-import com.google.android.gms.internal.en;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.Strings;
 
 import epic.easystock.R;
-import epic.easystock.R.id;
-import epic.easystock.R.layout;
-import epic.easystock.R.menu;
 import epic.easystock.apiEndpoint.ApiEndpoint;
 import epic.easystock.apiEndpoint.model.MetaProduct;
 import epic.easystock.apiEndpoint.model.Pantry;
 import epic.easystock.apiEndpoint.model.User;
 import epic.easystock.apiEndpoint.model.UserPantry;
 import epic.easystock.assist.AppConstants;
-import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.os.Build;
 
 public class MyPantriesActivity extends Activity {
 	String mail;
@@ -102,26 +89,28 @@ public class MyPantriesActivity extends Activity {
 				user.setEmail(mail);
 				String[] uMail = mail.split("@");
 				user.setNick(uMail[0]);
-				newUP.setUser(user);
 				myNewPantry = endpoint.getMyPantryByMail(mail).execute();
 				if (myNewPantry == null) {
 					myNewPantry = new Pantry();
-					Log.i("NewPantryTask PANTRY", "myNewPantry == null" + myNewPantry.getKey());
+					Log.i("NewPantryTask PANTRY", "myNewPantry == null"
+							+ myNewPantry.getKey());
 				}
 				myNewPantry.setProducts(new ArrayList<MetaProduct>());
-				newUP.setPantry(myNewPantry);
 
 				try {
-					endpoint.insertUser(user).execute();
+					user = endpoint.insertUser(user).execute();
 				} catch (Exception e) {
-					endpoint.updateUser(user).execute();
+					user = endpoint.findUserByMail(user).execute();
 				}
 				try {
-					endpoint.insertPantry(myNewPantry).execute();
+					myNewPantry = endpoint.insertPantry(myNewPantry).execute();
 				} catch (Exception e) {
-					endpoint.updatePantry(myNewPantry).execute();
+					//myNewPantry = endpoint.updatePantry(myNewPantry).execute();
+					e.printStackTrace();
 				}
 				try {
+					newUP.setUser(user.getKey().getId());
+					newUP.setPantry(myNewPantry.getKey());
 					endpoint.insertUserPantry(newUP).execute();
 				} catch (Exception e) {
 					endpoint.updateUserPantry(newUP).execute();

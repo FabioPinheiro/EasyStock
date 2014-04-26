@@ -2,6 +2,7 @@ package epic.easystock.activitys;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import android.app.ListActivity;
@@ -28,6 +29,7 @@ import epic.easystock.apiEndpoint.model.Pantry;
 import epic.easystock.apiEndpoint.model.Product;
 import epic.easystock.apiEndpoint.model.UserPantry;
 import epic.easystock.assist.AppConstants;
+import epic.easystock.assist.ProductAdapter;
 
 public class PantyActivity extends ListActivity {
 	String mail;
@@ -39,7 +41,9 @@ public class PantyActivity extends ListActivity {
 		setContentView(epic.easystock.R.layout.activity_panty);
 		mail = getIntent().getStringExtra("MAIL");
 		addProduct = (Button) findViewById(R.id.AddProduct);
-		new ListPantryTask().execute(getApplicationContext());
+		ProductAdapter adapter = new ProductAdapter(this, new ArrayList<Product>());
+		setListAdapter(adapter);
+		new ListPantryTask(adapter).execute(getApplicationContext());
 
 		addProduct.setOnClickListener(new OnClickListener() {
 			@Override
@@ -58,9 +62,23 @@ public class PantyActivity extends ListActivity {
 		}
 	}
 
-	public class ListPantryTask extends AsyncTask<Context, Integer, Void> {
+	public class ListPantryTask extends
+			AsyncTask<Context, Integer, List<Product>> {
+		private ProductAdapter adapter;
+
+		public ListPantryTask(ProductAdapter adapter) {
+			this.adapter = adapter;
+		}
+
 		@Override
-		protected Void doInBackground(Context... contexts) {
+		protected void onPostExecute(List<Product> result) {
+			super.onPostExecute(result);
+			Collection<Product> aux = result;
+			adapter.addAll(aux);
+		}
+
+		@Override
+		protected List<Product> doInBackground(Context... contexts) {
 			Log.i("ListPantryTask PANTRY", "new ListPantryTask: " + mail);
 			if (!isSignedIn()) {
 				return null;
@@ -98,14 +116,23 @@ public class PantyActivity extends ListActivity {
 
 			ArrayList<Product> list = new ArrayList<Product>();
 			for (MetaProduct mp : products) {
-				Product aux = new Product();
-				aux.setName(mp.getProduct().getName());
-				aux.setDescription(mp.getProduct().getDescription());
-				aux.setBarCode(mp.getProduct().getBarCode());
-				aux.setKey(mp.getProduct().getKey());
+				Product aux = null;
+				try {
+					aux = endpoint.getProduct(mp.getProduct()).execute();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					continue;
+				}
+				/*
+				 * aux.setName(mp.getProduct().getName());
+				 * aux.setDescription(mp.getProduct().getDescription());
+				 * aux.setBarCode(mp.getProduct().getBarCode());
+				 * aux.setKey(mp.getProduct().getKey());
+				 */
 				list.add(aux);
 			}
-			return null;
+			return list;
 		}
 	}
 
@@ -140,8 +167,10 @@ public class PantyActivity extends ListActivity {
 				if (newList == null)
 					newList = new ArrayList<MetaProduct>();
 				MetaProduct metaP = new MetaProduct();
-				Product newProd = endpoint.getProductByBarCode(productId).execute();
-				metaP.setProduct(newProd);
+				Product newProd = endpoint.getProductByBarCode(productId)
+						.execute();
+				metaP.setProduct(newProd.getKey());
+				metaP.setAmount(0.0);
 				endpoint.insertMetaProduct(metaP).execute();
 				newList.add(metaP);
 				pantry.setProducts(newList);
@@ -155,5 +184,14 @@ public class PantyActivity extends ListActivity {
 
 			return null;
 		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			ProductAdapter adapter = new ProductAdapter(PantyActivity.this, new ArrayList<Product>());
+			setListAdapter(adapter);
+			new ListPantryTask(adapter).execute(PantyActivity.this);
+		}
+
 	}
 }
