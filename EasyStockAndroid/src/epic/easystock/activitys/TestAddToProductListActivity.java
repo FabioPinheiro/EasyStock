@@ -31,6 +31,7 @@ import epic.easystock.R;
 import epic.easystock.apiEndpoint.ApiEndpoint;
 import epic.easystock.apiEndpoint.model.Product;
 import epic.easystock.assist.AppConstants;
+import epic.easystock.assist.endPointCall.EndPointCall;
 
 public class TestAddToProductListActivity extends Activity {
 
@@ -43,7 +44,7 @@ public class TestAddToProductListActivity extends Activity {
 		setContentView(R.layout.activity_test_add_to_product_list);
 		takePic = (Button) findViewById(R.id.take_pic_button);
 		imageView = (ImageView) findViewById(R.id.add_prod_pic);
-		mail = getIntent().getStringExtra("MAIL");
+		mail = EndPointCall.getEmailAccount(); // FIXME LIXO  getIntent().getStringExtra("MAIL");
 	}
 
 	Button takePic;

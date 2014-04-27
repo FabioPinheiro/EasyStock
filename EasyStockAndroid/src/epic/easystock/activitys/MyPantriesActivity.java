@@ -26,9 +26,10 @@ import epic.easystock.apiEndpoint.model.Pantry;
 import epic.easystock.apiEndpoint.model.User;
 import epic.easystock.apiEndpoint.model.UserPantry;
 import epic.easystock.assist.AppConstants;
+import epic.easystock.assist.endPointCall.EndPointCall;
 
 public class MyPantriesActivity extends Activity {
-	String mail;
+	//String mail;
 	Button newPantry;
 
 	@Override
@@ -36,10 +37,10 @@ public class MyPantriesActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_pantries);
 
-		mail = getIntent().getStringExtra("MAIL");
+		//LIXO mail = getIntent().getStringExtra("MAIL");
 
 		TextView myMail = (TextView) findViewById(R.id.myMail);
-		myMail.setText(mail);
+		myMail.setText(EndPointCall.getEmailAccount());
 
 		newPantry = (Button) findViewById(R.id.createpantry);
 
@@ -53,21 +54,13 @@ public class MyPantriesActivity extends Activity {
 
 	}
 
-	private boolean isSignedIn() {
-		if (!Strings.isNullOrEmpty(mail)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public class NewPantryTask extends AsyncTask<Context, Integer, Void> {
 		private String name;
 
 		@Override
 		protected Void doInBackground(Context... contexts) {
 
-			if (!isSignedIn()) {
+			if (!EndPointCall.isSignedIn()) {
 				return null;
 			}
 
@@ -86,21 +79,21 @@ public class MyPantriesActivity extends Activity {
 			GoogleAccountCredential credential = GoogleAccountCredential
 					.usingAudience(MyPantriesActivity.this,
 							AppConstants.AUDIENCE);
-			credential.setSelectedAccountName(mail);
+			credential.setSelectedAccountName(EndPointCall.getEmailAccount());
 			ApiEndpoint endpoint = AppConstants.getApiServiceHandle(credential);
 
 			try {
 					
 				Pantry myNewPantry = endpoint
-						.getPantryByMailAndName(mail, name).execute();
+						.getPantryByMailAndName(EndPointCall.getEmailAccount(), name).execute();
 				if (myNewPantry != null) {
 					Log.e("CREATE PANTRY", "User have a pantry with "+ name+" as name");
 					return null;
 				}
 				UserPantry newUP = new UserPantry();
 				User user = new User();
-				user.setEmail(mail);
-				String[] uMail = mail.split("@");
+				user.setEmail(EndPointCall.getEmailAccount());
+				String[] uMail = EndPointCall.getEmailAccount().split("@");
 				user.setNick(uMail[0]);
 				myNewPantry = new Pantry();
 				myNewPantry.setName(name);

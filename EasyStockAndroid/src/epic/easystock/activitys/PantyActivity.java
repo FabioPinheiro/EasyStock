@@ -31,6 +31,7 @@ import epic.easystock.apiEndpoint.model.Product;
 import epic.easystock.assist.AppConstants;
 import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.assist.PantryDbAdapter;
+import epic.easystock.assist.endPointCall.EndPointCall;
 import epic.easystock.data.LocalMetaProduct;
 
 public class PantyActivity extends ListActivity {
@@ -43,7 +44,8 @@ public class PantyActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(epic.easystock.R.layout.activity_panty);
-		mail = getIntent().getStringExtra("MAIL");
+		//LIXO mail = getIntent().getStringExtra("MAIL");
+		mail = EndPointCall.getEmailAccount();//FIXME
 		addProduct = (Button) findViewById(R.id.AddProduct);
 		adapter = new MetaProductAdapter(this,
 				new ArrayList<LocalMetaProduct>());

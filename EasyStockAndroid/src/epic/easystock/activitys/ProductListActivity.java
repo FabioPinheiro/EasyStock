@@ -20,6 +20,7 @@ import android.widget.Toast;
 import epic.easystock.R;
 import epic.easystock.assist.AppConstants;
 import epic.easystock.assist.ProductAdapter;
+import epic.easystock.assist.endPointCall.EndPointCall;
 import epic.easystock.apiEndpoint.model.CollectionResponseProduct;
 import epic.easystock.apiEndpoint.model.Key;
 import epic.easystock.apiEndpoint.model.Product;
@@ -39,7 +40,7 @@ public class ProductListActivity extends ListActivity {
 		xpto = findViewById(R.id.layout_edit_botons_product_list);
 		// FIXME viewContainer = findViewById(R.id.undobar);
 
-		mail = getIntent().getStringExtra("MAIL");
+		mail = EndPointCall.getEmailAccount();//FIXME LIXO getIntent().getStringExtra("MAIL");
 		// 1. pass context and data to the custom adapter
 		ProductAdapter adapter = new ProductAdapter(this,
 				new ArrayList<Product>());

@@ -1,47 +1,31 @@
 package epic.easystock.activitys;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMultiplayer.InitiateMatchResult;
-
-import epic.easystock.MainActivity;
-import epic.easystock.R;
-import epic.easystock.assist.SignInAux;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.common.AccountPicker;
-import com.google.android.gms.internal.in;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.Strings;
 
+import epic.easystock.MainActivity;
+import epic.easystock.R;
+import epic.easystock.assist.SignInAux;
+import epic.easystock.assist.endPointCall.EndPointCall;
+
 public class HomeActivity extends Activity {
-	String mail;
+	//String mail;
 
 	// Context applicationContext;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		EndPointCall.onCreate(this);
+		setTitle(R.string.title_activity_home);
 		setContentView(epic.easystock.R.layout.activity_home);
-		mail = getIntent().getStringExtra("MAIL");
-
-	}
-
-	private boolean isSignedIn() {
-		if (!Strings.isNullOrEmpty(mail)) {
-			return true;
-		} else {
-			return false;
-		}
+		//mail = getIntent().getStringExtra("MAIL");
 	}
 
 	@Override
@@ -63,8 +47,8 @@ public class HomeActivity extends Activity {
 
 	public void changeToProductListActivity(View view) {
 		Intent intent = new Intent(this, ProductListActivity.class);
-		if (isSignedIn()) {
-			intent.putExtra("MAIL", mail);
+		if (EndPointCall.isSignedIn()) { //FIXME I don't like
+			//LIXO intent.putExtra("MAIL", mail);
 			startActivity(intent);
 		}
 	}
@@ -77,13 +61,13 @@ public class HomeActivity extends Activity {
 
 	public void changeToTestAddToProductListActivity(View view) {
 		Intent intent = new Intent(this, TestAddToProductListActivity.class);
-		intent.putExtra("MAIL", mail);
+		//LIXO intent.putExtra("MAIL", mail);
 		startActivity(intent);
 	}
 
 	public void changeToPantyActivity(View view) {
 		Intent intent = new Intent(this, PantyActivity.class);
-		intent.putExtra("MAIL", mail);
+		//LIXO intent.putExtra("MAIL", mail);
 		startActivity(intent);
 	}
 
@@ -95,13 +79,13 @@ public class HomeActivity extends Activity {
 
 	public void changeToMyPantriesActivity(View view) {
 		Intent intent = new Intent(this, MyPantriesActivity.class);
-		intent.putExtra("MAIL", mail);
+		//LIXO intent.putExtra("MAIL", mail);
 		startActivity(intent);
 	}
 
 	public void changeToMainActivity(View view) {
 		Intent intent = new Intent(this, MainActivity.class);
-		intent.putExtra("MAIL", mail);
+		//LIXO intent.putExtra("MAIL", mail);
 		startActivity(intent);
 	}
 
