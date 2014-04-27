@@ -1,41 +1,30 @@
 package epic.easystock.activitys;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.Strings;
-
 import epic.easystock.R;
-import epic.easystock.apiEndpoint.ApiEndpoint;
-import epic.easystock.apiEndpoint.model.Product;
-import epic.easystock.assist.AppConstants;
 import epic.easystock.assist.endPointCall.EndPointCall;
 
 public class TestAddToProductListActivity extends Activity {
 
-	private OnTouchListener addListener = null;
+	//LIXO private OnTouchListener addListener = null;
 	private static String mail;
 
 	@Override
@@ -44,7 +33,8 @@ public class TestAddToProductListActivity extends Activity {
 		setContentView(R.layout.activity_test_add_to_product_list);
 		takePic = (Button) findViewById(R.id.take_pic_button);
 		imageView = (ImageView) findViewById(R.id.add_prod_pic);
-		mail = EndPointCall.getEmailAccount(); // FIXME LIXO  getIntent().getStringExtra("MAIL");
+		mail = EndPointCall.getEmailAccount(); // FIXME LIXO
+												// getIntent().getStringExtra("MAIL");
 	}
 
 	Button takePic;
@@ -140,106 +130,57 @@ public class TestAddToProductListActivity extends Activity {
 
 		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 		imageView.setImageBitmap(bitmap);
-		
+
 		Toast.makeText(this, mail, Toast.LENGTH_SHORT).show();
 
 	}
 
-	private static boolean isSignedIn() {
-		if (!Strings.isNullOrEmpty(mail)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public void addXPTO(View view) {
 		// new EndpointsTask().execute(getApplicationContext());
-		String name = ((EditText) findViewById(R.id.activity_test_add_to_product_list_name))
-				.getText().toString();
-		Long barCode = Long
-				.parseLong(((EditText) findViewById(R.id.activity_test_add_to_product_list_barCode))
-						.getText().toString());
-		String description = ((EditText) findViewById(R.id.activity_test_add_to_product_list_description))
-				.getText().toString();
-		mail = getIntent().getStringExtra("MAIL");
-		if (!AppConstants
-				.checkGooglePlayServicesAvailable(TestAddToProductListActivity.this)) {
-			return;
-		}
-		new EndpointsTask(TestAddToProductListActivity.this, getIntent(), mail)
-				.execute(new epic.easystock.activitys.TestAddToProductListActivity.EndpointsTask.Param(
-						name, barCode, description, mCurrentPhotoPath));
+		String name = ((EditText) findViewById(R.id.activity_test_add_to_product_list_name)).getText().toString();
+		Long barCode = Long.parseLong(((EditText) findViewById(R.id.activity_test_add_to_product_list_barCode)).getText().toString());
+		String description = ((EditText) findViewById(R.id.activity_test_add_to_product_list_description)).getText().toString();
+		EndPointCall.addToProductListTask(name, barCode, description,mCurrentPhotoPath);
 	}
 
-	public static class EndpointsTask
-			extends
-			AsyncTask<epic.easystock.activitys.TestAddToProductListActivity.EndpointsTask.Param, Integer, Long> {
-		public static class Param {
-			String name;
-			Long barCode;
-			String description;
-			String image;
-
-			public Param(String name, Long barCode, String description,
-					String image) {
-				super();
-				this.name = name;
-				this.barCode = barCode;
-				this.description = description;
-				this.image = image;
-			}
-		}
-
-		Context context;
-		Intent intent;
-		String mail;
-
-		public EndpointsTask(Context incontext, Intent intent, String mail) {
-			context = incontext;
-			this.mail = mail;
-			this.intent = intent;
-		}
-
-		@Override
-		protected Long doInBackground(
-				epic.easystock.activitys.TestAddToProductListActivity.EndpointsTask.Param... params) {
-			try {
-				// Product productAux = new Product(idProduct, name, barCode,
-				// description);
-				if (!isSignedIn()) {
-					Log.i("ADD PRODUCT", "NOT SIGNED IN");
-					return null;
-				}
-
-				// Create a Google credential since this is an authenticated
-				// request
-				// to the API.
-				GoogleAccountCredential credential = GoogleAccountCredential
-						.usingAudience(context, AppConstants.AUDIENCE);
-				credential.setSelectedAccountName(mail);
-				ApiEndpoint endpoint = AppConstants
-						.getApiServiceHandle(credential);// FIXME
-
-				Product content = new Product();
-				content.setName(params[0].name);
-				content.setBarCode(params[0].barCode);
-				content.setDescription(params[0].description);
-				if (!Strings.isNullOrEmpty(params[0].image)) {
-					Bitmap bmp = BitmapFactory.decodeFile(params[0].image);
-					if (bmp != null && bmp.getByteCount() > 5) {
-						ByteArrayOutputStream stream = new ByteArrayOutputStream();
-						bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-						byte[] byteArray = stream.toByteArray();
-						content.encodeImage(byteArray);
-					}
-				}
-				Log.i("ADD PRODUCT", "TEST");
-				Product result = endpoint.insertProduct(content).execute();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return (long) 0; // FIXME
-		}
-	}
+	/*
+	 * LIXO public static class EndpointsTask extends
+	 * AsyncTask<epic.easystock.activitys
+	 * .TestAddToProductListActivity.EndpointsTask.Param, Integer, Long> {
+	 * public static class Param { String name; Long barCode; String
+	 * description; String image;
+	 * 
+	 * public Param(String name, Long barCode, String description, String image)
+	 * { super(); this.name = name; this.barCode = barCode; this.description =
+	 * description; this.image = image; } }
+	 * 
+	 * Context context; Intent intent; String mail;
+	 * 
+	 * public EndpointsTask(Context incontext, Intent intent, String mail) {
+	 * context = incontext; this.mail = mail; this.intent = intent; }
+	 * 
+	 * @Override protected Long doInBackground(
+	 * epic.easystock.activitys.TestAddToProductListActivity
+	 * .EndpointsTask.Param... params) { try { // Product productAux = new
+	 * Product(idProduct, name, barCode, // description); if (!isSignedIn()) {
+	 * Log.i("ADD PRODUCT", "NOT SIGNED IN"); return null; }
+	 * 
+	 * // Create a Google credential since this is an authenticated // request
+	 * // to the API. GoogleAccountCredential credential =
+	 * GoogleAccountCredential .usingAudience(context, AppConstants.AUDIENCE);
+	 * credential.setSelectedAccountName(mail); ApiEndpoint endpoint =
+	 * AppConstants .getApiServiceHandle(credential);// FIXME
+	 * 
+	 * Product content = new Product(); content.setName(params[0].name);
+	 * content.setBarCode(params[0].barCode);
+	 * content.setDescription(params[0].description); if
+	 * (!Strings.isNullOrEmpty(params[0].image)) { Bitmap bmp =
+	 * BitmapFactory.decodeFile(params[0].image); if (bmp != null &&
+	 * bmp.getByteCount() > 5) { ByteArrayOutputStream stream = new
+	 * ByteArrayOutputStream(); bmp.compress(Bitmap.CompressFormat.PNG, 100,
+	 * stream); byte[] byteArray = stream.toByteArray();
+	 * content.encodeImage(byteArray); } } Log.i("ADD PRODUCT", "TEST"); Product
+	 * result = endpoint.insertProduct(content).execute(); } catch (IOException
+	 * e) { e.printStackTrace(); } return (long) 0; // FIXME } }
+	 */
 }

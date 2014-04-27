@@ -36,23 +36,36 @@ public class EndPointCall {
 	
 	static private final String FAIL_TO_LIST_PRODUCTS = "FAIL_TO_LIST_PRODUCTS";
 	static private final String FAIL_TO_LIST_PANTRY_PRODUCTS = "FAIL_TO_LIST_PANTRY_PRODUCTS";
-	static private final String FAIL_TO_ADD_PRODUCT = "FAIL_TO_ADD_PRODUCT";
 	static private final String DONE = "AsyncTask Done"; //FIXME remove!!! use in debug
 	
-	static private ApiEndpoint.Builder apiEndpointBuilder = null;
-	static private ApiEndpoint apiEndpoint = null;
+	//static private ApiEndpoint.Builder apiEndpointBuilder = null;
+	//static private ApiEndpoint apiEndpoint = null;
 	static private Context globalContext = null;
 	static private String mEmailAccount = null;
 
 	
 	static public String getEmailAccount() {return mEmailAccount;}
 	static public boolean isSignedIn() {return (!Strings.isNullOrEmpty(mEmailAccount) ? true : false);}
-
-	
+	static public ApiEndpoint getApiEndpoint(){
+		GoogleAccountCredential credential = GoogleAccountCredential.usingAudience(EndPointCall.getGlobalContext(), AppConstants.AUDIENCE);
+		credential.setSelectedAccountName(EndPointCall.getEmailAccount());
+		ApiEndpoint endpoint = AppConstants.getApiServiceHandle(credential);
+		return endpoint;
+	}
+	/*public static ApiEndpoint getApiEndpoint() {
+		apiEndpointBuilder = new ApiEndpoint.Builder(
+				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {}
+				});
+		apiEndpoint = CloudEndpointUtils.updateBuilder(apiEndpointBuilder).build();
+		return apiEndpoint;
+	}*/
+	public static Context getGlobalContext() {return globalContext;}
+	static public void msg(String message){Toast.makeText(EndPointCall.getGlobalContext(), message, Toast.LENGTH_LONG).show();}
 	static public void onCreate(Activity activity){
 		globalContext = activity.getApplicationContext();
 		Log.i(EndPointCall_TAG, "On init()");
-		
 		
 		int googleAccounts = AppConstants.countGoogleAccounts(globalContext);
 		if (googleAccounts == 0) {
@@ -82,32 +95,11 @@ public class EndPointCall {
 					null, null, null);
 			activity.startActivityForResult(accountSelector,ACTIVITY_RESULT_FROM_ACCOUNT_SELECTION); //FIXME TEST
 		}
-		//Intent intent = new Intent(this, HomeActivity.class);
-		//intent.putExtra("MAIL", mEmailAccount);
-		//startActivity(intent);
-		
-		apiEndpointBuilder = new ApiEndpoint.Builder(
-				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-				new HttpRequestInitializer() {
-					public void initialize(HttpRequest httpRequest) {
-					}
-				});
-		apiEndpoint = CloudEndpointUtils.updateBuilder(
-				apiEndpointBuilder).build();
 	}
 	
-	public static ApiEndpoint getApiEndpoint() {
-		return apiEndpoint;
-	}
-	public static Context getGlobalContext() {
-		return globalContext;
-	}
-	static private void msg(String message){
-		Toast.makeText(EndPointCall.getGlobalContext(), message, Toast.LENGTH_LONG).show();
-	}
-	static public void addProductTask(String name, Long barCode,
-			String description) {
-		//new AddProductTask().execute(new epic.easystock.assist.EndpointCall.AddProductTask.Param(name, barCode, description));
+
+	static public void addToProductListTask(String name, Long barCode,String description, String image) {
+		new AddToProductListTask(name, barCode, description, image).execute();
 	}
 	
 	static public void listProductTask(ProductAdapter adapter){
