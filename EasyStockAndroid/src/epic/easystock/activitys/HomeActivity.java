@@ -7,10 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
-import com.google.api.client.util.Strings;
-
-import epic.easystock.MainActivity;
 import epic.easystock.R;
 import epic.easystock.assist.SignInAux;
 import epic.easystock.assist.endPointCall.EndPointCall;
@@ -79,12 +75,6 @@ public class HomeActivity extends Activity {
 
 	public void changeToMyPantriesActivity(View view) {
 		Intent intent = new Intent(this, MyPantriesActivity.class);
-		//LIXO intent.putExtra("MAIL", mail);
-		startActivity(intent);
-	}
-
-	public void changeToMainActivity(View view) {
-		Intent intent = new Intent(this, MainActivity.class);
 		//LIXO intent.putExtra("MAIL", mail);
 		startActivity(intent);
 	}
