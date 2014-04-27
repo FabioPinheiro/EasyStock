@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"IneSQDZRISaU6plvxbhHIOAs-WY/rkdtumIg9AJdsGyjzl7dgHNfeTc\"",
+ "etag": "\"IneSQDZRISaU6plvxbhHIOAs-WY/P7kqqVDhEqYl1MGw4LhLnFfqc4g\"",
  "discoveryVersion": "v1",
  "id": "apiEndpoint:v1",
  "name": "apiEndpoint",
@@ -217,6 +217,9 @@
      "type": "string",
      "format": "int64"
     },
+    "name": {
+     "type": "string"
+    },
     "products": {
      "type": "array",
      "items": {
@@ -380,6 +383,33 @@
    },
    "parameterOrder": [
     "id"
+   ],
+   "response": {
+    "$ref": "Pantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getPantryByMailAndName": {
+   "id": "apiEndpoint.getPantryByMailAndName",
+   "path": "pantry/{mail}/{name}",
+   "httpMethod": "GET",
+   "parameters": {
+    "mail": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    },
+    "name": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "mail",
+    "name"
    ],
    "response": {
     "$ref": "Pantry"

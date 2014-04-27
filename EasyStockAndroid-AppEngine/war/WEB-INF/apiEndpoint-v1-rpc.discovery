@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"IneSQDZRISaU6plvxbhHIOAs-WY/rkdtumIg9AJdsGyjzl7dgHNfeTc\"",
+ "etag": "\"IneSQDZRISaU6plvxbhHIOAs-WY/P7kqqVDhEqYl1MGw4LhLnFfqc4g\"",
  "discoveryVersion": "v1",
  "id": "apiEndpoint:v1",
  "name": "apiEndpoint",
@@ -215,6 +215,9 @@
      "type": "string",
      "format": "int64"
     },
+    "name": {
+     "type": "string"
+    },
     "products": {
      "type": "array",
      "items": {
@@ -374,6 +377,30 @@
    },
    "parameterOrder": [
     "id"
+   ],
+   "returns": {
+    "$ref": "Pantry"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "apiEndpoint.getPantryByMailAndName": {
+   "id": "apiEndpoint.getPantryByMailAndName",
+   "allowGet": true,
+   "parameters": {
+    "mail": {
+     "type": "string",
+     "required": true
+    },
+    "name": {
+     "type": "string",
+     "required": true
+    }
+   },
+   "parameterOrder": [
+    "mail",
+    "name"
    ],
    "returns": {
     "$ref": "Pantry"
