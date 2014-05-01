@@ -14,7 +14,7 @@
  * the License.
  */
 
-package epic.easystock.assist;
+package epic.easystock.io;
 
 import java.util.ArrayList;
 import java.util.List;

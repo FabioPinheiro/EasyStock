@@ -6,22 +6,27 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import epic.easystock.R;
-import epic.easystock.assist.SignInAux;
-import epic.easystock.assist.endPointCall.EndPointCall;
+import epic.easystock.io.EndPointCall;
 
 public class HomeActivity extends Activity {
 	//String mail;
+
+	@Override
+	public void startActivity(Intent intent) {
+		if (EndPointCall.isSignedIn()) {
+			super.startActivity(intent);
+		}else{
+			EndPointCall.msgNotSignedIn();
+		}
+	}
 
 	// Context applicationContext;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		EndPointCall.onCreate(this);
-		setTitle(R.string.title_activity_home);
 		setContentView(epic.easystock.R.layout.activity_home);
-		//mail = getIntent().getStringExtra("MAIL");
+		EndPointCall.onInit(this);
 	}
 
 	@Override
@@ -34,48 +39,23 @@ public class HomeActivity extends Activity {
 		super.onStop();
 	}
 
-	public void signIn(View view) {
-		Toast.makeText(this, "signIn HOME", Toast.LENGTH_SHORT);
-		String myMail = new SignInAux().signIn(view, this);
-		Toast.makeText(this, "signIn HOME" + myMail, Toast.LENGTH_SHORT);
-	}
-
-
 	public void changeToProductListActivity(View view) {
 		Intent intent = new Intent(this, ProductListActivity.class);
-		if (EndPointCall.isSignedIn()) { //FIXME I don't like
-			//LIXO intent.putExtra("MAIL", mail);
-			startActivity(intent);
-		}
+		startActivity(intent);
 	}
-
-	/*
-	 * public void changeRegisterActivity(View view) { Intent intent = new
-	 * Intent(this, RegisterActivity.class); intent.putExtra("MAIL", mail);
-	 * startActivity(intent); }
-	 */
 
 	public void changeToTestAddToProductListActivity(View view) {
 		Intent intent = new Intent(this, TestAddToProductListActivity.class);
-		//LIXO intent.putExtra("MAIL", mail);
 		startActivity(intent);
 	}
 
 	public void changeToPantyActivity(View view) {
 		Intent intent = new Intent(this, PantyActivity.class);
-		//LIXO intent.putExtra("MAIL", mail);
 		startActivity(intent);
 	}
 
-	/*
-	 * public void changeToLogInActivity(View view) { Intent intent = new
-	 * Intent(this, SignInActivity.class); intent.putExtra("MAIL", mail);
-	 * startActivity(intent); }
-	 */
-
 	public void changeToMyPantriesActivity(View view) {
 		Intent intent = new Intent(this, MyPantriesActivity.class);
-		//LIXO intent.putExtra("MAIL", mail);
 		startActivity(intent);
 	}
 

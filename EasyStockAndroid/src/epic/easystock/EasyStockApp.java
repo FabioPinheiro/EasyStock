@@ -1,8 +1,9 @@
 package epic.easystock;
 
-import epic.easystock.assist.endPointCall.EndPointCall;
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
+import epic.easystock.io.EndPointCall;
 
 public class EasyStockApp extends Application {
 	static private final String APP_TAG = "EasyStockApp";
@@ -10,7 +11,8 @@ public class EasyStockApp extends Application {
 	public void onCreate() {
 		super.onCreate();
 		Log.i(APP_TAG, "onCreate()");
-		EndPointCall.onApplicationCreate(this.getApplicationContext());
+		Context context = this.getApplicationContext();
+		EndPointCall.onApplicationCreate(context);
 	}
 
 	@Override

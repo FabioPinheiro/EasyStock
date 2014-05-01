@@ -26,7 +26,7 @@ import epic.easystock.apiEndpoint.model.Pantry;
 import epic.easystock.apiEndpoint.model.User;
 import epic.easystock.apiEndpoint.model.UserPantry;
 import epic.easystock.assist.AppConstants;
-import epic.easystock.assist.endPointCall.EndPointCall;
+import epic.easystock.io.EndPointCall;
 
 public class MyPantriesActivity extends Activity {
 	//String mail;

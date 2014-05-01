@@ -1,8 +1,9 @@
-package epic.easystock.assist.endPointCall;
+package epic.easystock.io;
 
 import java.io.IOException;
 
-import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,10 +16,8 @@ import epic.easystock.assist.AppConstants;
 
 public class AuthorizationCheckTask extends AsyncTask<Void, Integer, Boolean> {
 	static private AuthorizationCheckTask mAuthTask;// FIXME REMOVE !!!
-	Activity activity;
-	String[] emailAccounts;// XXX devia passar pelo AsyncTask
-
-	static public void performAuthCheck(Activity activity, String[] emailAccounts) {
+	
+	static public void performAuthCheck(Context context, String[] emailAccounts) {
 		// Cancel previously running tasks.
 		if (mAuthTask != null) {
 			try {
@@ -27,20 +26,23 @@ public class AuthorizationCheckTask extends AsyncTask<Void, Integer, Boolean> {
 				e.printStackTrace();
 			}
 		}
-		new AuthorizationCheckTask(activity, emailAccounts).execute();
+		new AuthorizationCheckTask(context, emailAccounts).execute();
 	}
+	
+	private Context context;
+	private String[] emailAccounts;// XXX devia passar pelo AsyncTask
 
-	AuthorizationCheckTask(Activity activity, String[] emailAccounts) {
+	AuthorizationCheckTask(Context context, String[] emailAccounts) {
 		this.emailAccounts = emailAccounts;
-		this.activity = activity;
+		this.context = context;
 	}
 
 	@Override
 	protected Boolean doInBackground(Void... v) {
 		Log.i(AuthorizationCheckTask.class.getCanonicalName(), "Background task started.");
 
-		if (!AppConstants.checkGooglePlayServicesAvailable(activity)) {
-			Log.e(AuthorizationCheckTask.class.getCanonicalName(),"Fail to checkGooglePlayServicesAvailable: activity=" + activity.toString());
+		if (!AppConstants.checkGooglePlayServicesAvailable(context)) {
+			Log.e(AuthorizationCheckTask.class.getCanonicalName(),"Fail to checkGooglePlayServicesAvailable: activity=" + context.toString());
 			return false;
 		}
 
@@ -60,7 +62,7 @@ public class AuthorizationCheckTask extends AsyncTask<Void, Integer, Boolean> {
 			// If the application has the appropriate access then a token
 			// will be retrieved, otherwise
 			// an error will be thrown.
-			GoogleAccountCredential credential = GoogleAccountCredential.usingAudience(activity, AppConstants.AUDIENCE);
+			GoogleAccountCredential credential = GoogleAccountCredential.usingAudience(context, AppConstants.AUDIENCE);
 			credential.setSelectedAccountName(emailAccount);
 
 			String accessToken = credential.getToken(); //FIXME REMOVE
@@ -86,7 +88,7 @@ public class AuthorizationCheckTask extends AsyncTask<Void, Integer, Boolean> {
 	protected void onProgressUpdate(Integer... stringIds) {
 		// Toast only the most recent.
 		Integer stringId = stringIds[0];
-		Toast.makeText(activity, stringId, Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, stringId, Toast.LENGTH_SHORT).show();
 	}
 
 	@Override

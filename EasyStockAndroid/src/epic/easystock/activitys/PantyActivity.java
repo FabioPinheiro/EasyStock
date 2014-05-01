@@ -1,38 +1,23 @@
 package epic.easystock.activitys;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo.State;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.Strings;
 
 import epic.easystock.R;
-import epic.easystock.apiEndpoint.ApiEndpoint;
-import epic.easystock.apiEndpoint.model.MetaProduct;
-import epic.easystock.apiEndpoint.model.Pantry;
-import epic.easystock.apiEndpoint.model.Product;
-import epic.easystock.assist.AppConstants;
 import epic.easystock.assist.MetaProductAdapter;
-import epic.easystock.assist.PantryDbAdapter;
-import epic.easystock.assist.endPointCall.EndPointCall;
 import epic.easystock.data.LocalMetaProduct;
+import epic.easystock.io.EndPointCall;
 
 public class PantyActivity extends ListActivity {
 	String mail;
@@ -56,7 +41,8 @@ public class PantyActivity extends ListActivity {
 			@Override
 			public void onClick(View v) {
 				Log.i("ADDPRODUCT PANTRY", "new AddProductTask: " + mail);
-				new AddProductTask(adapter).execute(getApplicationContext());
+				Long productId = Long.valueOf(((EditText) findViewById(R.id.NumberId)).getText().toString());
+				EndPointCall.addProductToPantryTask(adapter, name, productId);
 			}
 		});
 
@@ -77,14 +63,8 @@ public class PantyActivity extends ListActivity {
 				name = input.getText().toString();
 				if (Strings.isNullOrEmpty(name))
 					name = "default";
-				if (isConnected()) {
-					new ListPantryTask(adapter)
-							.execute(getApplicationContext());
-				} else {
-					new LocalListPantryTask(adapter)
-							.execute(getApplicationContext());
-				}
-
+					String pantryID = name;
+					EndPointCall.listPantryProductTask(adapter, pantryID);
 			}
 		});
 
@@ -98,38 +78,7 @@ public class PantyActivity extends ListActivity {
 		alert.show();
 	}
 
-	private boolean isConnected() {
-		boolean connected = false;
-		ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-		// mobile
-		State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE) == null ? null
-				: conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-						.getState();
-		// wifi
-		State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI) == null ? null
-				: conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-						.getState();
-		if (mobile != null
-				&& (mobile == State.CONNECTED || mobile == State.CONNECTING)) {
-			connected = true;
-		}
-		if (wifi != null
-				&& (wifi == State.CONNECTED || wifi == State.CONNECTING)) {
-			connected = true;
-		}
-		return connected;
-
-	}
-
-	private boolean isSignedIn() {
-		if (!Strings.isNullOrEmpty(mail)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
+/*
 	public class LocalListPantryTask extends
 			AsyncTask<Context, Integer, List<LocalMetaProduct>> {
 		private PantryDbAdapter dbAdapter;
@@ -158,9 +107,9 @@ public class PantyActivity extends ListActivity {
 			}
 			return dbAdapter.getAllProducts();
 		}
-	}
+	}*/
 
-	public class ListPantryTask extends
+	/*public class ListPantryTask extends
 			AsyncTask<Context, Integer, List<LocalMetaProduct>> {
 		private MetaProductAdapter adapter;
 		private PantryDbAdapter dbAdapter;
@@ -246,9 +195,9 @@ public class PantyActivity extends ListActivity {
 			}
 			return localProducts;
 		}
-	}
+	}*/
 
-	public class AddProductTask extends
+	/*public class AddProductTask extends
 			AsyncTask<Context, Integer, LocalMetaProduct> { // FIXME isto tem
 															// muito problemas
 															// de syscronização
@@ -347,5 +296,5 @@ public class PantyActivity extends ListActivity {
 			((EditText) findViewById(R.id.NumberId)).setText("");
 		}
 
-	}
+	}*/
 }

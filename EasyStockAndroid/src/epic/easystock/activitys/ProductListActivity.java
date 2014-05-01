@@ -20,10 +20,10 @@ import android.widget.Toast;
 import epic.easystock.R;
 import epic.easystock.assist.AppConstants;
 import epic.easystock.assist.ProductAdapter;
-import epic.easystock.assist.endPointCall.EndPointCall;
 import epic.easystock.apiEndpoint.model.CollectionResponseProduct;
 import epic.easystock.apiEndpoint.model.Key;
 import epic.easystock.apiEndpoint.model.Product;
+import epic.easystock.io.EndPointCall;
 
 public class ProductListActivity extends ListActivity {
 
@@ -42,11 +42,10 @@ public class ProductListActivity extends ListActivity {
 
 		mail = EndPointCall.getEmailAccount();//FIXME LIXO getIntent().getStringExtra("MAIL");
 		// 1. pass context and data to the custom adapter
-		ProductAdapter adapter = new ProductAdapter(this,
-				new ArrayList<Product>());
+		ProductAdapter adapter = new ProductAdapter(this, new ArrayList<Product>());
 		// 2. setListAdapter
 		setListAdapter(adapter);
-		new EndpointTask2(adapter).execute();
+		EndPointCall.listProductTask(adapter);
 	}
 
 	@Override
@@ -88,60 +87,4 @@ public class ProductListActivity extends ListActivity {
 					}
 				});
 	}
-
-	private boolean isSignedIn() {
-		if (!Strings.isNullOrEmpty(mail)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public class EndpointTask2 extends AsyncTask<Void, Void, List<Product>> {
-		private ProductAdapter adapter;
-
-		public EndpointTask2(ProductAdapter adapter) {
-			this.adapter = adapter;
-		}
-
-		@Override
-		protected void onPostExecute(List<Product> result) {
-			super.onPostExecute(result);
-			Collection<Product> aux = result;
-			adapter.addAll(aux);
-		}
-
-		@Override
-		protected List<Product> doInBackground(Void... params) {
-			CollectionResponseProduct result = null;
-			if (!isSignedIn()) {
-				return null;
-			}
-
-			if (!AppConstants
-					.checkGooglePlayServicesAvailable(ProductListActivity.this)) {
-				return null;
-			}
-
-			// Create a Google credential since this is an authenticated request
-			// to the API.
-			GoogleAccountCredential credential = GoogleAccountCredential
-					.usingAudience(ProductListActivity.this, AppConstants.AUDIENCE);
-			credential.setSelectedAccountName(mail);
-			try {
-				result = AppConstants.getApiServiceHandle(credential)
-						.listProduct().execute();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (result != null) {
-				return result.getItems();
-			} else {
-				return null;
-			}
-		}
-
-	}
-
 }

@@ -1,4 +1,4 @@
-package epic.easystock.assist.endPointCall;
+package epic.easystock.io;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

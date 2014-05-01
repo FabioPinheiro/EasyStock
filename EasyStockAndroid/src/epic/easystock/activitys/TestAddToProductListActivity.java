@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import epic.easystock.R;
-import epic.easystock.assist.endPointCall.EndPointCall;
+import epic.easystock.io.EndPointCall;
 
 public class TestAddToProductListActivity extends Activity {
 
