@@ -15,9 +15,12 @@ import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.data.LocalMetaProduct;
 
 public class ListPantryProductTask extends AsyncTask<Context, Integer, List<LocalMetaProduct>> {
+	static private final String LOG_TAG = AddProductToPantryTask.class.getCanonicalName();
+	
 	private MetaProductAdapter adapter;
 	private PantryDbAdapter dbAdapter;
 	private String pantryID;
+	private Boolean pantryLoaded;
 	
 	public ListPantryProductTask(MetaProductAdapter adapter, String pantryID) {
 		this.adapter = adapter;
@@ -27,6 +30,9 @@ public class ListPantryProductTask extends AsyncTask<Context, Integer, List<Loca
 	@Override
 	protected void onPostExecute(List<LocalMetaProduct> result) {
 		super.onPostExecute(result);
+		if (pantryLoaded) {
+			EndPointCall.msg(LOG_TAG , EndPointCall.FAIL_TO_LOAD_PANTRY);
+		}
 		if (result != null) {
 			dbAdapter.putAllProducts(result);
 			Collection<LocalMetaProduct> localProducts = result;
@@ -42,32 +48,37 @@ public class ListPantryProductTask extends AsyncTask<Context, Integer, List<Loca
 		List<MetaProduct> products = null;
 		try {
 			Pantry pantry = EndPointCall.getApiEndpoint().getPantryByMailAndName(EndPointCall.getEmailAccount(), pantryID).execute();
-			products = pantry.getProducts();
-			if (products == null) {
-				Log.e("PantyActivity", "ListPantryTask PANTRY "
-						+ "products == null");
-				products = new ArrayList<MetaProduct>();
-				pantry.setProducts(products);
-				EndPointCall.getApiEndpoint().updatePantry(pantry).execute();
+			pantryLoaded = (pantry != null);
+			if (!pantryLoaded) {
+				Log.e(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PANTRY);
+			}else {
+				products = pantry.getProducts();
+				if (products == null) { //FIXME fixme no app engin
+					Log.e(LOG_TAG, "products == null");
+					products = new ArrayList<MetaProduct>();
+					pantry.setProducts(products);
+					EndPointCall.getApiEndpoint().updatePantry(pantry).execute();
+				}
 			}
-			//products = EndPointCall.getApiEndpoint().getPantryProducts(pantryID).execute().getItems();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		List<LocalMetaProduct> localProducts = new ArrayList<LocalMetaProduct>();
-		for (MetaProduct mp : products) {
-			Product aux = null;
-			try {
-				aux = EndPointCall.getApiEndpoint().getProduct(mp.getProduct()).execute();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				continue;
+		if (pantryLoaded){
+			for (MetaProduct mp : products) {
+				Product aux = null;
+				try {
+					aux = EndPointCall.getApiEndpoint().getProduct(mp.getProduct()).execute();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					continue;
+				}
+				localProducts.add(new LocalMetaProduct(aux.getBarCode(), aux
+						.getName(), aux.getDescription(), aux.getKey(), mp
+						.getAmount()));
 			}
-			localProducts.add(new LocalMetaProduct(aux.getBarCode(), aux
-					.getName(), aux.getDescription(), aux.getKey(), mp
-					.getAmount()));
 		}
 		return localProducts;
 	}

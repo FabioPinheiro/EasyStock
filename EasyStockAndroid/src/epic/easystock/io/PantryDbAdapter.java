@@ -43,30 +43,30 @@ import android.util.Log;
  * recommended).
  */
 public class PantryDbAdapter {
-	public static final String TABLE_NAME = "pantry";
 	public static final String PROD_NAME = "name";
 	public static final String PROD_DESCRIPTION = "description";
 	public static final String PROD_ID = "_id";
 	public static final String PROD_BARCODE = "BarCode";
 	public static final String PROD_AMOUNT = "amount";
+	private static final String DATABASE_NAME = "pantry_data";
+	private static final int DATABASE_VERSION = 1;
+	private static final String TAG = "PantryDbAdapter";
 
-	private static final String TAG = "NotesDbAdapter";
+	private static String DATABASE_TABLE;
+	
 	private DatabaseHelper mDbHelper;
 	private SQLiteDatabase mDb;
+	private final Context mCtx;
 
 	/**
 	 * Database creation sql statement
 	 */
-	private static final String DATABASE_CREATE = "create table " + TABLE_NAME
+	private static final String DATABASE_CREATE = "create table " + DATABASE_TABLE
 			+ " (" + PROD_ID + " integer primary key, " + PROD_BARCODE
 			+ " integer, " + PROD_NAME + " text not null, " + PROD_DESCRIPTION
 			+ " text not null," + PROD_AMOUNT + " real not null );";
 
-	private static final String DATABASE_NAME = "data";
-	private static final String DATABASE_TABLE = TABLE_NAME;
-	private static final int DATABASE_VERSION = 1;
 
-	private final Context mCtx;
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -96,8 +96,9 @@ public class PantryDbAdapter {
 	 * @param ctx
 	 *            the Context within which to work
 	 */
-	public PantryDbAdapter(Context ctx) {
+	public PantryDbAdapter(Context ctx, String pantryID) {
 		this.mCtx = ctx;
+		DATABASE_TABLE = "PantryTabelID:" + pantryID;
 	}
 
 	/**

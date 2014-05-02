@@ -32,11 +32,21 @@ public class PantyActivity extends ListActivity {
 		//LIXO mail = getIntent().getStringExtra("MAIL");
 		mail = EndPointCall.getEmailAccount();//FIXME
 		addProduct = (Button) findViewById(R.id.AddProduct);
-		adapter = new MetaProductAdapter(this,
-				new ArrayList<LocalMetaProduct>());
+		adapter = new MetaProductAdapter(this, new ArrayList<LocalMetaProduct>());
 		setListAdapter(adapter);
-		selectPantry();
-
+		
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		final String[] items = { "One", "two", "three" }; //TODO 
+		alert.setTitle("Select Pantry");
+		alert.setItems(items, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				EndPointCall.setSelectedPantry(items[which]);
+				EndPointCall.listPantryProductTask(adapter, EndPointCall.getSelectedPantry()); //FIXME
+			}
+		});
+		alert.show();
+		
 		addProduct.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -46,36 +56,6 @@ public class PantyActivity extends ListActivity {
 			}
 		});
 
-	}
-
-	private void selectPantry() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-		alert.setTitle("Title");
-		alert.setMessage("Message");
-
-		// Set an EditText view to get user input
-		final EditText input = new EditText(this);
-		alert.setView(input);
-
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				name = input.getText().toString();
-				if (Strings.isNullOrEmpty(name))
-					name = "default";
-					String pantryID = name;
-					EndPointCall.listPantryProductTask(adapter, pantryID);
-			}
-		});
-
-		alert.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						name = "default";
-					}
-				});
-
-		alert.show();
 	}
 
 /*

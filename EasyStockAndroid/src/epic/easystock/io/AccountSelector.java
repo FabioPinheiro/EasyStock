@@ -21,7 +21,7 @@ public class AccountSelector {
 		this.accounts = accountManager.getAccountsByType(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
 	}
 	
-	public Account selectorAccount(Context context) {
+	public Account selectorAccount() {
 		Account aux;
 		if (countGoogleAccounts() == 0) {
 				// No accounts registered, nothing to do.
@@ -55,7 +55,6 @@ public class AccountSelector {
 				activity.startActivityForResult(accountSelector, ACTIVITY_RESULT_FROM_ACCOUNT_SELECTION);*/ // FIXME TEST
 		}
 		AuthorizationCheckTask.performAuthCheck(context,new String[] { aux.name });
-		EndPointCall.msg("Selected Account: " + aux.name);
 		return aux;
 	}
 }

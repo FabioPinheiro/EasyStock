@@ -14,7 +14,7 @@ import epic.easystock.data.LocalMetaProduct;
 
 //FIXME isto tem muito problemasde syscronização(falar com ofabio)
 public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaProduct> {
-	static private final String LOG_TAG = "AddProductToPantry";
+	static private final String LOG_TAG = AddProductToPantryTask.class.getCanonicalName();
 
 	private MetaProductAdapter adapter;
 	private String mail, pantrySelected;
