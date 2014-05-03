@@ -142,17 +142,16 @@ public class EndPointCall {
 		new ListAllProductTask(adapter).execute();
 	}
 	static public void listPantryProductTask(MetaProductAdapter adapter, String pantryID) {
+		Log.i(EndPointCall_TAG, "isConnected()=" + isConnected());
 		if (isConnected()) {
-			Log.i(EndPointCall_TAG, "isConnected()=" + isConnected());
 			new ListPantryProductTask(adapter, pantryID).execute();
 		} else {
-			Log.i(EndPointCall_TAG, "isConnected()=" + isConnected());
 			PantryDbAdapter bd = EndPointCall.getPantryDbAdapter();
 			bd.open();
 			adapter.addAll(bd.getAllProducts());
 			adapter.notifyDataSetChanged();
 			bd.close();
-			throw new UnsupportedOperationException();
+			// throw new UnsupportedOperationException();
 			// FIXME new ListPantrysTask(adapter).execute();
 		}
 	}
