@@ -32,13 +32,14 @@ public class ListPantryProductTask extends AsyncTask<Context, Integer, List<Loca
 		super.onPostExecute(result);
 		if (pantryLoaded) {
 			EndPointCall.msg(LOG_TAG , EndPointCall.FAIL_TO_LOAD_PANTRY);
+			Log.e(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PANTRY);
 		}
 		if (result != null) {
-			dbAdapter.putAllProducts(result);
 			Collection<LocalMetaProduct> localProducts = result;
+			dbAdapter.putAllProducts(localProducts);
 			adapter.addAll(localProducts);
 		} else {
-			Log.e(this.getClass().getCanonicalName(), "EndPointCall.FAIL_TO_LIST_PANTRY_PRODUCTS");
+			Log.e(LOG_TAG, "EndPointCall.FAIL_TO_LIST_PANTRY_PRODUCTS");
 			EndPointCall.msg(EndPointCall.FAIL_TO_LIST_PANTRY_PRODUCTS);
 		}
 	}
@@ -64,7 +65,7 @@ public class ListPantryProductTask extends AsyncTask<Context, Integer, List<Loca
 			e.printStackTrace();
 		}
 		
-		List<LocalMetaProduct> localProducts = new ArrayList<LocalMetaProduct>();
+		List<LocalMetaProduct> result = new ArrayList<LocalMetaProduct>();
 		if (pantryLoaded){
 			for (MetaProduct mp : products) {
 				Product aux = null;
@@ -75,11 +76,11 @@ public class ListPantryProductTask extends AsyncTask<Context, Integer, List<Loca
 					e.printStackTrace();
 					continue;
 				}
-				localProducts.add(new LocalMetaProduct(aux.getBarCode(), aux
+				result.add(new LocalMetaProduct(aux.getBarCode(), aux
 						.getName(), aux.getDescription(), aux.getKey(), mp
 						.getAmount()));
 			}
 		}
-		return localProducts;
+		return result;
 	}
 }

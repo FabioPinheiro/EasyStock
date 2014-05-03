@@ -1,6 +1,7 @@
 package epic.easystock.activitys;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -36,12 +37,14 @@ public class PantyActivity extends ListActivity {
 		setListAdapter(adapter);
 		
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		final String[] items = { "One", "two", "three" }; //TODO 
+		List<String> aux = EndPointCall.getUserDbAdapter().avalablePantrysFromUser(EndPointCall.getEmailAccount());
+		final String[] pantry = new String[aux.size()];
+		aux.toArray(pantry);
 		alert.setTitle("Select Pantry");
-		alert.setItems(items, new DialogInterface.OnClickListener() {
+		alert.setItems(pantry, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				EndPointCall.setSelectedPantry(items[which]);
+				EndPointCall.setSelectedPantry(pantry[which]);
 				EndPointCall.listPantryProductTask(adapter, EndPointCall.getSelectedPantry()); //FIXME
 			}
 		});

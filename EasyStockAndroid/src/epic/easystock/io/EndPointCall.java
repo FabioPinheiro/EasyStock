@@ -45,8 +45,7 @@ public class EndPointCall {
 	static public String getEmailAccount() {
 		return mEmailAccount;
 	}
-	// static protected void setEmailAccount(String account) {mEmailAccount=
-	// account;}
+	// static protected void setEmailAccount(String account) {mEmailAccount=account;}
 	static public boolean isSignedIn() {
 		return (!Strings.isNullOrEmpty(mEmailAccount) ? true : false);
 	}
@@ -79,6 +78,9 @@ public class EndPointCall {
 		}
 		return new PantryDbAdapter(EndPointCall.getGlobalContext(), name);
 	}
+	public static UserBdAdapter getUserDbAdapter() {
+		return new UserBdAdapter(EndPointCall.getGlobalContext());
+	}
 	static public void msg(String message) {
 		Toast.makeText(EndPointCall.getGlobalContext(), message, Toast.LENGTH_LONG).show();
 	}
@@ -103,6 +105,8 @@ public class EndPointCall {
 			globalSettings.edit().putString(PREFS_LAST_USED_EMAIL, aux.name).commit();// FIXME
 			mEmailAccount = aux.name;
 			msg("Hello " + mEmailAccount);
+			EndPointCall.getUserDbAdapter().createPantry(mEmailAccount, "pantry1");//FIXME
+			EndPointCall.getUserDbAdapter().createPantry(mEmailAccount, "pantry2");//FIXME
 		} else {
 			mEmailAccount = globalSettings.getString(PREFS_LAST_USED_EMAIL, "EMAIL_ERROR");
 			msg("Welcome Back " + mEmailAccount);// FIXME TEXT

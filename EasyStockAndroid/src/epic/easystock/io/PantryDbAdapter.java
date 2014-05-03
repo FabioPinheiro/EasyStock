@@ -17,6 +17,7 @@
 package epic.easystock.io;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.android.gms.internal.ar;
@@ -173,7 +174,7 @@ public class PantryDbAdapter {
 	 * 
 	 * @return Cursor over all notes
 	 */
-	public void putAllProducts(List<LocalMetaProduct> products) {
+	public void putAllProducts(Collection<LocalMetaProduct> products) {
 
 		for (LocalMetaProduct lmp : products) {
 			try {
