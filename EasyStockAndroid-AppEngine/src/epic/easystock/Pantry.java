@@ -1,5 +1,6 @@
 package epic.easystock;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,9 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-
-import com.google.appengine.api.datastore.Key;
 
 @Entity
 public class Pantry {
@@ -37,6 +35,10 @@ public class Pantry {
 	
 	
 	public List<MetaProduct> getProducts() {
+		if (products == null) {
+			System.err.print(this.getClass().getCanonicalName() + ": getProducts(): products is null"); //FIXME
+			products = new ArrayList<MetaProduct>();
+		}
 		return products;
 	}
 

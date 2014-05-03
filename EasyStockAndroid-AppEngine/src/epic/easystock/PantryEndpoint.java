@@ -135,8 +135,7 @@ public class PantryEndpoint {
 					ret = p;
 			}
 			if (ret != null)
-				for (MetaProduct p : ret.getProducts()) {
-				}
+				for (MetaProduct p : ret.getProducts()) {} //FIXME isto é inutil ?! era suporto fazer o que?
 
 		} finally {
 			mgr.close();

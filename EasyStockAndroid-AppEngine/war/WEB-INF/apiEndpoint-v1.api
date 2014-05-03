@@ -665,14 +665,14 @@
           "name" : {
             "type" : "string"
           },
-          "parent" : {
-            "$ref" : "Key"
-          },
           "complete" : {
             "type" : "boolean"
           },
           "namespace" : {
             "type" : "string"
+          },
+          "parent" : {
+            "$ref" : "Key"
           }
         }
       },
@@ -830,12 +830,12 @@
           "description" : {
             "type" : "string"
           },
-          "name" : {
-            "type" : "string"
-          },
           "timeStamp" : {
             "type" : "string",
             "format" : "date-time"
+          },
+          "name" : {
+            "type" : "string"
           }
         }
       },
