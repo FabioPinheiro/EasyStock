@@ -26,51 +26,14 @@
   "ownerDomain" : "easystock.epic",
   "ownerName" : "easystock.epic",
   "methods" : {
-    "apiEndpoint.updateUserPantry" : {
-      "path" : "userpantry",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserPantryEndpoint.updateUserPantry",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "apiEndpoint.getMyPantryByMail" : {
-      "path" : "getPantryByMail",
+    "apiEndpoint.getUser" : {
+      "path" : "user/{id}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserPantryEndpoint.getMyPantryByMail",
-      "request" : {
-        "parameters" : {
-          "mail" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "apiEndpoint.getUserPantry" : {
-      "path" : "userpantry/{id}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserPantryEndpoint.getUserPantry",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.getUser",
       "request" : {
         "parameters" : {
           "id" : {
@@ -84,14 +47,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.listUserPantry" : {
-      "path" : "userpantry",
+    "apiEndpoint.listMetaProduct" : {
+      "path" : "metaproduct",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserPantryEndpoint.listUserPantry",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.listMetaProduct",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -109,6 +72,27 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "apiEndpoint.removeMetaProduct" : {
+      "path" : "metaproduct/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.removeMetaProduct",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
     "apiEndpoint.insertUserPantry" : {
       "path" : "userpantry",
       "httpMethod" : "POST",
@@ -116,7 +100,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserPantryEndpoint.insertUserPantry",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.insertUserPantry",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -132,7 +116,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserPantryEndpoint.removeUserPantry",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.removeUserPantry",
       "request" : {
         "parameters" : {
           "id" : {
@@ -146,30 +130,14 @@
         "body" : "empty"
       }
     },
-    "apiEndpoint.updateMetaProduct" : {
-      "path" : "metaproduct",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.MetaProductEndpoint.updateMetaProduct",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "apiEndpoint.listMetaProduct" : {
-      "path" : "metaproduct",
+    "apiEndpoint.listUserPantry" : {
+      "path" : "userpantry",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.MetaProductEndpoint.listMetaProduct",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.listUserPantry",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -187,109 +155,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.getMetaProduct" : {
-      "path" : "metaproduct/{id}",
+    "apiEndpoint.listPantry" : {
+      "path" : "pantry",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.MetaProductEndpoint.getMetaProduct",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "apiEndpoint.insertMetaProduct" : {
-      "path" : "metaproduct",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.MetaProductEndpoint.insertMetaProduct",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "apiEndpoint.removeMetaProduct" : {
-      "path" : "metaproduct/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.MetaProductEndpoint.removeMetaProduct",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "apiEndpoint.findUserByMail" : {
-      "path" : "findUserByMail",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserEndpoint.findUserByMail",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "apiEndpoint.removeUser" : {
-      "path" : "user/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserEndpoint.removeUser",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "apiEndpoint.listUser" : {
-      "path" : "user",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserEndpoint.listUser",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.listPantry",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -307,14 +180,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.getUser" : {
-      "path" : "user/{id}",
+    "apiEndpoint.getUserPantry" : {
+      "path" : "userpantry/{id}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserEndpoint.getUser",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.getUserPantry",
       "request" : {
         "parameters" : {
           "id" : {
@@ -323,22 +196,6 @@
           }
         },
         "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "apiEndpoint.insertUser" : {
-      "path" : "user",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserEndpoint.insertUser",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -351,7 +208,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.UserEndpoint.updateUser",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.updateUser",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -360,54 +217,22 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.getPantryProducts" : {
-      "path" : "metaproductcollection/{id}",
+    "apiEndpoint.getMyPantryByMail" : {
+      "path" : "getPantryByMail",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.PantryEndpoint.getPantryProducts",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.getMyPantryByMail",
       "request" : {
         "parameters" : {
-          "id" : {
-            "type" : "int64",
+          "mail" : {
+            "type" : "string",
             "required" : true
           }
         },
         "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "apiEndpoint.updatePantry" : {
-      "path" : "pantry",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.PantryEndpoint.updatePantry",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "apiEndpoint.insertPantry" : {
-      "path" : "pantry",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.PantryEndpoint.insertPantry",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -420,7 +245,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.PantryEndpoint.getPantry",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.getPantry",
       "request" : {
         "parameters" : {
           "id" : {
@@ -441,7 +266,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.PantryEndpoint.getPantryByMailAndName",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.getPantryByMailAndName",
       "request" : {
         "parameters" : {
           "mail" : {
@@ -459,14 +284,146 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.listPantry" : {
-      "path" : "pantry",
+    "apiEndpoint.removeProduct" : {
+      "path" : "product/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.removeProduct",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "apiEndpoint.removePantry" : {
+      "path" : "pantry/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.removePantry",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "apiEndpoint.updateUserPantry" : {
+      "path" : "userpantry",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.updateUserPantry",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "apiEndpoint.getProduct" : {
+      "path" : "product/{id}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.PantryEndpoint.listPantry",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.getProduct",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "apiEndpoint.insertUser" : {
+      "path" : "user",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.insertUser",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "apiEndpoint.findUserByMail" : {
+      "path" : "findUserByMail",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.findUserByMail",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "apiEndpoint.getPantryProducts" : {
+      "path" : "metaproductcollection/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.getPantryProducts",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "apiEndpoint.listUser" : {
+      "path" : "user",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.listUser",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -484,14 +441,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.removePantry" : {
-      "path" : "pantry/{id}",
-      "httpMethod" : "DELETE",
+    "apiEndpoint.getProductByBarCode" : {
+      "path" : "getProductByBarCode",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.PantryEndpoint.removePantry",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.getProductByBarCode",
       "request" : {
         "parameters" : {
           "id" : {
@@ -502,22 +459,42 @@
         "body" : "empty"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.getProduct" : {
-      "path" : "product/{id}",
+    "apiEndpoint.updateProduct" : {
+      "path" : "product",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.updateProduct",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "apiEndpoint.listProduct" : {
+      "path" : "product",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.ProductEndpoint.getProduct",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.listProduct",
       "request" : {
         "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
           }
         },
         "body" : "empty"
@@ -533,7 +510,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.ProductEndpoint.insertProduct",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.insertProduct",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -542,35 +519,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.removeProduct" : {
-      "path" : "product/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.ProductEndpoint.removeProduct",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "apiEndpoint.updateProduct" : {
-      "path" : "product",
+    "apiEndpoint.updateMetaProduct" : {
+      "path" : "metaproduct",
       "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.ProductEndpoint.updateProduct",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.updateMetaProduct",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -579,14 +535,30 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.getProductByBarCode" : {
-      "path" : "getProductByBarCode",
+    "apiEndpoint.updatePantry" : {
+      "path" : "pantry",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.updatePantry",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "apiEndpoint.getMetaProduct" : {
+      "path" : "metaproduct/{id}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.ProductEndpoint.getProductByBarCode",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.getMetaProduct",
       "request" : {
         "parameters" : {
           "id" : {
@@ -600,51 +572,74 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.listProduct" : {
-      "path" : "product",
-      "httpMethod" : "GET",
+    "apiEndpoint.insertPantry" : {
+      "path" : "pantry",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
       "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.ProductEndpoint.listProduct",
+      "rosyMethod" : "epic.easystock.ApiEndpoint.insertPantry",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "apiEndpoint.insertMetaProduct" : {
+      "path" : "metaproduct",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.insertMetaProduct",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "apiEndpoint.removeUser" : {
+      "path" : "user/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ApiEndpoint.removeUser",
       "request" : {
         "parameters" : {
-          "cursor" : {
-            "type" : "string",
-            "required" : false
-          },
-          "limit" : {
-            "type" : "int32",
-            "required" : false
+          "id" : {
+            "type" : "int64",
+            "required" : true
           }
         },
         "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
+        "body" : "empty"
       }
     }
   },
   "descriptor" : {
     "schemas" : {
-      "UserPantry" : {
-        "id" : "UserPantry",
+      "User" : {
+        "id" : "User",
         "type" : "object",
         "properties" : {
           "key" : {
             "$ref" : "Key"
           },
-          "pantry" : {
-            "type" : "string",
-            "format" : "int64"
+          "nick" : {
+            "type" : "string"
           },
-          "user" : {
-            "type" : "string",
-            "format" : "int64"
-          },
-          "permissionType" : {
-            "$ref" : "PermissionType"
+          "email" : {
+            "type" : "string"
           }
         }
       },
@@ -676,31 +671,18 @@
           }
         }
       },
-      "PermissionType" : {
-        "id" : "PermissionType",
-        "type" : "string",
-        "enum" : [ "OWNER", "EDITOR", "READER" ]
-      },
-      "Pantry" : {
-        "id" : "Pantry",
+      "CollectionResponse_MetaProduct" : {
+        "id" : "CollectionResponse_MetaProduct",
         "type" : "object",
         "properties" : {
-          "key" : {
-            "type" : "string",
-            "format" : "int64"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "products" : {
+          "items" : {
             "type" : "array",
             "items" : {
               "$ref" : "MetaProduct"
             }
           },
-          "timeStamp" : {
-            "type" : "string",
-            "format" : "date-time"
+          "nextPageToken" : {
+            "type" : "string"
           }
         }
       },
@@ -724,6 +706,31 @@
           }
         }
       },
+      "UserPantry" : {
+        "id" : "UserPantry",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "pantry" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "user" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "permissionType" : {
+            "$ref" : "PermissionType"
+          }
+        }
+      },
+      "PermissionType" : {
+        "id" : "PermissionType",
+        "type" : "string",
+        "enum" : [ "OWNER", "EDITOR", "READER" ]
+      },
       "CollectionResponse_UserPantry" : {
         "id" : "CollectionResponse_UserPantry",
         "type" : "object",
@@ -739,63 +746,6 @@
           }
         }
       },
-      "CollectionResponse_MetaProduct" : {
-        "id" : "CollectionResponse_MetaProduct",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "MetaProduct"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
-      },
-      "User" : {
-        "id" : "User",
-        "type" : "object",
-        "properties" : {
-          "key" : {
-            "$ref" : "Key"
-          },
-          "nick" : {
-            "type" : "string"
-          },
-          "email" : {
-            "type" : "string"
-          }
-        }
-      },
-      "CollectionResponse_User" : {
-        "id" : "CollectionResponse_User",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "User"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
-      },
-      "MetaProductCollection" : {
-        "id" : "MetaProductCollection",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "MetaProduct"
-            }
-          }
-        }
-      },
       "CollectionResponse_Pantry" : {
         "id" : "CollectionResponse_Pantry",
         "type" : "object",
@@ -808,6 +758,29 @@
           },
           "nextPageToken" : {
             "type" : "string"
+          }
+        }
+      },
+      "Pantry" : {
+        "id" : "Pantry",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "products" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "MetaProduct"
+            }
+          },
+          "timeStamp" : {
+            "type" : "string",
+            "format" : "date-time"
           }
         }
       },
@@ -839,6 +812,33 @@
           }
         }
       },
+      "MetaProductCollection" : {
+        "id" : "MetaProductCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "MetaProduct"
+            }
+          }
+        }
+      },
+      "CollectionResponse_User" : {
+        "id" : "CollectionResponse_User",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "User"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      },
       "CollectionResponse_Product" : {
         "id" : "CollectionResponse_Product",
         "type" : "object",
@@ -856,147 +856,115 @@
       }
     },
     "methods" : {
-      "epic.easystock.UserPantryEndpoint.updateUserPantry" : {
-        "request" : {
-          "$ref" : "UserPantry"
-        },
+      "epic.easystock.ApiEndpoint.getUser" : {
         "response" : {
-          "$ref" : "UserPantry"
+          "$ref" : "User"
         }
       },
-      "epic.easystock.UserPantryEndpoint.getMyPantryByMail" : {
-        "response" : {
-          "$ref" : "Pantry"
-        }
-      },
-      "epic.easystock.UserPantryEndpoint.getUserPantry" : {
-        "response" : {
-          "$ref" : "UserPantry"
-        }
-      },
-      "epic.easystock.UserPantryEndpoint.listUserPantry" : {
-        "response" : {
-          "$ref" : "CollectionResponse_UserPantry"
-        }
-      },
-      "epic.easystock.UserPantryEndpoint.insertUserPantry" : {
-        "request" : {
-          "$ref" : "UserPantry"
-        },
-        "response" : {
-          "$ref" : "UserPantry"
-        }
-      },
-      "epic.easystock.UserPantryEndpoint.removeUserPantry" : {
-      },
-      "epic.easystock.MetaProductEndpoint.updateMetaProduct" : {
-        "request" : {
-          "$ref" : "MetaProduct"
-        },
-        "response" : {
-          "$ref" : "MetaProduct"
-        }
-      },
-      "epic.easystock.MetaProductEndpoint.listMetaProduct" : {
+      "epic.easystock.ApiEndpoint.listMetaProduct" : {
         "response" : {
           "$ref" : "CollectionResponse_MetaProduct"
         }
       },
-      "epic.easystock.MetaProductEndpoint.getMetaProduct" : {
-        "response" : {
-          "$ref" : "MetaProduct"
-        }
+      "epic.easystock.ApiEndpoint.removeMetaProduct" : {
       },
-      "epic.easystock.MetaProductEndpoint.insertMetaProduct" : {
+      "epic.easystock.ApiEndpoint.insertUserPantry" : {
         "request" : {
-          "$ref" : "MetaProduct"
+          "$ref" : "UserPantry"
         },
         "response" : {
-          "$ref" : "MetaProduct"
+          "$ref" : "UserPantry"
         }
       },
-      "epic.easystock.MetaProductEndpoint.removeMetaProduct" : {
+      "epic.easystock.ApiEndpoint.removeUserPantry" : {
       },
-      "epic.easystock.UserEndpoint.findUserByMail" : {
-        "request" : {
-          "$ref" : "User"
-        },
+      "epic.easystock.ApiEndpoint.listUserPantry" : {
         "response" : {
-          "$ref" : "User"
+          "$ref" : "CollectionResponse_UserPantry"
         }
       },
-      "epic.easystock.UserEndpoint.removeUser" : {
-      },
-      "epic.easystock.UserEndpoint.listUser" : {
-        "response" : {
-          "$ref" : "CollectionResponse_User"
-        }
-      },
-      "epic.easystock.UserEndpoint.getUser" : {
-        "response" : {
-          "$ref" : "User"
-        }
-      },
-      "epic.easystock.UserEndpoint.insertUser" : {
-        "request" : {
-          "$ref" : "User"
-        },
-        "response" : {
-          "$ref" : "User"
-        }
-      },
-      "epic.easystock.UserEndpoint.updateUser" : {
-        "request" : {
-          "$ref" : "User"
-        },
-        "response" : {
-          "$ref" : "User"
-        }
-      },
-      "epic.easystock.PantryEndpoint.getPantryProducts" : {
-        "response" : {
-          "$ref" : "MetaProductCollection"
-        }
-      },
-      "epic.easystock.PantryEndpoint.updatePantry" : {
-        "request" : {
-          "$ref" : "Pantry"
-        },
-        "response" : {
-          "$ref" : "Pantry"
-        }
-      },
-      "epic.easystock.PantryEndpoint.insertPantry" : {
-        "request" : {
-          "$ref" : "Pantry"
-        },
-        "response" : {
-          "$ref" : "Pantry"
-        }
-      },
-      "epic.easystock.PantryEndpoint.getPantry" : {
-        "response" : {
-          "$ref" : "Pantry"
-        }
-      },
-      "epic.easystock.PantryEndpoint.getPantryByMailAndName" : {
-        "response" : {
-          "$ref" : "Pantry"
-        }
-      },
-      "epic.easystock.PantryEndpoint.listPantry" : {
+      "epic.easystock.ApiEndpoint.listPantry" : {
         "response" : {
           "$ref" : "CollectionResponse_Pantry"
         }
       },
-      "epic.easystock.PantryEndpoint.removePantry" : {
+      "epic.easystock.ApiEndpoint.getUserPantry" : {
+        "response" : {
+          "$ref" : "UserPantry"
+        }
       },
-      "epic.easystock.ProductEndpoint.getProduct" : {
+      "epic.easystock.ApiEndpoint.updateUser" : {
+        "request" : {
+          "$ref" : "User"
+        },
+        "response" : {
+          "$ref" : "User"
+        }
+      },
+      "epic.easystock.ApiEndpoint.getMyPantryByMail" : {
+        "response" : {
+          "$ref" : "Pantry"
+        }
+      },
+      "epic.easystock.ApiEndpoint.getPantry" : {
+        "response" : {
+          "$ref" : "Pantry"
+        }
+      },
+      "epic.easystock.ApiEndpoint.getPantryByMailAndName" : {
+        "response" : {
+          "$ref" : "Pantry"
+        }
+      },
+      "epic.easystock.ApiEndpoint.removeProduct" : {
+      },
+      "epic.easystock.ApiEndpoint.removePantry" : {
+      },
+      "epic.easystock.ApiEndpoint.updateUserPantry" : {
+        "request" : {
+          "$ref" : "UserPantry"
+        },
+        "response" : {
+          "$ref" : "UserPantry"
+        }
+      },
+      "epic.easystock.ApiEndpoint.getProduct" : {
         "response" : {
           "$ref" : "Product"
         }
       },
-      "epic.easystock.ProductEndpoint.insertProduct" : {
+      "epic.easystock.ApiEndpoint.insertUser" : {
+        "request" : {
+          "$ref" : "User"
+        },
+        "response" : {
+          "$ref" : "User"
+        }
+      },
+      "epic.easystock.ApiEndpoint.findUserByMail" : {
+        "request" : {
+          "$ref" : "User"
+        },
+        "response" : {
+          "$ref" : "User"
+        }
+      },
+      "epic.easystock.ApiEndpoint.getPantryProducts" : {
+        "response" : {
+          "$ref" : "MetaProductCollection"
+        }
+      },
+      "epic.easystock.ApiEndpoint.listUser" : {
+        "response" : {
+          "$ref" : "CollectionResponse_User"
+        }
+      },
+      "epic.easystock.ApiEndpoint.getProductByBarCode" : {
+        "response" : {
+          "$ref" : "Product"
+        }
+      },
+      "epic.easystock.ApiEndpoint.updateProduct" : {
         "request" : {
           "$ref" : "Product"
         },
@@ -1004,25 +972,57 @@
           "$ref" : "Product"
         }
       },
-      "epic.easystock.ProductEndpoint.removeProduct" : {
-      },
-      "epic.easystock.ProductEndpoint.updateProduct" : {
-        "request" : {
-          "$ref" : "Product"
-        },
-        "response" : {
-          "$ref" : "Product"
-        }
-      },
-      "epic.easystock.ProductEndpoint.getProductByBarCode" : {
-        "response" : {
-          "$ref" : "Product"
-        }
-      },
-      "epic.easystock.ProductEndpoint.listProduct" : {
+      "epic.easystock.ApiEndpoint.listProduct" : {
         "response" : {
           "$ref" : "CollectionResponse_Product"
         }
+      },
+      "epic.easystock.ApiEndpoint.insertProduct" : {
+        "request" : {
+          "$ref" : "Product"
+        },
+        "response" : {
+          "$ref" : "Product"
+        }
+      },
+      "epic.easystock.ApiEndpoint.updateMetaProduct" : {
+        "request" : {
+          "$ref" : "MetaProduct"
+        },
+        "response" : {
+          "$ref" : "MetaProduct"
+        }
+      },
+      "epic.easystock.ApiEndpoint.updatePantry" : {
+        "request" : {
+          "$ref" : "Pantry"
+        },
+        "response" : {
+          "$ref" : "Pantry"
+        }
+      },
+      "epic.easystock.ApiEndpoint.getMetaProduct" : {
+        "response" : {
+          "$ref" : "MetaProduct"
+        }
+      },
+      "epic.easystock.ApiEndpoint.insertPantry" : {
+        "request" : {
+          "$ref" : "Pantry"
+        },
+        "response" : {
+          "$ref" : "Pantry"
+        }
+      },
+      "epic.easystock.ApiEndpoint.insertMetaProduct" : {
+        "request" : {
+          "$ref" : "MetaProduct"
+        },
+        "response" : {
+          "$ref" : "MetaProduct"
+        }
+      },
+      "epic.easystock.ApiEndpoint.removeUser" : {
       }
     }
   }
