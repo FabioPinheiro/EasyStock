@@ -15,19 +15,10 @@
         android:layout_height="wrap_content"
         android:text="TextView" />
 
-    <EditText
-        android:id="@+id/pantryName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/pantryName"
-        android:inputType="textPersonName" />
-
     <Button
-        android:id="@+id/createpantry"
+        android:id="@+id/createnewpantry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/create_pantry"
-        android:text="create pantry" />
+        android:text="Create New Pantry" />
 
 </LinearLayout>

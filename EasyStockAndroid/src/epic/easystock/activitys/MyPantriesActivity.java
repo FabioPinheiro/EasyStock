@@ -1,9 +1,12 @@
 package epic.easystock.activitys;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,115 +29,95 @@ import epic.easystock.apiEndpoint.model.Pantry;
 import epic.easystock.apiEndpoint.model.User;
 import epic.easystock.apiEndpoint.model.UserPantry;
 import epic.easystock.assist.AppConstants;
+import epic.easystock.io.AddProductToPantryTask;
 import epic.easystock.io.EndPointCall;
 
 public class MyPantriesActivity extends Activity {
-	//String mail;
+	// String mail;
 	Button newPantry;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_pantries);
-
-		//LIXO mail = getIntent().getStringExtra("MAIL");
-
 		TextView myMail = (TextView) findViewById(R.id.myMail);
 		myMail.setText(EndPointCall.getEmailAccount());
-
-		newPantry = (Button) findViewById(R.id.createpantry);
-
+		newPantry = (Button) findViewById(R.id.createnewpantry);
 		newPantry.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
-				new NewPantryTask().execute(getApplicationContext());
+				xpto();
 			}
 		});
-
 	}
-
+	public void xpto() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		List<String> aux = EndPointCall.getUserDbAdapter().avalablePantrysFromUser(EndPointCall.getEmailAccount());
+		final String[] pantry = new String[aux.size()];
+		aux.toArray(pantry);
+		alert.setTitle("New Pantry in " + EndPointCall.getEmailAccount()); // TEXT
+																			// FIXME
+		alert.setMessage("Chose the Pantry Name:"); // TEXT FIXME
+		final TextView textView = new TextView(this);
+		alert.setView(textView);
+		alert.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				new NewPantryTask(textView.getText().toString()).execute(getApplicationContext());
+			}
+		});
+		alert.show();
+	}
+	
 	public class NewPantryTask extends AsyncTask<Context, Integer, Void> {
-		private String name;
-
+		/* FIXME static */private final String LOG_TAG = AddProductToPantryTask.class.getCanonicalName();
+		private String pantryName;
+		
+		NewPantryTask(String pantryName) {
+			this.pantryName = pantryName;
+		}
 		@Override
 		protected Void doInBackground(Context... contexts) {
-
-			if (!EndPointCall.isSignedIn()) {
-				return null;
-			}
-
-			if (!AppConstants
-					.checkGooglePlayServicesAvailable(MyPantriesActivity.this)) {
-
-				return null;
-			}
-			name = ((EditText) findViewById(R.id.pantryName)).getText()
-					.toString();
-			if (Strings.isNullOrEmpty(name)) {
-				name = "default";
-			}
-			// Create a Google credential since this is an authenticated request
-			// to the API.
-			GoogleAccountCredential credential = GoogleAccountCredential
-					.usingAudience(MyPantriesActivity.this,
-							AppConstants.AUDIENCE);
-			credential.setSelectedAccountName(EndPointCall.getEmailAccount());
-			ApiEndpoint endpoint = AppConstants.getApiServiceHandle(credential);
-
-			try {
-					
-				Pantry myNewPantry = endpoint
-						.getPantryByMailAndName(EndPointCall.getEmailAccount(), name).execute();
-				if (myNewPantry != null) {
-					Log.e("CREATE PANTRY", "User have a pantry with "+ name+" as name");
-					return null;
-				}
-				UserPantry newUP = new UserPantry();
-				User user = new User();
-				user.setEmail(EndPointCall.getEmailAccount());
-				String[] uMail = EndPointCall.getEmailAccount().split("@");
-				user.setNick(uMail[0]);
-				myNewPantry = new Pantry();
-				myNewPantry.setName(name);
-				myNewPantry.setProducts(new ArrayList<MetaProduct>());
-
+			if (Strings.isNullOrEmpty(pantryName)) {
+				EndPointCall.msg(LOG_TAG, EndPointCall.FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME);
+				Log.e(LOG_TAG, EndPointCall.FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME);
+			} else {
 				try {
-					user = endpoint.insertUser(user).execute();
+					Pantry myNewPantry = EndPointCall.getApiEndpoint().getPantryByMailAndName(EndPointCall.getEmailAccount(), pantryName).execute();
+					if (myNewPantry != null) {
+						Log.e(LOG_TAG, EndPointCall.FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER + ": " + pantryName);
+						return null;// FIXME update
+					}
+					User user = EndPointCall.getUser();
+					user = EndPointCall.getApiEndpoint().findUserByMail(user).execute();
+					if (user == null) {
+						EndPointCall.getApiEndpoint().insertUser(EndPointCall.getUser()).execute();
+					}
+					myNewPantry = new Pantry();
+					myNewPantry.setName(pantryName);
+					myNewPantry.setProducts(new ArrayList<MetaProduct>()); // FIXME isto devia/ja estar no AppEngine
+					myNewPantry = EndPointCall.getApiEndpoint().insertPantry(myNewPantry).execute();
+					UserPantry newUP = new UserPantry();
+					try {
+						newUP.setUser(user.getKey().getId());
+						newUP.setPantry(myNewPantry.getKey());
+						endpoint.insertUserPantry(newUP).execute();
+					} catch (Exception e) {
+						endpoint.updateUserPantry(newUP).execute();
+					}
 				} catch (Exception e) {
-					user = endpoint.findUserByMail(user).execute();
-				}
-				try {
-					myNewPantry = endpoint.insertPantry(myNewPantry).execute();
-				} catch (Exception e) {
-					// myNewPantry =
-					// endpoint.updatePantry(myNewPantry).execute();
 					e.printStackTrace();
 				}
-				try {
-					newUP.setUser(user.getKey().getId());
-					newUP.setPantry(myNewPantry.getKey());
-					endpoint.insertUserPantry(newUP).execute();
-				} catch (Exception e) {
-					endpoint.updateUserPantry(newUP).execute();
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
-
 			return null;
 		}
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.my_pantries, menu);
 		return true;
 	}
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -146,5 +129,4 @@ public class MyPantriesActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 }

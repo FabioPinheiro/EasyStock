@@ -17,6 +17,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.util.Strings;
 
 import epic.easystock.apiEndpoint.ApiEndpoint;
+import epic.easystock.apiEndpoint.model.User;
 import epic.easystock.assist.AppConstants;
 import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.assist.ProductAdapter;
@@ -33,6 +34,8 @@ public class EndPointCall {
 	static public final String FAIL_TO_LIST_PRODUCTS = "FAIL_TO_LIST_PRODUCTS";
 	static public final String FAIL_TO_LIST_PANTRY_PRODUCTS = "FAIL_TO_LIST_PANTRY_PRODUCTS";
 	static public final String FAIL_TO_LOAD_PANTRY = "FAIL_TO_LOAD_PANTRY";
+	static public final String FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME = "FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME";
+	static public final String FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER = "FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER";
 	static public final String DONE = "AsyncTask Done"; // FIXME remove!!! use
 														// in debug
 	static private Context globalContext = null;
@@ -44,6 +47,13 @@ public class EndPointCall {
 	}
 	static public String getEmailAccount() {
 		return mEmailAccount;
+	}
+	static public User getUser() {
+		User user = new User();
+		user.setEmail(EndPointCall.getEmailAccount());
+		String[] uMail = EndPointCall.getEmailAccount().split("@");
+		user.setNick(uMail[0]);
+		return user;
 	}
 	// static protected void setEmailAccount(String account) {mEmailAccount=account;}
 	static public boolean isSignedIn() {

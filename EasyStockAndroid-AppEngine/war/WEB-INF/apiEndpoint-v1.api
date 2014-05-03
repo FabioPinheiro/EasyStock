@@ -162,27 +162,6 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.getMetaProduct" : {
-      "path" : "metaproduct/{id}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.MetaProductEndpoint.getMetaProduct",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "apiEndpoint.listMetaProduct" : {
       "path" : "metaproduct",
       "httpMethod" : "GET",
@@ -200,6 +179,27 @@
           "limit" : {
             "type" : "int32",
             "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "apiEndpoint.getMetaProduct" : {
+      "path" : "metaproduct/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.MetaProductEndpoint.getMetaProduct",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
           }
         },
         "body" : "empty"
@@ -542,22 +542,6 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "apiEndpoint.updateProduct" : {
-      "path" : "product",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
-      "rosyMethod" : "epic.easystock.ProductEndpoint.updateProduct",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "apiEndpoint.removeProduct" : {
       "path" : "product/{id}",
       "httpMethod" : "DELETE",
@@ -577,6 +561,22 @@
       },
       "response" : {
         "body" : "empty"
+      }
+    },
+    "apiEndpoint.updateProduct" : {
+      "path" : "product",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "clientIds" : [ "450897529696-7gb20kb2tlo24fofl1eeltrrkpjtlc17.apps.googleusercontent.com" ],
+      "rosyMethod" : "epic.easystock.ProductEndpoint.updateProduct",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
       }
     },
     "apiEndpoint.getProductByBarCode" : {
@@ -897,14 +897,14 @@
           "$ref" : "MetaProduct"
         }
       },
-      "epic.easystock.MetaProductEndpoint.getMetaProduct" : {
-        "response" : {
-          "$ref" : "MetaProduct"
-        }
-      },
       "epic.easystock.MetaProductEndpoint.listMetaProduct" : {
         "response" : {
           "$ref" : "CollectionResponse_MetaProduct"
+        }
+      },
+      "epic.easystock.MetaProductEndpoint.getMetaProduct" : {
+        "response" : {
+          "$ref" : "MetaProduct"
         }
       },
       "epic.easystock.MetaProductEndpoint.insertMetaProduct" : {
@@ -1004,6 +1004,8 @@
           "$ref" : "Product"
         }
       },
+      "epic.easystock.ProductEndpoint.removeProduct" : {
+      },
       "epic.easystock.ProductEndpoint.updateProduct" : {
         "request" : {
           "$ref" : "Product"
@@ -1011,8 +1013,6 @@
         "response" : {
           "$ref" : "Product"
         }
-      },
-      "epic.easystock.ProductEndpoint.removeProduct" : {
       },
       "epic.easystock.ProductEndpoint.getProductByBarCode" : {
         "response" : {
