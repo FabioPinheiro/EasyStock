@@ -28,6 +28,7 @@ import epic.easystock.apiEndpoint.model.MetaProduct;
 import epic.easystock.apiEndpoint.model.Pantry;
 import epic.easystock.apiEndpoint.model.User;
 import epic.easystock.apiEndpoint.model.UserPantry;
+import epic.easystock.apiEndpoint.model.UserPantryDTO;
 import epic.easystock.assist.AppConstants;
 import epic.easystock.io.AddProductToPantryTask;
 import epic.easystock.io.EndPointCall;
@@ -75,6 +76,7 @@ public class MyPantriesActivity extends Activity {
 		NewPantryTask(String pantryName) {
 			this.pantryName = pantryName;
 		}
+		
 		@Override
 		protected Void doInBackground(Context... contexts) {
 			if (Strings.isNullOrEmpty(pantryName)) {
@@ -90,20 +92,15 @@ public class MyPantriesActivity extends Activity {
 					User user = EndPointCall.getUser();
 					user = EndPointCall.getApiEndpoint().findUserByMail(user).execute();
 					if (user == null) {
-						EndPointCall.getApiEndpoint().insertUser(EndPointCall.getUser()).execute();
+						user = EndPointCall.getApiEndpoint().insertUser(EndPointCall.getUser()).execute(); //FIXME isto devia esta noutro sitio
+						Log.e(LOG_TAG, EndPointCall.INSERT_NEW_USER_IN_APPENGINE); //FIXME Log.i verificar só se funciona
 					}
-					myNewPantry = new Pantry();
-					myNewPantry.setName(pantryName);
-					myNewPantry.setProducts(new ArrayList<MetaProduct>()); // FIXME isto devia/ja estar no AppEngine
-					myNewPantry = EndPointCall.getApiEndpoint().insertPantry(myNewPantry).execute();
-					UserPantry newUP = new UserPantry();
-					try {
-						newUP.setUser(user.getKey().getId());
-						newUP.setPantry(myNewPantry.getKey());
-						endpoint.insertUserPantry(newUP).execute();
-					} catch (Exception e) {
-						endpoint.updateUserPantry(newUP).execute();
-					}
+					
+					UserPantryDTO aux = new UserPantryDTO();
+					aux.setUser(user);
+					aux.setPantry(null); //FIXME isto é suporto não fazer nada mas não tenho acertesa do defalte
+					aux.setPantryName(pantryName);
+					EndPointCall.getApiEndpoint().insertUserPantry(aux);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
