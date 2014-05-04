@@ -50,17 +50,17 @@ public class ListPantryProductTask extends AsyncTask<Context, Integer, List<Loca
 		try {
 			Pantry pantry = EndPointCall.getApiEndpoint().getPantryByMailAndName(EndPointCall.getEmailAccount(), pantryID).execute();
 			pantryLoaded = (pantry != null);
-			if (!pantryLoaded) {
-				Log.e(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PANTRY);
-			}else {
+			if (pantryLoaded) {
 				products = pantry.getProducts();
+				if (products == null) { //FIXME
+					Log.e(LOG_TAG, "products == null");
+					products = new ArrayList<MetaProduct>();
+				}
+			}else {
+				Log.e(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PANTRY);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		if (products == null) { //FIXME
-			Log.e(LOG_TAG, "products == null");
-			products = new ArrayList<MetaProduct>();
 		}
 		List<LocalMetaProduct> result = new ArrayList<LocalMetaProduct>();
 		if (pantryLoaded){

@@ -38,6 +38,7 @@ public class EndPointCall {
 	static public final String FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER = "FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER";
 	static public final String INSERT_NEW_USER_IN_APPENGINE = "INSERT_NEW_USER_IN_APPENGINE";
 	static public final String DONE = "AsyncTask Done"; // FIXME remove!!! use
+	static public final String DEBUG = "DEBUG";
 														// in debug
 	static private Context globalContext = null;
 	static private SharedPreferences globalSettings;

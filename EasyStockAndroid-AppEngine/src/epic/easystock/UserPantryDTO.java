@@ -16,7 +16,7 @@ public class UserPantryDTO{
 
 	private User user;
 	private Pantry pantry;//FIXME
-	public String pantryName;
+	private String pantryName;
 	
 	public User getUser() {
 		return user;
@@ -27,4 +27,11 @@ public class UserPantryDTO{
 	public Pantry getPantry() {
 		return pantry;
 	}
+	public String getPantryName() {
+		return pantryName;
+	}
+	public void setPantryName(String pantryName) {
+		this.pantryName = pantryName;
+	}
+	
 }

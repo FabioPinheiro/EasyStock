@@ -152,8 +152,8 @@ public class UserBdAdapter {
 		List<Pair<String, String>> pairList = getAllPantry();
 		List<String> pantrysID = new ArrayList<String>();
 		for (Pair<String, String> pair : pairList) {
-			if (pair.first == user) {
-				pantrysID.add(pair.second);
+			if (pair.first.equalsIgnoreCase(user))  {
+				pantrysID.add(pair.second);//*"" + (pair.first.equalsIgnoreCase(user)) + "#" + pair.first + "#"+ user+ "#" +pair.second);
 			}
 		}
 		return pantrysID;

@@ -1,12 +1,10 @@
 package epic.easystock;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
-import javax.persistence.Entity;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
@@ -257,6 +255,7 @@ public class ApiEndpoint {
 			if (pantryIsNull) {
 				pantry = new Pantry();
 				pantry.setProducts(new ArrayList<MetaProduct>());
+				pantry.setName(userPantryDTO.getPantryName());
 				pantry = insertPantry(pantry); //mgr.persist();// FIXME verificar se está aqui bem devido if (containsUserPantry(userpantry))			
 			}else {}//FIXME care pantry.getKey()
 			userpantry = new UserPantry();
