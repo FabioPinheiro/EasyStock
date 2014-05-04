@@ -1,5 +1,6 @@
 package epic.easystock.activitys;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import com.google.api.client.util.Strings;
 
 import epic.easystock.R;
 import epic.easystock.apiEndpoint.ApiEndpoint;
+import epic.easystock.apiEndpoint.ApiEndpoint.InsertUserPantry;
 import epic.easystock.apiEndpoint.model.MetaProduct;
 import epic.easystock.apiEndpoint.model.Pantry;
 import epic.easystock.apiEndpoint.model.User;
@@ -59,49 +61,77 @@ public class MyPantriesActivity extends Activity {
 		alert.setTitle("New Pantry in " + EndPointCall.getEmailAccount()); // TEXT
 																			// FIXME
 		alert.setMessage("Chose the Pantry Name:"); // TEXT FIXME
-		final TextView textView = new TextView(this);
+		final EditText textView = new EditText(this);
 		alert.setView(textView);
+		final Context aux2 = this;
 		alert.setPositiveButton("Create", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				new NewPantryTask(textView.getText().toString()).execute(getApplicationContext());
+				new NewPantryTask(textView.getText().toString()).execute(aux2);
 			}
 		});
 		alert.show();
 	}
 	
+	private enum State {NULL, FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME , FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER,INSERT_NEW_USER_IN_APPENGINE}
 	public class NewPantryTask extends AsyncTask<Context, Integer, Void> {
 		/* FIXME static */private final String LOG_TAG = AddProductToPantryTask.class.getCanonicalName();
 		private String pantryName;
+		private State state = State.NULL;
 		
 		NewPantryTask(String pantryName) {
 			this.pantryName = pantryName;
 		}
 		
 		@Override
-		protected Void doInBackground(Context... contexts) {
-			if (Strings.isNullOrEmpty(pantryName)) {
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			EndPointCall.msg(LOG_TAG, EndPointCall.DONE);
+			if(state == state.FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME)
 				EndPointCall.msg(LOG_TAG, EndPointCall.FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME);
+			if(state == state.FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER)
+				EndPointCall.msg(LOG_TAG, EndPointCall.FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER);
+			if(state == state.INSERT_NEW_USER_IN_APPENGINE)
+				EndPointCall.msg(LOG_TAG, EndPointCall.INSERT_NEW_USER_IN_APPENGINE);
+		}
+		
+		@Override
+		protected Void doInBackground(Context... v) {
+			if (Strings.isNullOrEmpty(pantryName)) {
 				Log.e(LOG_TAG, EndPointCall.FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME);
+				state=State.FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME;
 			} else {
 				try {
-					Pantry myNewPantry = EndPointCall.getApiEndpoint().getPantryByMailAndName(EndPointCall.getEmailAccount(), pantryName).execute();
+					GoogleAccountCredential credential = GoogleAccountCredential.usingAudience(v[0], AppConstants.AUDIENCE);
+					GoogleAccountCredential credential2 = GoogleAccountCredential.usingAudience(v[0], AppConstants.AUDIENCE);
+					credential.setSelectedAccountName(EndPointCall.getEmailAccount());
+					credential2.setSelectedAccountName(EndPointCall.getEmailAccount());
+			    	ApiEndpoint.Builder apiEndpoint = new ApiEndpoint.Builder(AppConstants.HTTP_TRANSPORT,
+			           AppConstants.JSON_FACTORY,credential);
+			    	ApiEndpoint.Builder apiEndpoint2 = new ApiEndpoint.Builder(AppConstants.HTTP_TRANSPORT,
+			           AppConstants.JSON_FACTORY,credential);
+					ApiEndpoint api1 = apiEndpoint.build();
+					/*FIXME ERROR in appengine Pantry myNewPantry = api1.getPantryByMailAndName(EndPointCall.getEmailAccount(), pantryName).execute();
 					if (myNewPantry != null) {
 						Log.e(LOG_TAG, EndPointCall.FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER + ": " + pantryName);
+						state=State.FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER;
 						return null;// FIXME update
-					}
+					}*/
 					User user = EndPointCall.getUser();
-					user = EndPointCall.getApiEndpoint().findUserByMail(user).execute();
+					user = api1.findUserByMail(user).execute();
 					if (user == null) {
-						user = EndPointCall.getApiEndpoint().insertUser(EndPointCall.getUser()).execute(); //FIXME isto devia esta noutro sitio
+						user = api1.insertUser(EndPointCall.getUser()).execute(); //FIXME isto devia esta noutro sitio
 						Log.e(LOG_TAG, EndPointCall.INSERT_NEW_USER_IN_APPENGINE); //FIXME Log.i verificar só se funciona
+						state=State.INSERT_NEW_USER_IN_APPENGINE;
 					}
-					
+					Log.e(LOG_TAG,user.toString());
 					UserPantryDTO aux = new UserPantryDTO();
 					aux.setUser(user);
 					aux.setPantry(null); //FIXME isto é suporto não fazer nada mas não tenho acertesa do defalte
 					aux.setPantryName(pantryName);
-					EndPointCall.getApiEndpoint().insertUserPantry(aux);
-				} catch (Exception e) {
+					Log.e(LOG_TAG,aux.toString());
+					UserPantry xxx= api1.insertUserPantry(aux).execute();
+					Log.e(LOG_TAG, xxx.toString());
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}

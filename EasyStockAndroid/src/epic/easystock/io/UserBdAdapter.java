@@ -137,7 +137,7 @@ public class UserBdAdapter {
 	 */
 	public List<Pair<String, String>> getAllPantry() {
 		List<Pair<String, String>> users_pantrys = new ArrayList<Pair<String, String>>();
-		Cursor cursor = mDb.query(DATABASE_TABLE, null, null, null, null, null, null);
+		Cursor cursor = fetchAllPantry();
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Pair<String, String> prod = cursorToUserPantry(cursor);

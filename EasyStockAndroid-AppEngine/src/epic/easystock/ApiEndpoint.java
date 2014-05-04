@@ -1,10 +1,12 @@
 package epic.easystock;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
+import javax.persistence.Entity;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
@@ -232,21 +234,6 @@ public class ApiEndpoint {
 		return userpantry;
 	}
 	
-	static public class UserPantryDTO {
-		private User user;
-		private Pantry pantry;
-		public String pantryName;
-		
-		public User getUser() {
-			return user;
-		}
-		public void setUser(User user) {
-			this.user = user;
-		}
-		public Pantry getPantry() {
-			return pantry;
-		}
-	}
 	
 	/**
 	 * This inserts a new entity into App Engine datastore. If the entity already exists in the datastore, an exception is thrown. It uses HTTP POST method.
@@ -270,18 +257,17 @@ public class ApiEndpoint {
 			if (pantryIsNull) {
 				pantry = new Pantry();
 				pantry.setProducts(new ArrayList<MetaProduct>());
-			}
+				pantry = insertPantry(pantry); //mgr.persist();// FIXME verificar se está aqui bem devido if (containsUserPantry(userpantry))			
+			}else {}//FIXME care pantry.getKey()
 			userpantry = new UserPantry();
 			userpantry.setUser(user.getKey().getId());
-			userpantry.setPantry(pantry.getKey()); // XXX FIXME key? esta aqui bem?
+			userpantry.setPantry(pantry.getKey());
 			if (containsUserPantry(userpantry)) {
 				throw new EntityExistsException("insertUserPantry: Object (userpantry) already exists");
 			}
-			if(pantryIsNull){
-				mgr.persist(pantry);// FIXME verificar se está aqui bem devido if (containsUserPantry(userpantry))			
-			}
 			mgr.persist(userpantry);
 		} finally {
+		
 			mgr.close();
 		}
 		return userpantry;
@@ -506,7 +492,7 @@ public class ApiEndpoint {
 	 * 
 	 * @return The inserted entity.
 	 */
-	/*@ApiMethod(name = "insertPantry")
+	//@ApiMethod(name = "insertPantry")
 	public Pantry insertPantry(Pantry pantry) {
 		EntityManager mgr = getEntityManager();
 		try {
@@ -518,7 +504,7 @@ public class ApiEndpoint {
 			mgr.close();
 		}
 		return pantry;
-	}*/
+	}
 	/**
 	 * This method is used for updating an existing entity. If the entity does not exist in the datastore, an exception is thrown. It uses HTTP PUT method.
 	 * 

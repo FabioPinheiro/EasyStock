@@ -36,7 +36,7 @@ public class EndPointCall {
 	static public final String FAIL_TO_LOAD_PANTRY = "FAIL_TO_LOAD_PANTRY";
 	static public final String FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME = "FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME";
 	static public final String FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER = "FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER";
-	static public final String INSERT_NEW_USER_IN_APPENGINE= "INSERT_NEW_USER_IN_APPENGINE";
+	static public final String INSERT_NEW_USER_IN_APPENGINE = "INSERT_NEW_USER_IN_APPENGINE";
 	static public final String DONE = "AsyncTask Done"; // FIXME remove!!! use
 														// in debug
 	static private Context globalContext = null;
@@ -90,13 +90,15 @@ public class EndPointCall {
 		return new PantryDbAdapter(EndPointCall.getGlobalContext(), name);
 	}
 	public static UserBdAdapter getUserDbAdapter() {
-		return new UserBdAdapter(EndPointCall.getGlobalContext());
+		UserBdAdapter aux = new UserBdAdapter(EndPointCall.getGlobalContext());
+		aux.open(); //FIXME falta close .... e esta sepre a abri
+		return aux;
 	}
 	static public void msg(String message) {
 		Toast.makeText(EndPointCall.getGlobalContext(), message, Toast.LENGTH_LONG).show();
 	}
 	static public void msg(String TAG, String message) {
-		msg(TAG + ":" + message); //FIXME tag is for debug
+		msg(TAG + ":" + message); // FIXME tag is for debug
 	}
 	static public void msgNotSignedIn() {
 		msg("Need To Sign In");
@@ -116,8 +118,8 @@ public class EndPointCall {
 			globalSettings.edit().putString(PREFS_LAST_USED_EMAIL, aux.name).commit();// FIXME
 			mEmailAccount = aux.name;
 			msg("Hello " + mEmailAccount);
-			EndPointCall.getUserDbAdapter().createPantry(mEmailAccount, "pantry1");//FIXME
-			EndPointCall.getUserDbAdapter().createPantry(mEmailAccount, "pantry2");//FIXME
+			EndPointCall.getUserDbAdapter().createPantry(mEmailAccount, "pantry1");// FIXME
+			EndPointCall.getUserDbAdapter().createPantry(mEmailAccount, "pantry2");// FIXME
 		} else {
 			mEmailAccount = globalSettings.getString(PREFS_LAST_USED_EMAIL, "EMAIL_ERROR");
 			msg("Welcome Back " + mEmailAccount);// FIXME TEXT
@@ -134,12 +136,7 @@ public class EndPointCall {
 		return endpoint;
 	}
 	/*
-	 * public static ApiEndpoint getApiEndpoint() { FIXME apiEndpointBuilder =
-	 * new ApiEndpoint.Builder( AndroidHttp.newCompatibleTransport(), new
-	 * JacksonFactory(), new HttpRequestInitializer() { public void
-	 * initialize(HttpRequest httpRequest) {} }); apiEndpoint =
-	 * CloudEndpointUtils.updateBuilder(apiEndpointBuilder).build(); return
-	 * apiEndpoint; }
+	 * public static ApiEndpoint getApiEndpoint() { FIXME apiEndpointBuilder = new ApiEndpoint.Builder( AndroidHttp.newCompatibleTransport(), new JacksonFactory(), new HttpRequestInitializer() { public void initialize(HttpRequest httpRequest) {} }); apiEndpoint = CloudEndpointUtils.updateBuilder(apiEndpointBuilder).build(); return apiEndpoint; }
 	 */
 	// ##################################################################################
 	static public void addToProductListTask(String name, Long barCode, String description, String image) {
