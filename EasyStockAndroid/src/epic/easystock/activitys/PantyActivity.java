@@ -16,6 +16,7 @@ import epic.easystock.R;
 import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.data.LocalMetaProduct;
 import epic.easystock.io.EndPointCall;
+import epic.easystock.io.UserBdAdapter;
 
 public class PantyActivity extends ListActivity {
 	String mail;
@@ -34,14 +35,12 @@ public class PantyActivity extends ListActivity {
 		setListAdapter(adapter);
 		
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		List<String> aux = EndPointCall.getUserDbAdapter().avalablePantrysFromUser(EndPointCall.getEmailAccount());
-		final String[] pantry = new String[aux.size()];
-		aux.toArray(pantry);
+		final String[] pantreisName = EndPointCall.getUserDbAdapter().avalablePantrysNamesFromUser(EndPointCall.getEmailAccount());
 		alert.setTitle("Select Pantry");
-		alert.setItems(pantry, new DialogInterface.OnClickListener() {
+		alert.setItems(pantreisName, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				EndPointCall.setSelectedPantry(pantry[which]);
+				EndPointCall.setSelectedPantry(pantreisName[which]);
 				EndPointCall.listPantryProductTask(adapter, EndPointCall.getSelectedPantry()); //FIXME
 			}
 		});

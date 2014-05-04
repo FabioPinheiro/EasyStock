@@ -119,8 +119,6 @@ public class EndPointCall {
 			globalSettings.edit().putString(PREFS_LAST_USED_EMAIL, aux.name).commit();// FIXME
 			mEmailAccount = aux.name;
 			msg("Hello " + mEmailAccount);
-			EndPointCall.getUserDbAdapter().createPantry(mEmailAccount, "pantry1");// FIXME
-			EndPointCall.getUserDbAdapter().createPantry(mEmailAccount, "pantry2");// FIXME
 		} else {
 			mEmailAccount = globalSettings.getString(PREFS_LAST_USED_EMAIL, "EMAIL_ERROR");
 			msg("Welcome Back " + mEmailAccount);// FIXME TEXT

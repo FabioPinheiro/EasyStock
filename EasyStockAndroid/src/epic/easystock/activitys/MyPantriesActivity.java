@@ -45,6 +45,9 @@ public class MyPantriesActivity extends Activity {
 		setContentView(R.layout.activity_my_pantries);
 		TextView myMail = (TextView) findViewById(R.id.myMail);
 		myMail.setText(EndPointCall.getEmailAccount());
+
+		//FIXME final String[] pantreisName = EndPointCall.getUserDbAdapter().avalablePantrysNamesFromUser(EndPointCall.getEmailAccount());
+		
 		newPantry = (Button) findViewById(R.id.createnewpantry);
 		newPantry.setOnClickListener(new OnClickListener() {
 			@Override
@@ -55,9 +58,6 @@ public class MyPantriesActivity extends Activity {
 	}
 	public void xpto() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		List<String> aux = EndPointCall.getUserDbAdapter().avalablePantrysFromUser(EndPointCall.getEmailAccount());
-		final String[] pantry = new String[aux.size()];
-		aux.toArray(pantry);
 		alert.setTitle("New Pantry in " + EndPointCall.getEmailAccount()); // TEXT
 																			// FIXME
 		alert.setMessage("Chose the Pantry Name:"); // TEXT FIXME
@@ -86,7 +86,7 @@ public class MyPantriesActivity extends Activity {
 		protected void onPostExecute(UserPantry result) {
 			super.onPostExecute(result);
 			if(result != null){
-				EndPointCall.getUserDbAdapter().createPantry(EndPointCall.getEmailAccount(), pantryName + result.getPantry().toString());
+				EndPointCall.getUserDbAdapter().createPantry(EndPointCall.getEmailAccount(), result.getPantry(), pantryName);
 				EndPointCall.msg(EndPointCall.DEBUG, "! "+ EndPointCall.getUserDbAdapter().getAllPantry().size());
 			}
 			EndPointCall.msg(LOG_TAG, EndPointCall.DONE);

@@ -41,18 +41,20 @@ public class UserBdAdapter {
 	public static final String TABLE_NAME = "users";
 	public static final String USER = "user_id";
 	public static final String PANTRY_ID = "pantry_id";
+	public static final String PANTRY_NAME = "pantry_name";
 	private static final String TAG = "NotesDbAdapter";
+	private static final String DATABASE_NAME = "data";
+	private static final String DATABASE_TABLE = TABLE_NAME;
+	private static final int DATABASE_VERSION = 1;
 	private DatabaseHelper mDbHelper;
 	private SQLiteDatabase mDb;
 	/**
 	 * Database creation sql statement
 	 */
 	private static final String DATABASE_CREATE = "create table " + TABLE_NAME
-	+ " (" + PANTRY_ID + " text not null, " + USER + " text not null ,"
+	+ " (" + PANTRY_NAME + " text not null, " + USER + " text not null ," + PANTRY_ID + " bigint not null, "
 	+ "primary key(" + PANTRY_ID + ", " + USER + "));";
-	private static final String DATABASE_NAME = "data";
-	private static final String DATABASE_TABLE = TABLE_NAME;
-	private static final int DATABASE_VERSION = 1;
+	
 	private final Context mCtx;
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -105,10 +107,11 @@ public class UserBdAdapter {
 	 * successfully created return the new rowId for that note, otherwise return
 	 * a -1 to indicate failure.
 	 */
-	public long createPantry(String user, String pantry) {
+	public long createPantry(String user, long pantryID ,String pantryName) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(USER, user);
-		initialValues.put(PANTRY_ID, pantry);
+		initialValues.put(PANTRY_ID, pantryID);
+		initialValues.put(PANTRY_NAME, pantryName);
 		return mDb.insert(DATABASE_TABLE, null, initialValues);
 	}
 	/**
@@ -135,12 +138,12 @@ public class UserBdAdapter {
 	 * 
 	 * @return Cursor over all notes
 	 */
-	public List<Pair<String, String>> getAllPantry() {
-		List<Pair<String, String>> users_pantrys = new ArrayList<Pair<String, String>>();
+	public List<UserPantryAux> getAllPantry() {
+		List<UserPantryAux> users_pantrys = new ArrayList<UserPantryAux>();
 		Cursor cursor = fetchAllPantry();
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			Pair<String, String> prod = cursorToUserPantry(cursor);
+			UserPantryAux prod = cursorToUserPantry(cursor);
 			users_pantrys.add(prod);
 			cursor.moveToNext();
 		}
@@ -148,19 +151,43 @@ public class UserBdAdapter {
 		cursor.close();
 		return users_pantrys;
 	}
-	public List<String> avalablePantrysFromUser(String user) {
-		List<Pair<String, String>> pairList = getAllPantry();
-		List<String> pantrysID = new ArrayList<String>();
-		for (Pair<String, String> pair : pairList) {
-			if (pair.first.equalsIgnoreCase(user))  {
-				pantrysID.add(pair.second);//*"" + (pair.first.equalsIgnoreCase(user)) + "#" + pair.first + "#"+ user+ "#" +pair.second);
+	private/*FIXME public*/ List<UserPantryAux> avalablePantrysFromUser(String user) {
+		List<UserPantryAux> list = getAllPantry();
+		List<UserPantryAux> ret = new ArrayList<UserPantryAux>();
+		for (UserPantryAux el : list) {
+			if (el.user.equalsIgnoreCase(user))  {
+				ret.add(el);
 			}
 		}
-		return pantrysID;
+		return ret;
 	}
-	private Pair<String, String> cursorToUserPantry(Cursor cursor) {
+	public String[] avalablePantrysNamesFromUser(String user) {
+		List<UserBdAdapter.UserPantryAux> aux = avalablePantrysFromUser(user);
+		String[] pantreisName = new String[aux.size()];
+		int i = 0;
+		for (UserBdAdapter.UserPantryAux el : aux) {
+			pantreisName[i]= el.pantryName;
+			i++;
+		}
+		return pantreisName;
+	}
+	
+	static public class UserPantryAux{
+		public String user;
+		public long pantryID;
+		public String pantryName;
+		public UserPantryAux(String user, long pantryID, String pantryName) {
+			super();
+			this.user = user;
+			this.pantryID = pantryID;
+			this.pantryName = pantryName;
+		}
+		
+	}
+	private UserPantryAux cursorToUserPantry(Cursor cursor) {
 		String user = cursor.getString(cursor.getColumnIndex(USER));
-		String pantry = cursor.getString(cursor.getColumnIndex(PANTRY_ID));
-		return new Pair<String, String>(user, pantry);
+		long pantryID = cursor.getLong(cursor.getColumnIndex(PANTRY_ID));
+		String pantryName = cursor.getString(cursor.getColumnIndex(PANTRY_NAME));
+		return new UserPantryAux(user, pantryID, pantryName);
 	}
 }
