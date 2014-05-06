@@ -21,6 +21,8 @@ import epic.easystock.apiEndpoint.model.User;
 import epic.easystock.assist.AppConstants;
 import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.assist.ProductAdapter;
+import epic.easystock.data.PantryDbAdapter;
+import epic.easystock.data.UserBdAdapter;
 
 public class EndPointCall {
 	static private final String EndPointCall_TAG = "EndPointCall";
@@ -34,11 +36,14 @@ public class EndPointCall {
 	static public final String FAIL_TO_LIST_PRODUCTS = "FAIL_TO_LIST_PRODUCTS";
 	static public final String FAIL_TO_LIST_PANTRY_PRODUCTS = "FAIL_TO_LIST_PANTRY_PRODUCTS";
 	static public final String FAIL_TO_LOAD_PANTRY = "FAIL_TO_LOAD_PANTRY";
+	static public final String FAIL_TO_LOAD_PRODUCT = "FAIL_TO_LOAD_PRODUCT";
 	static public final String FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME = "FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME";
 	static public final String FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER = "FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER";
 	static public final String INSERT_NEW_USER_IN_APPENGINE = "INSERT_NEW_USER_IN_APPENGINE";
+	static public final String PANTRY_IS_EMPTY = "PANTRY_IS_EMPTY";
 	static public final String DONE = "AsyncTask Done"; // FIXME remove!!! use
 	static public final String DEBUG = "DEBUG";
+	static public final String ERROR = "ERROR";
 														// in debug
 	static private Context globalContext = null;
 	static private SharedPreferences globalSettings;
@@ -65,7 +70,12 @@ public class EndPointCall {
 		globalSettings.edit().putString(PREFS_LAST_USED_PANTRY, selectedPantry).commit();
 	}
 	public static String getSelectedPantry() {
-		return globalSettings.getString(PREFS_LAST_USED_PANTRY, ERROR_PANTRY_NAME);
+		String aux = globalSettings.getString(PREFS_LAST_USED_PANTRY, ERROR_PANTRY_NAME);
+		if(Strings.isNullOrEmpty(aux)){
+			msg(EndPointCall_TAG,"getSelectedPantry is null or empty"); //FIXME TEXT
+			Log.e(EndPointCall_TAG, "getSelectedPantry is null or empty"); //FIXME TEXT
+		}
+		return aux;
 	}
 	// ##################################################################################
 	private static boolean isConnected() {
@@ -141,9 +151,10 @@ public class EndPointCall {
 	static public void addToProductListTask(String name, Long barCode, String description, String image) {
 		new AddToProductListTask(name, barCode, description, image).execute();
 	}
-	static public void addProductToPantryTask(MetaProductAdapter adapter, String selectedPantry, Long productId) {
+	static public void addProductToPantryTask(MetaProductAdapter adapter, Long productId) {
+		String selectedPantry = getSelectedPantry();
 		new AddProductToPantryTask(adapter, selectedPantry, productId).execute(); // FIXME getSelectedPantry()
-		Log.i(EndPointCall_TAG, "addProductToPantryTask:" + "productId " + productId);
+		Log.i(EndPointCall_TAG, "addProductToPantryTask:" + " productId " + productId + " to " + selectedPantry);
 	}
 	static public void listProductTask(ProductAdapter adapter) {
 		new ListAllProductTask(adapter).execute();

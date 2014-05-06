@@ -13,14 +13,15 @@ import epic.easystock.apiEndpoint.model.Pantry;
 import epic.easystock.apiEndpoint.model.Product;
 import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.data.LocalMetaProduct;
+import epic.easystock.data.PantryDbAdapter;
 
 public class ListPantryProductTask extends AsyncTask<Context, Integer, List<LocalMetaProduct>> {
 	static private final String LOG_TAG = AddProductToPantryTask.class.getCanonicalName();
-	
 	private MetaProductAdapter adapter;
 	private PantryDbAdapter dbAdapter;
 	private String pantryID;
 	private Boolean pantryLoaded;
+	private Boolean productLoaded;
 	
 	public ListPantryProductTask(MetaProductAdapter adapter, String pantryID) {
 		this.adapter = adapter;
@@ -30,54 +31,61 @@ public class ListPantryProductTask extends AsyncTask<Context, Integer, List<Loca
 	@Override
 	protected void onPostExecute(List<LocalMetaProduct> result) {
 		super.onPostExecute(result);
-		if (pantryLoaded) {
-			EndPointCall.msg(LOG_TAG , EndPointCall.FAIL_TO_LOAD_PANTRY);
-			Log.e(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PANTRY);
+		if (!pantryLoaded) {
+			EndPointCall.msg(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PANTRY);
+		}
+		if (!productLoaded) {
+			EndPointCall.msg(LOG_TAG ,EndPointCall.FAIL_TO_LIST_PANTRY_PRODUCTS);
 		}
 		if (result != null) {
 			Collection<LocalMetaProduct> localProducts = result;
+			if (result.isEmpty()){
+				EndPointCall.msg(LOG_TAG ,EndPointCall.PANTRY_IS_EMPTY);
+			}
 			dbAdapter.putAllProducts(localProducts);
 			adapter.addAll(localProducts);
-		} else {
-			Log.e(LOG_TAG, "EndPointCall.FAIL_TO_LIST_PANTRY_PRODUCTS");
-			EndPointCall.msg(EndPointCall.FAIL_TO_LIST_PANTRY_PRODUCTS);
+		}else {
+			EndPointCall.msg(LOG_TAG ,EndPointCall.ERROR);
+			Log.e(LOG_TAG, EndPointCall.ERROR);
 		}
 	}
 	@Override
 	protected List<LocalMetaProduct> doInBackground(Context... contexts) {
-		
-		List<MetaProduct> products = null;
+		Pantry pantry;
 		try {
-			Pantry pantry = EndPointCall.getApiEndpoint().getPantryByMailAndName(EndPointCall.getEmailAccount(), pantryID).execute();
-			pantryLoaded = (pantry != null);
-			if (pantryLoaded) {
-				products = pantry.getProducts();
-				if (products == null) { //FIXME
-					Log.e(LOG_TAG, "products == null");
-					products = new ArrayList<MetaProduct>();
-				}
-			}else {
-				Log.e(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PANTRY);
-			}
+			pantry = EndPointCall.getApiEndpoint().getPantryByMailAndName(EndPointCall.getEmailAccount(), pantryID).execute();
+			pantryLoaded = true;
 		} catch (IOException e) {
+			pantryLoaded = false;
+			pantry = null;
+			Log.e(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PANTRY);
 			e.printStackTrace();
 		}
 		List<LocalMetaProduct> result = new ArrayList<LocalMetaProduct>();
-		if (pantryLoaded){
-			for (MetaProduct mp : products) {
-				Product aux = null;
-				try {
-					aux = EndPointCall.getApiEndpoint().getProduct(mp.getProduct()).execute();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					continue;
-				}
-				result.add(new LocalMetaProduct(aux.getBarCode(), aux
-						.getName(), aux.getDescription(), aux.getKey(), mp
-						.getAmount()));
-			}
+		// if (pantry == null) {
+		// Log.e(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PANTRY);
+		// }else {
+		List<MetaProduct> products = pantry.getProducts();
+		if (products == null) { // FIXME
+			Log.e(LOG_TAG, "products == null");
+			products = new ArrayList<MetaProduct>();
 		}
+		// if (pantryLoaded){
+		productLoaded = false;
+		for (MetaProduct mp : products) {
+			try {
+				Product aux = EndPointCall.getApiEndpoint().getProduct(mp.getProduct()).execute();
+				result.add(new LocalMetaProduct(aux.getBarCode(), aux.getName(), aux.getDescription(), aux.getKey(), mp.getAmount()));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Log.e(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PRODUCT);
+				e.printStackTrace();
+				continue;
+			}
+			productLoaded = true;
+		}
+		// }
+		// }
 		return result;
 	}
 }

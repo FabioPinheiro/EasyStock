@@ -14,6 +14,11 @@ import javax.persistence.OneToMany;
 @Entity
 public class Pantry {
 
+	public Pantry(String name){
+		this.name = name;
+		this.products = new ArrayList<MetaProduct>();
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long key;

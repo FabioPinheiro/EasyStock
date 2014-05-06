@@ -25,6 +25,7 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 		this.mail = EndPointCall.getEmailAccount();
 		this.pantrySelected = pantrySelected;
 		this.productId = productId;
+		
 	}
 
 	@Override

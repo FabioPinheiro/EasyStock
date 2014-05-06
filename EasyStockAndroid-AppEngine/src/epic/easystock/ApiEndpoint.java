@@ -253,9 +253,9 @@ public class ApiEndpoint {
 			if (containsPantry(pantry))
 				throw new EntityExistsException("insertUserPantry: Object (pantry) already exists");
 			if (pantryIsNull) {
-				pantry = new Pantry();
-				pantry.setProducts(new ArrayList<MetaProduct>());
-				pantry.setName(userPantryDTO.getPantryName());
+				pantry = new Pantry(userPantryDTO.getPantryName());
+				//pantry.setProducts(new ArrayList<MetaProduct>());
+				//pantry.setName(userPantryDTO.getPantryName());
 				pantry = insertPantry(pantry); //mgr.persist();// FIXME verificar se está aqui bem devido if (containsUserPantry(userpantry))			
 			}else {}//FIXME care pantry.getKey()
 			userpantry = new UserPantry();
@@ -266,7 +266,6 @@ public class ApiEndpoint {
 			}
 			mgr.persist(userpantry);
 		} finally {
-		
 			mgr.close();
 		}
 		return userpantry;

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package epic.easystock.io;
+package epic.easystock.data;
 
 import java.util.ArrayList;
 import java.util.List;

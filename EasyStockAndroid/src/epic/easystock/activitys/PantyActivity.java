@@ -1,11 +1,12 @@
 package epic.easystock.activitys;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,12 +17,10 @@ import epic.easystock.R;
 import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.data.LocalMetaProduct;
 import epic.easystock.io.EndPointCall;
-import epic.easystock.io.UserBdAdapter;
 
 public class PantyActivity extends ListActivity {
 	String mail;
 	Button addProduct;
-	private String name;
 	MetaProductAdapter adapter;
 
 	@Override
@@ -44,6 +43,13 @@ public class PantyActivity extends ListActivity {
 				EndPointCall.listPantryProductTask(adapter, EndPointCall.getSelectedPantry()); //FIXME
 			}
 		});
+		final Activity aux = this;
+		alert.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				aux.finish();
+			}
+		});
 		alert.show();
 		
 		addProduct.setOnClickListener(new OnClickListener() {
@@ -51,7 +57,7 @@ public class PantyActivity extends ListActivity {
 			public void onClick(View v) {
 				Log.i("ADDPRODUCT PANTRY", "new AddProductTask: " + mail);
 				Long productId = Long.valueOf(((EditText) findViewById(R.id.NumberId)).getText().toString());
-				EndPointCall.addProductToPantryTask(adapter, name, productId);
+				EndPointCall.addProductToPantryTask(adapter, productId);
 			}
 		});
 

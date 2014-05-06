@@ -14,7 +14,7 @@
  * the License.
  */
 
-package epic.easystock.io;
+package epic.easystock.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,7 +23,6 @@ import java.util.List;
 import com.google.android.gms.internal.ar;
 
 import epic.easystock.apiEndpoint.model.MetaProduct;
-import epic.easystock.data.LocalMetaProduct;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -136,8 +135,7 @@ public class PantryDbAdapter {
 	 *            the body of the note
 	 * @return rowId or -1 if failed
 	 */
-	public long createProduct(String name, String description, Long barcode,
-			Long id, Double amount) {
+	public long createProduct(String name, String description, Long barcode, Long id, Double amount) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(PROD_NAME, name);
 		initialValues.put(PROD_DESCRIPTION, description);
@@ -178,8 +176,7 @@ public class PantryDbAdapter {
 
 		for (LocalMetaProduct lmp : products) {
 			try {
-				createProduct(lmp.getName(), lmp.getDescription(),
-						lmp.getBarCode(), lmp.getId(), lmp.getAmount());
+				createProduct(lmp.getName(), lmp.getDescription(), lmp.getBarCode(), lmp.getId(), lmp.getAmount());
 			} catch (SQLiteConstraintException e) {
 				updateProduct(lmp.getName(), lmp.getDescription(),
 						lmp.getBarCode(), lmp.getId(), lmp.getAmount()+1);
