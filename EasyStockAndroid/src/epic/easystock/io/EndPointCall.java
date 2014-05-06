@@ -32,15 +32,21 @@ public class EndPointCall {
 	static private final String PREFS_FIRST_INIT = "PREFS_FIRST_INIT";
 	static private final String PREFS_LAST_USED_EMAIL = "PREFS_LAST_USED_EMAIL";
 	static private final String PREFS_LAST_USED_PANTRY = "PREFS_LAST_USED_PANTRY";
+
 	static private final String ERROR_PANTRY_NAME = "ERROR_PANTRY_NAME";
+
 	static public final String FAIL_TO_LIST_PRODUCTS = "FAIL_TO_LIST_PRODUCTS";
 	static public final String FAIL_TO_LIST_PANTRY_PRODUCTS = "FAIL_TO_LIST_PANTRY_PRODUCTS";
 	static public final String FAIL_TO_LOAD_PANTRY = "FAIL_TO_LOAD_PANTRY";
 	static public final String FAIL_TO_LOAD_PRODUCT = "FAIL_TO_LOAD_PRODUCT";
 	static public final String FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME = "FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME";
 	static public final String FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER = "FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER";
+	static public final String FAIL_PRODUCT_ALREADY_IN_THE_PANTRY = "FAIL_PRODUCT_ALREADY_IN_THE_PANTRY";
+
 	static public final String INSERT_NEW_USER_IN_APPENGINE = "INSERT_NEW_USER_IN_APPENGINE";
 	static public final String PANTRY_IS_EMPTY = "PANTRY_IS_EMPTY";
+	public static final String PRODUCT_ADDED_TO_LOCAL_PANTRY = "PRODUCT_ADDED_TO_LOCAL_PANTRY";
+
 	static public final String DONE = "AsyncTask Done"; // FIXME remove!!! use
 	static public final String DEBUG = "DEBUG";
 	static public final String ERROR = "ERROR";
@@ -153,7 +159,8 @@ public class EndPointCall {
 	}
 	static public void addProductToPantryTask(MetaProductAdapter adapter, Long productId) {
 		String selectedPantry = getSelectedPantry();
-		new AddProductToPantryTask(adapter, selectedPantry, productId).execute(); // FIXME getSelectedPantry()
+		new AddProductToLocalPantryTask(adapter, selectedPantry, productId).execute();
+		//new AddProductToPantryTask(adapter, selectedPantry, productId).execute(); // FIXME getSelectedPantry()
 		Log.i(EndPointCall_TAG, "addProductToPantryTask:" + " productId " + productId + " to " + selectedPantry);
 	}
 	static public void listProductTask(ProductAdapter adapter) {

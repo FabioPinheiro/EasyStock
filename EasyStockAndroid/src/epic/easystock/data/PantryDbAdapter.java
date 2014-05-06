@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package epic.easystock.data;
 
 import java.util.ArrayList;
@@ -33,14 +32,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * Simple notes database access helper class. Defines the basic CRUD operations
- * for the notepad example, and gives the ability to list all notes as well as
- * retrieve or modify a specific note.
+ * Simple notes database access helper class. Defines the basic CRUD operations for the notepad example, and gives the ability to list all notes as well as retrieve or modify a specific note.
  * 
- * This has been improved from the first version of this tutorial through the
- * addition of better error handling and also using returning a Cursor instead
- * of using a collection of inner classes (which is less scalable and not
- * recommended).
+ * This has been improved from the first version of this tutorial through the addition of better error handling and also using returning a Cursor instead of using a collection of inner classes (which is less scalable and not recommended).
  */
 public class PantryDbAdapter {
 	public static final String PROD_NAME = "name";
@@ -51,47 +45,37 @@ public class PantryDbAdapter {
 	private static final String DATABASE_NAME = "pantry_data";
 	private static final int DATABASE_VERSION = 1;
 	private static final String TAG = "PantryDbAdapter";
-
 	private static String DATABASE_TABLE;
-	
 	private DatabaseHelper mDbHelper;
 	private SQLiteDatabase mDb;
 	private final Context mCtx;
-
 	/**
 	 * Database creation sql statement
 	 */
 	private static final String DATABASE_CREATE = "create table " + DATABASE_TABLE
-			+ " (" + PROD_ID + " integer primary key, " + PROD_BARCODE
-			+ " integer, " + PROD_NAME + " text not null, " + PROD_DESCRIPTION
-			+ " text not null," + PROD_AMOUNT + " real not null );";
-
-
-
+	+ " (" + PROD_ID + " integer primary key, " + PROD_BARCODE
+	+ " integer, " + PROD_NAME + " text not null, " + PROD_DESCRIPTION
+	+ " text not null," + PROD_AMOUNT + " real not null );";
+	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
-
 		DatabaseHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		}
-
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-
 			db.execSQL(DATABASE_CREATE);
 		}
-
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-					+ newVersion + ", which will destroy all old data");
+			+ newVersion + ", which will destroy all old data");
 			db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
 			onCreate(db);
 		}
 	}
-
+	
 	/**
-	 * Constructor - takes the context to allow the database to be
-	 * opened/created
+	 * Constructor - takes the context to allow the database to be opened/created
 	 * 
 	 * @param ctx
 	 *            the Context within which to work
@@ -100,14 +84,10 @@ public class PantryDbAdapter {
 		this.mCtx = ctx;
 		DATABASE_TABLE = "PantryTabelID:" + pantryID;
 	}
-
 	/**
-	 * Open the notes database. If it cannot be opened, try to create a new
-	 * instance of the database. If it cannot be created, throw an exception to
-	 * signal the failure
+	 * Open the notes database. If it cannot be opened, try to create a new instance of the database. If it cannot be created, throw an exception to signal the failure
 	 * 
-	 * @return this (self reference, allowing this to be chained in an
-	 *         initialization call)
+	 * @return this (self reference, allowing this to be chained in an initialization call)
 	 * @throws SQLException
 	 *             if the database could be neither opened or created
 	 */
@@ -116,15 +96,11 @@ public class PantryDbAdapter {
 		mDb = mDbHelper.getWritableDatabase();
 		return this;
 	}
-
 	public void close() {
 		mDbHelper.close();
 	}
-
 	/**
-	 * Create a new note using the title and body provided. If the note is
-	 * successfully created return the new rowId for that note, otherwise return
-	 * a -1 to indicate failure.
+	 * Create a new note using the title and body provided. If the note is successfully created return the new rowId for that note, otherwise return a -1 to indicate failure.
 	 * 
 	 * @param barcode
 	 * @param id
@@ -144,47 +120,32 @@ public class PantryDbAdapter {
 		initialValues.put(PROD_AMOUNT, amount);
 		return mDb.insert(DATABASE_TABLE, null, initialValues);
 	}
-
-	/**
-	 * Delete the note with the given rowId
-	 * 
-	 * @param rowId
-	 *            id of note to delete
-	 * @return true if deleted, false otherwise
-	 */
-	public boolean deleteNote(long rowId) {
-
+	public boolean deleteProduct(long rowId) {
 		return mDb.delete(DATABASE_TABLE, PROD_ID + "=" + rowId, null) > 0;
 	}
-
 	/**
 	 * Return a Cursor over the list of all notes in the database
 	 * 
 	 * @return Cursor over all notes
 	 */
 	public Cursor fetchAllNotes() {
-
 		return mDb.query(DATABASE_TABLE, null, null, null, null, null, null);
 	}
-
 	/**
 	 * Return a Cursor over the list of all notes in the database
 	 * 
 	 * @return Cursor over all notes
 	 */
 	public void putAllProducts(Collection<LocalMetaProduct> products) {
-
 		for (LocalMetaProduct lmp : products) {
 			try {
 				createProduct(lmp.getName(), lmp.getDescription(), lmp.getBarCode(), lmp.getId(), lmp.getAmount());
 			} catch (SQLiteConstraintException e) {
-				updateProduct(lmp.getName(), lmp.getDescription(),
-						lmp.getBarCode(), lmp.getId(), lmp.getAmount()+1);
+				Log.e("PantryBDAdapter", "error putAllProducts");
+				updateProduct(lmp.getName(), lmp.getDescription(), lmp.getBarCode(), lmp.getId(), lmp.getAmount() + 1);
 			}
 		}
-
 	}
-
 	/**
 	 * Return a Cursor over the list of all notes in the database
 	 * 
@@ -192,10 +153,7 @@ public class PantryDbAdapter {
 	 */
 	public List<LocalMetaProduct> getAllProducts() {
 		List<LocalMetaProduct> products = new ArrayList<LocalMetaProduct>();
-
-		Cursor cursor = mDb.query(DATABASE_TABLE, null, null, null, null, null,
-				null);
-
+		Cursor cursor = mDb.query(DATABASE_TABLE, null, null, null, null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			LocalMetaProduct prod = cursorToMetaProduct(cursor);
@@ -204,10 +162,8 @@ public class PantryDbAdapter {
 		}
 		// make sure to close the cursor
 		cursor.close();
-
 		return products;
 	}
-
 	private LocalMetaProduct cursorToMetaProduct(Cursor cursor) {
 		Long id = cursor.getLong(cursor.getColumnIndex(PROD_ID));
 		String name = cursor.getString(cursor.getColumnIndex(PROD_NAME));
@@ -215,10 +171,9 @@ public class PantryDbAdapter {
 		String desc = cursor.getString(cursor.getColumnIndex(PROD_DESCRIPTION));
 		Double amount = cursor.getDouble(cursor.getColumnIndex(PROD_AMOUNT));
 		LocalMetaProduct prod = new LocalMetaProduct(barCode, name, desc, id,
-				amount);
+		amount);
 		return prod;
 	}
-
 	/**
 	 * Return a Cursor positioned at the note that matches the given rowId
 	 * 
@@ -229,22 +184,16 @@ public class PantryDbAdapter {
 	 *             if note could not be found/retrieved
 	 */
 	public Cursor fetchNote(long id) throws SQLException {
-
 		Cursor mCursor =
-
 		mDb.query(true, DATABASE_TABLE, null, PROD_ID + "=" + id, null, null,
-				null, null, null);
+		null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
 		return mCursor;
-
 	}
-
 	/**
-	 * Update the note using the details provided. The note to be updated is
-	 * specified using the rowId, and it is altered to use the title and body
-	 * values passed in
+	 * Update the note using the details provided. The note to be updated is specified using the rowId, and it is altered to use the title and body values passed in
 	 * 
 	 * @param id
 	 *            id of note to update
@@ -256,7 +205,7 @@ public class PantryDbAdapter {
 	 * @return true if the note was successfully updated, false otherwise
 	 */
 	public boolean updateProduct(String name, String description, Long barcode,
-			Long id, Double amount) {
+	Long id, Double amount) {
 		ContentValues args = new ContentValues();
 		args.put(PROD_NAME, name);
 		args.put(PROD_DESCRIPTION, description);
@@ -264,6 +213,5 @@ public class PantryDbAdapter {
 		args.put(PROD_ID, id);
 		args.put(PROD_AMOUNT, amount);
 		return mDb.update(DATABASE_TABLE, args, PROD_ID + "=" + id, null) > 0;
-
 	}
 }

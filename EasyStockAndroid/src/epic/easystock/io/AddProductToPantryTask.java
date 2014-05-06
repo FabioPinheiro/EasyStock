@@ -34,9 +34,8 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 			Pantry pantry = EndPointCall.getApiEndpoint().getPantryByMailAndName(mail, pantrySelected).execute();
 			List<MetaProduct> newList = pantry.getProducts();
 			if (newList == null) {
-				Log.e("PantyActivity", "AddProductTask: newList=null");
-				newList = new ArrayList<MetaProduct>(); // FIXME isto nunca
-														// devia de ser null
+				Log.e(LOG_TAG, "AddProductTask: newList=null");
+				newList = new ArrayList<MetaProduct>(); // FIXME isto nunca devia de ser null
 			}
 			MetaProduct metaP = null;
 			Product newProd = null;
@@ -49,9 +48,9 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 					metaP = mp;
 					mp.setAmount(mp.getAmount() + 1);
 
-					EndPointCall.getApiEndpoint().removeMetaProduct(mp.getKey().getId());
+					//FIXME ERROR WTF ? EndPointCall.getApiEndpoint().removeMetaProduct(mp.getKey().getId());  //!!!!!!! EEROR
 					// newList.add(mp);
-					Log.i("PantyActivity", "AddProductTask: Product was in the list");
+					Log.i(LOG_TAG, "AddProductTask: Product was in the list");
 					break;
 				}
 			}

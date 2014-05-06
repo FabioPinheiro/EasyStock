@@ -27,7 +27,7 @@ public class Pantry {
 	
 	private String name;
 	
-	@OneToMany(mappedBy = "pantry", cascade = CascadeType.ALL)
+	//@OneToMany(mappedBy = "pantry", cascade = CascadeType.ALL)
 	private List<MetaProduct> products;
 
 	public Date getTimeStamp() {

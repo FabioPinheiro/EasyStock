@@ -1,5 +1,7 @@
 package epic.easystock.data;
 
+import epic.easystock.apiEndpoint.model.Product;
+
 public class LocalMetaProduct {
 
 	private Long BarCode;
@@ -15,8 +17,7 @@ public class LocalMetaProduct {
 	 * @param id
 	 * @param double1
 	 */
-	public LocalMetaProduct(Long barcode, String name, String description,
-			Long id, Double amount) {
+	public LocalMetaProduct(Long barcode, String name, String description, Long id, Double amount) {
 		super();
 		BarCode = barcode;
 		this.name = name;
@@ -24,7 +25,9 @@ public class LocalMetaProduct {
 		this.id = id;
 		this.setAmount(amount);
 	}
-
+	public LocalMetaProduct(Product product, Double amount) {
+		this(product.getBarCode(), product.getName(), product.getDescription(), product.getKey().longValue(), amount);
+	}
 	public Long getBarCode() {
 		return BarCode;
 	}

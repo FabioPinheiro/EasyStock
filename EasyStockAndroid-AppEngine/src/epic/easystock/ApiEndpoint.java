@@ -400,9 +400,7 @@ public class ApiEndpoint {
 			cursor = JPACursorHelper.getCursor(execute);
 			if (cursor != null)
 				cursorString = cursor.toWebSafeString();
-			// Tight loop for fetching all entities from datastore and
-			// accomodate
-			// for lazy fetch.
+			// Tight loop for fetching all entities from datastore and accomodate for lazy fetch.
 			for (Pantry obj : execute);
 		} finally {
 			mgr.close();
@@ -465,14 +463,14 @@ public class ApiEndpoint {
 		}
 		return ret;
 	}
-	/**
+	/**LIXO
 	 * This method gets the entity having primary key id. It uses HTTP GET method.
 	 * 
 	 * @param id
 	 *            the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
-	@ApiMethod(name = "getPantryProducts")
+	/*@ApiMethod(name = "getPantryProducts")
 	public List<MetaProduct> getPantryProducts(@Named("id") Long id) {
 		EntityManager mgr = getEntityManager();
 		Pantry pantry = null;
@@ -482,7 +480,7 @@ public class ApiEndpoint {
 			mgr.close();
 		}
 		return pantry.getProducts();
-	}
+	}*/
 	/*
 	 * LIXO FIXME see insertUserPantry(userpantry, user, pantry) This inserts a new entity into App Engine datastore. If the entity already exists in the datastore, an exception is thrown. It uses HTTP POST method.
 	 * 
@@ -490,7 +488,7 @@ public class ApiEndpoint {
 	 * 
 	 * @return The inserted entity.
 	 */
-	//@ApiMethod(name = "insertPantry")
+	//CARE @ApiMethod(name = "insertPantry")
 	public Pantry insertPantry(Pantry pantry) {
 		EntityManager mgr = getEntityManager();
 		try {
@@ -704,152 +702,152 @@ public class ApiEndpoint {
 		return contains;
 	}
 	// ################################# META PRODUCT #################################
-	/**
-	 * This method lists all the entities inserted in datastore. It uses HTTP GET method and paging support.
-	 * 
-	 * @return A CollectionResponse class containing the list of all entities persisted and a cursor to the next page.
-	 */
-	@SuppressWarnings({ "unchecked", "unused" })
-	@ApiMethod(name = "listMetaProduct")
-	public CollectionResponse<MetaProduct> listMetaProduct(
-	@Nullable @Named("cursor") String cursorString,
-	@Nullable @Named("limit") Integer limit) {
-		EntityManager mgr = null;
-		Cursor cursor = null;
-		List<MetaProduct> execute = null;
-		try {
-			mgr = getEntityManager();
-			Query query = mgr
-			.createQuery("select from MetaProduct as MetaProduct");
-			if (cursorString != null && cursorString != "") {
-				cursor = Cursor.fromWebSafeString(cursorString);
-				query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
-			}
-			if (limit != null) {
-				query.setFirstResult(0);
-				query.setMaxResults(limit);
-			}
-			execute = (List<MetaProduct>) query.getResultList();
-			cursor = JPACursorHelper.getCursor(execute);
-			if (cursor != null)
-				cursorString = cursor.toWebSafeString();
-			// Tight loop for fetching all entities from datastore and
-			// accomodate
-			// for lazy fetch.
-			for (MetaProduct obj : execute);
-		} finally {
-			mgr.close();
-		}
-		return CollectionResponse.<MetaProduct> builder().setItems(execute)
-		.setNextPageToken(cursorString).build();
-	}
-	/**
-	 * This method gets the entity having primary key id. It uses HTTP GET method.
-	 * 
-	 * @param id
-	 *            the primary key of the java bean.
-	 * @return The entity with primary key id.
-	 */
-	@ApiMethod(name = "getMetaProduct")
-	public MetaProduct getMetaProduct(@Named("id") Long id) {
-		EntityManager mgr = getEntityManager();
-		MetaProduct metaproduct = null;
-		try {
-			metaproduct = mgr.find(MetaProduct.class, id);
-		} finally {
-			mgr.close();
-		}
-		return metaproduct;
-	}
-	/**
-	 * This inserts a new entity into App Engine datastore. If the entity already exists in the datastore, an exception is thrown. It uses HTTP POST method.
-	 * 
-	 * @param metaproduct
-	 *            the entity to be inserted.
-	 * @return The inserted entity.
-	 */
-	@ApiMethod(name = "insertMetaProduct")
-	public MetaProduct insertMetaProduct(MetaProduct metaproduct) {
-		EntityManager mgr = getEntityManager();
-		try {
-			if (containsMetaProduct(metaproduct)) {
-				metaproduct.setAmount(metaproduct.getAmount() + 1);
-				updateMetaProduct(metaproduct);
-				return metaproduct;
-			}
-			mgr.persist(metaproduct);
-		} finally {
-			mgr.close();
-		}
-		return metaproduct;
-	}
-	/**
-	 * This method is used for updating an existing entity. If the entity does not exist in the datastore, an exception is thrown. It uses HTTP PUT method.
-	 * 
-	 * @param metaproduct
-	 *            the entity to be updated.
-	 * @return The updated entity.
-	 */
-	@ApiMethod(name = "updateMetaProduct")
-	public MetaProduct updateMetaProduct(MetaProduct metaproduct) {
-		EntityManager mgr = getEntityManager();
-		try {
-			if (!containsMetaProduct(metaproduct)) {
-				throw new EntityNotFoundException("Object does not exist");
-			}
-			mgr.persist(metaproduct);
-		} finally {
-			mgr.close();
-		}
-		return metaproduct;
-	}
-	/**
-	 * This method removes the entity with primary key id. It uses HTTP DELETE method.
-	 * 
-	 * @param id
-	 *            the primary key of the entity to be deleted.
-	 */
-	@ApiMethod(name = "removeMetaProduct")
-	public void removeMetaProduct(@Named("id") Long id) {
-		EntityManager mgr = getEntityManager();
-		try {
-			MetaProduct metaproduct = mgr.find(MetaProduct.class, id);
-			mgr.remove(metaproduct);
-		} finally {
-			mgr.close();
-		}
-	}
-	private boolean containsMetaProduct(MetaProduct metaproduct) {
-		EntityManager mgr = getEntityManager();
-		boolean contains = true;
-		try {
-			if (metaproduct == null)
-				return false;
-			MetaProduct item = containsByProduct(metaproduct);
-			if (item == null) {
-				contains = false;
-			}
-		} finally {
-			mgr.close();
-		}
-		return contains;
-	}
-	@SuppressWarnings({ "unused", "unchecked" })
-	private MetaProduct containsByProduct(MetaProduct metaproduct) {
-		EntityManager mgr = null;
-		List<MetaProduct> execute = null;
-		try {
-			mgr = getEntityManager();
-			Query query = mgr.createQuery(
-			"SELECT m FROM MetaProduct m WHERE m.product=:product")
-			.setParameter("product", metaproduct.getProduct());
-			query.setFirstResult(0);
-			execute = query.getResultList();
-		} finally {
-			mgr.close();
-		}
-		if (execute.size() > 0)
-			return execute.get(0);
-		return null;
-	}
+//	/**
+//	 * This method lists all the entities inserted in datastore. It uses HTTP GET method and paging support.
+//	 * 
+//	 * @return A CollectionResponse class containing the list of all entities persisted and a cursor to the next page.
+//	 */
+//	@SuppressWarnings({ "unchecked", "unused" })
+//	@ApiMethod(name = "listMetaProduct")
+//	public CollectionResponse<MetaProduct> listMetaProduct(
+//	@Nullable @Named("cursor") String cursorString,
+//	@Nullable @Named("limit") Integer limit) {
+//		EntityManager mgr = null;
+//		Cursor cursor = null;
+//		List<MetaProduct> execute = null;
+//		try {
+//			mgr = getEntityManager();
+//			Query query = mgr
+//			.createQuery("select from MetaProduct as MetaProduct");
+//			if (cursorString != null && cursorString != "") {
+//				cursor = Cursor.fromWebSafeString(cursorString);
+//				query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
+//			}
+//			if (limit != null) {
+//				query.setFirstResult(0);
+//				query.setMaxResults(limit);
+//			}
+//			execute = (List<MetaProduct>) query.getResultList();
+//			cursor = JPACursorHelper.getCursor(execute);
+//			if (cursor != null)
+//				cursorString = cursor.toWebSafeString();
+//			// Tight loop for fetching all entities from datastore and
+//			// accomodate
+//			// for lazy fetch.
+//			for (MetaProduct obj : execute);
+//		} finally {
+//			mgr.close();
+//		}
+//		return CollectionResponse.<MetaProduct> builder().setItems(execute)
+//		.setNextPageToken(cursorString).build();
+//	}
+//	/**
+//	 * This method gets the entity having primary key id. It uses HTTP GET method.
+//	 * 
+//	 * @param id
+//	 *            the primary key of the java bean.
+//	 * @return The entity with primary key id.
+//	 */
+//	@ApiMethod(name = "getMetaProduct")
+//	public MetaProduct getMetaProduct(@Named("id") Long id) {
+//		EntityManager mgr = getEntityManager();
+//		MetaProduct metaproduct = null;
+//		try {
+//			metaproduct = mgr.find(MetaProduct.class, id);
+//		} finally {
+//			mgr.close();
+//		}
+//		return metaproduct;
+//	}
+//	/**
+//	 * This inserts a new entity into App Engine datastore. If the entity already exists in the datastore, an exception is thrown. It uses HTTP POST method.
+//	 * 
+//	 * @param metaproduct
+//	 *            the entity to be inserted.
+//	 * @return The inserted entity.
+//	 */
+//	@ApiMethod(name = "insertMetaProduct")
+//	public MetaProduct insertMetaProduct(MetaProduct metaproduct) {
+//		EntityManager mgr = getEntityManager();
+//		try {
+//			if (containsMetaProduct(metaproduct)) {
+//				metaproduct.setAmount(metaproduct.getAmount() + 1);
+//				updateMetaProduct(metaproduct);
+//				return metaproduct;
+//			}
+//			mgr.persist(metaproduct);
+//		} finally {
+//			mgr.close();
+//		}
+//		return metaproduct;
+//	}
+//	/**
+//	 * This method is used for updating an existing entity. If the entity does not exist in the datastore, an exception is thrown. It uses HTTP PUT method.
+//	 * 
+//	 * @param metaproduct
+//	 *            the entity to be updated.
+//	 * @return The updated entity.
+//	 */
+//	@ApiMethod(name = "updateMetaProduct")
+//	public MetaProduct updateMetaProduct(MetaProduct metaproduct) {
+//		EntityManager mgr = getEntityManager();
+//		try {
+//			if (!containsMetaProduct(metaproduct)) {
+//				throw new EntityNotFoundException("Object does not exist");
+//			}
+//			mgr.persist(metaproduct);
+//		} finally {
+//			mgr.close();
+//		}
+//		return metaproduct;
+//	}
+//	/**
+//	 * This method removes the entity with primary key id. It uses HTTP DELETE method.
+//	 * 
+//	 * @param id
+//	 *            the primary key of the entity to be deleted.
+//	 */
+//	@ApiMethod(name = "removeMetaProduct")
+//	public void removeMetaProduct(@Named("id") Long id) {
+//		EntityManager mgr = getEntityManager();
+//		try {
+//			MetaProduct metaproduct = mgr.find(MetaProduct.class, id);
+//			mgr.remove(metaproduct);
+//		} finally {
+//			mgr.close();
+//		}
+//	}
+//	private boolean containsMetaProduct(MetaProduct metaproduct) {
+//		EntityManager mgr = getEntityManager();
+//		boolean contains = true;
+//		try {
+//			if (metaproduct == null)
+//				return false;
+//			MetaProduct item = containsByProduct(metaproduct);
+//			if (item == null) {
+//				contains = false;
+//			}
+//		} finally {
+//			mgr.close();
+//		}
+//		return contains;
+//	}
+//	@SuppressWarnings({ "unused", "unchecked" })
+//	private MetaProduct containsByProduct(MetaProduct metaproduct) {
+//		EntityManager mgr = null;
+//		List<MetaProduct> execute = null;
+//		try {
+//			mgr = getEntityManager();
+//			Query query = mgr.createQuery(
+//			"SELECT m FROM MetaProduct m WHERE m.product=:product")
+//			.setParameter("product", metaproduct.getProduct());
+//			query.setFirstResult(0);
+//			execute = query.getResultList();
+//		} finally {
+//			mgr.close();
+//		}
+//		if (execute.size() > 0)
+//			return execute.get(0);
+//		return null;
+//	}
 }

@@ -13,12 +13,11 @@ import com.google.appengine.api.datastore.Key;
 /*User - Pantry (1) - List of all pantries in the system and connects each User with the pantries he has access*/
 @Entity
 public class UserPantry {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key key;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL) 
 	private Long pantry;
 	
 	@OneToOne(cascade=CascadeType.ALL)
