@@ -13,12 +13,12 @@ import javax.persistence.OneToOne;
 
 import com.google.appengine.api.datastore.Key;
 
-@Entity
+//@Entity
 public class MetaProduct {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key key;
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//private Key key;
 	
 	private Long product;
 	
@@ -53,8 +53,8 @@ public class MetaProduct {
 		TimeStamp = timeStamp;
 	}
 
-	public Key getKey() {
-		return key;
-	}
+	//public Key getKey() {
+	//	return key;
+	//}
 	
 }

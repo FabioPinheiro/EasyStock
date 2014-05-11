@@ -1,27 +1,36 @@
 package epic.easystock.io;
 
+import java.util.List;
+
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.Strings;
 
+import epic.easystock.R;
 import epic.easystock.apiEndpoint.ApiEndpoint;
 import epic.easystock.apiEndpoint.model.User;
 import epic.easystock.assist.AppConstants;
 import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.assist.ProductAdapter;
-import epic.easystock.data.PantryDbAdapter;
+import epic.easystock.data.LocalMetaProduct;
+import epic.easystock.data.LocalProduct;
+import epic.easystock.data.PantriesDbAdapter;
+import epic.easystock.data.PantriesDbAdapter.PantryDB;
+import epic.easystock.data.ProductsDbAdapter;
 import epic.easystock.data.UserBdAdapter;
 
 public class EndPointCall {
@@ -32,7 +41,8 @@ public class EndPointCall {
 	static private final String PREFS_FIRST_INIT = "PREFS_FIRST_INIT";
 	static private final String PREFS_LAST_USED_EMAIL = "PREFS_LAST_USED_EMAIL";
 	static private final String PREFS_LAST_USED_PANTRY = "PREFS_LAST_USED_PANTRY";
-
+	static private final String PREFS_NEXT_LOCAL_KEY = "PREFS_NEXT_LOCAL_KEY";
+	
 	static private final String ERROR_PANTRY_NAME = "ERROR_PANTRY_NAME";
 
 	static public final String FAIL_TO_LIST_PRODUCTS = "FAIL_TO_LIST_PRODUCTS";
@@ -46,6 +56,7 @@ public class EndPointCall {
 	static public final String INSERT_NEW_USER_IN_APPENGINE = "INSERT_NEW_USER_IN_APPENGINE";
 	static public final String PANTRY_IS_EMPTY = "PANTRY_IS_EMPTY";
 	public static final String PRODUCT_ADDED_TO_LOCAL_PANTRY = "PRODUCT_ADDED_TO_LOCAL_PANTRY";
+	public static final String PANTRY_IS_ALREADY_OPEN = "PANTRY_IS_ALREADY_OPEN";
 
 	static public final String DONE = "AsyncTask Done"; // FIXME remove!!! use
 	static public final String DEBUG = "DEBUG";
@@ -72,19 +83,52 @@ public class EndPointCall {
 	static public boolean isSignedIn() {
 		return (!Strings.isNullOrEmpty(mEmailAccount) ? true : false);
 	}
-	public static void setSelectedPantry(String selectedPantry) {
-		globalSettings.edit().putString(PREFS_LAST_USED_PANTRY, selectedPantry).commit();
-	}
-	public static String getSelectedPantry() {
-		String aux = globalSettings.getString(PREFS_LAST_USED_PANTRY, ERROR_PANTRY_NAME);
-		if(Strings.isNullOrEmpty(aux)){
+	public static PantriesDbAdapter pantriesDbAdapter =null;
+	public static PantriesDbAdapter.PantryDB getPantryDB(String selectedPantry) {
+		if(Strings.isNullOrEmpty(selectedPantry)){
 			msg(EndPointCall_TAG,"getSelectedPantry is null or empty"); //FIXME TEXT
 			Log.e(EndPointCall_TAG, "getSelectedPantry is null or empty"); //FIXME TEXT
+			throw new RuntimeException();
+		}else{
+			globalSettings.edit().putString(PREFS_LAST_USED_PANTRY, selectedPantry).commit();
+			if(pantriesDbAdapter == null){
+				throw new RuntimeException();
+			}
+			return pantriesDbAdapter.getPantryDB(selectedPantry);
+		}
+	}
+	public static String getPantryName() {
+		String aux = globalSettings.getString(PREFS_LAST_USED_PANTRY, ERROR_PANTRY_NAME);
+		if(Strings.isNullOrEmpty(aux)){
+			msg(EndPointCall_TAG,"getPantryName is null or empty"); //FIXME TEXT
+			Log.e(EndPointCall_TAG, "getPantryName is null or empty"); //FIXME TEXT
+			throw new RuntimeException();
 		}
 		return aux;
 	}
+	/*LIXO FIXME UHWEKFHWKJFHLWJI public static PantryDbAdapter getPantryDbAdapteri() {
+		if(pantryDbAdapter == null) throw new RuntimeException(); //FIXME
+		return pantryDbAdapter;
+	}*/
+	private static UserBdAdapter userBdAdapter = null; //FIXME falta close   (o open esta no init)
+	public static UserBdAdapter getUserDbAdapter() {
+		if(userBdAdapter == null) throw new RuntimeException(); //FIXME
+		return userBdAdapter;
+	}
+	private static ProductsDbAdapter productsDbAdapter = null; //FIXME falta close   (o open esta no init)
+	public static ProductsDbAdapter getProductsDbAdapter() {
+		if(productsDbAdapter == null) throw new RuntimeException(); //FIXME
+		return productsDbAdapter;
+	}
+	public static Long nextLocalObjectKey() {
+		long aux = globalSettings.getLong(PREFS_NEXT_LOCAL_KEY, 0);
+		globalSettings.edit().putLong(PREFS_NEXT_LOCAL_KEY, ++aux).commit(); //FIXME sera que alguem consege chegar ao fim?
+		if(aux != 0)
+			return aux;
+		else throw new RuntimeException();
+	}
 	// ##################################################################################
-	private static boolean isConnected() {
+	public static boolean isConnected() {
 		boolean connected = false;
 		ConnectivityManager conMan = (ConnectivityManager) EndPointCall.getGlobalContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 		State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE) == null ? null : conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState(); // mobile
@@ -96,20 +140,6 @@ public class EndPointCall {
 			connected = true;
 		}
 		return connected;
-	}
-	public static PantryDbAdapter getPantryDbAdapter() {
-		String name = getSelectedPantry();
-		if (name == ERROR_PANTRY_NAME) {
-			msg(ERROR_PANTRY_NAME);
-			Log.e(EndPointCall_TAG, ERROR_PANTRY_NAME);
-			throw new UnsupportedOperationException();
-		}
-		return new PantryDbAdapter(EndPointCall.getGlobalContext(), name);
-	}
-	public static UserBdAdapter getUserDbAdapter() {
-		UserBdAdapter aux = new UserBdAdapter(EndPointCall.getGlobalContext());
-		aux.open(); //FIXME falta close .... e esta sepre a abri
-		return aux;
 	}
 	static public void msg(String message) {
 		Toast.makeText(EndPointCall.getGlobalContext(), message, Toast.LENGTH_LONG).show();
@@ -129,16 +159,23 @@ public class EndPointCall {
 		globalSettings = globalContext.getSharedPreferences(PREFS_FILE_NAME, 0);
 		boolean fistTime = globalSettings.getBoolean(PREFS_FIRST_INIT, true);
 		// Select Email
+		productsDbAdapter = new ProductsDbAdapter(EndPointCall.getGlobalContext());
+		productsDbAdapter.open();
 		if (fistTime) {
 			globalSettings.edit().putBoolean(PREFS_FIRST_INIT, false).commit();
 			Account aux = new AccountSelector(getGlobalContext()).selectorAccount();
 			globalSettings.edit().putString(PREFS_LAST_USED_EMAIL, aux.name).commit();// FIXME
+			globalSettings.edit().putLong(PREFS_NEXT_LOCAL_KEY, 1).commit();
 			mEmailAccount = aux.name;
+			listAllProductTask(null);
 			msg("Hello " + mEmailAccount);
 		} else {
 			mEmailAccount = globalSettings.getString(PREFS_LAST_USED_EMAIL, "EMAIL_ERROR");
 			msg("Welcome Back " + mEmailAccount);// FIXME TEXT
 		}
+		userBdAdapter = new UserBdAdapter(EndPointCall.getGlobalContext());
+		userBdAdapter.open();
+		pantriesDbAdapter = new PantriesDbAdapter(EndPointCall.getGlobalContext());
 	}
 	static public void onInit(Activity activity) {
 		Log.i(EndPointCall_TAG, "onInit()");
@@ -157,27 +194,71 @@ public class EndPointCall {
 	static public void addToProductListTask(String name, Long barCode, String description, String image) {
 		new AddToProductListTask(name, barCode, description, image).execute();
 	}
-	static public void addProductToPantryTask(MetaProductAdapter adapter, Long productId) {
-		String selectedPantry = getSelectedPantry();
-		new AddProductToLocalPantryTask(adapter, selectedPantry, productId).execute();
+	static public void addProductToPantryTask(MetaProductAdapter adapter, PantriesDbAdapter.PantryDB pantryDB, Long productBarCode) {
+		ProductsDbAdapter productsDBAdapter = EndPointCall.getProductsDbAdapter();
+		List<LocalProduct> ooo = productsDBAdapter.getProductByBarCode(productBarCode);
+		if(productsDBAdapter.getAllProducts().isEmpty())
+			throw new RuntimeException(); //FIXME LIXO REMOVE
+		//ver na local BD
+		if(ooo.isEmpty() && isConnected()){
+			//FIXME if not ver na AppEngine
+		}else{
+			//NONE ??!?!? FIXME
+		}
+		//if not perguntar se quer criar um, NAO QUER PORQUE EU NAO DEIXO, POR AGORA FIXME 
+		//if not exit FIXME
+
+		if(ooo.isEmpty()){
+			msg(EndPointCall_TAG, "Unknown Product");
+			/*FIXME AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle("Pro");
+			alert.setItems(pantreisName, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					selectedPantryName = pantreisName[which];//FIXME
+					final PantriesDbAdapter.PantryDB pantryDB = EndPointCall.getPantryDB(selectedPantryName);
+					EndPointCall.listPantryProductTask(adapter, pantryDB); //FIXME
+				}
+			});
+			final Activity aux = this;
+			alert.setOnCancelListener(new OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					aux.finish();
+				}
+			});
+			alert.show();*/
+		}
+		else{
+			if(ooo.size() == 1)
+				new AddProductToLocalPantryTask(adapter, pantryDB, new LocalMetaProduct(ooo.get(0),2.2)).execute();
+			else new RuntimeException(); //FIXME
+		}
 		//new AddProductToPantryTask(adapter, selectedPantry, productId).execute(); // FIXME getSelectedPantry()
-		Log.i(EndPointCall_TAG, "addProductToPantryTask:" + " productId " + productId + " to " + selectedPantry);
+
 	}
-	static public void listProductTask(ProductAdapter adapter) {
+	static public void listAllProductTask(ProductAdapter adapter) {
 		new ListAllProductTask(adapter).execute();
 	}
-	static public void listPantryProductTask(MetaProductAdapter adapter, String pantryID) {
+	static public void newPantryTask(String pantryName) {
+		new NewPantryTask(pantryName).execute();
+	}
+	static public void listPantryProductTask(MetaProductAdapter adapter, PantriesDbAdapter.PantryDB pantryDB) {
 		Log.i(EndPointCall_TAG, "isConnected()=" + isConnected());
 		if (isConnected()) {
-			new ListPantryProductTask(adapter, pantryID).execute();
+			new ListPantryProductTask(adapter, pantryDB, EndPointCall.getPantryName()).execute();
 		} else {
-			PantryDbAdapter bd = EndPointCall.getPantryDbAdapter();
-			bd.open();
-			adapter.addAll(bd.getAllProducts());
+			adapter.addAll(pantryDB.getAllProducts());
 			adapter.notifyDataSetChanged();
-			bd.close();
 			// throw new UnsupportedOperationException();
 			// FIXME new ListPantrysTask(adapter).execute();
+		}
+	}
+	static public void SynchronizePantry(PantryDB pantryDB) {
+		if(isConnected()){
+			new SynchronizePantryTask(pantryDB);
+		}else{
+			msg(EndPointCall_TAG, "SynchronizePantry_FAIL"); //FIXME TEXT e ver estado
 		}
 	}
 }

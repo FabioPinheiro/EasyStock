@@ -10,16 +10,19 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import epic.easystock.R;
 import epic.easystock.apiEndpoint.model.Product;
+import epic.easystock.data.LocalMetaProduct;
+import epic.easystock.data.LocalProduct;
 
 /**
  * @author fabio
  *
  */
-public class ProductAdapter extends ArrayAdapter<Product> {
+public class ProductAdapter extends ArrayAdapter<LocalProduct> {
 
 	private final Context context;
-	private final ArrayList<Product> productArrayList;
-	public ProductAdapter(Context context, ArrayList<Product> itemsArrayList) {
+	private final ArrayList<LocalProduct> productArrayList;
+	
+	public ProductAdapter(Context context, ArrayList<LocalProduct> itemsArrayList) {
 		super(context, R.layout.layout_list_product_row, itemsArrayList);
 
 		this.context = context;

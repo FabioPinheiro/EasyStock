@@ -14,7 +14,7 @@ import epic.easystock.data.LocalMetaProduct;
 
 //FIXME isto tem muito problemasde syscronização(falar com ofabio)
 public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaProduct> {
-	static private final String LOG_TAG = AddProductToPantryTask.class.getCanonicalName();
+	private final String LOG_TAG = this.getClass().getCanonicalName();
 
 	private MetaProductAdapter adapter;
 	private String mail, pantrySelected;
@@ -64,11 +64,12 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 			}
 			pantry.setProducts(newList);
 			EndPointCall.getApiEndpoint().updatePantry(pantry).execute();
-			Log.i("PantyActivity", "AddProductTask:" + "Product added to pantry");
-			return new LocalMetaProduct(newProd.getBarCode(), newProd.getName(), newProd.getDescription(), newProd.getKey(), metaP.getAmount());
+			Log.i(LOG_TAG, "AddProductTask:" + "Product added to pantry");
+			throw new RuntimeException();
+			//FIXME return new LocalMetaProduct(newProd.getBarCode(), newProd.getName(), newProd.getDescription(), newProd.getKey(), metaP.getAmount());
 		} catch (IOException e) {
-			Log.e("PantyActivity", "AddProductTask:" + "Product NOT added to pantry");
 			e.printStackTrace();
+			Log.e(LOG_TAG, "AddProductTask:" + "Product NOT added to pantry", e);
 		}
 
 		return null;

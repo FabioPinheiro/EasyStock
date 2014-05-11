@@ -45,7 +45,7 @@ public class MetaProductAdapter extends ArrayAdapter<LocalMetaProduct> {
 		TextView labelViewAmount = (TextView) rowView.findViewById(R.id.product_row_label_amount);
 
 		// 4. Set the text for textView
-		labelViewIdProduct.setText(productArrayList.get(position).getId()/*getKey().getId()*/.toString());
+		labelViewIdProduct.setText(productArrayList.get(position).getKey()/*getKey().getId()*/.toString());
 		labelViewName.setText(productArrayList.get(position).getName());
 		labelViewBarCode.setText(productArrayList.get(position).getBarCode().toString());
 		labelViewDescription.setText(productArrayList.get(position).getAmount().toString());

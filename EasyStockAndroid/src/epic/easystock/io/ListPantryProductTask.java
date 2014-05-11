@@ -1,57 +1,54 @@
 package epic.easystock.io;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import epic.easystock.apiEndpoint.model.MetaProduct;
-import epic.easystock.apiEndpoint.model.Pantry;
-import epic.easystock.apiEndpoint.model.Product;
 import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.data.LocalMetaProduct;
-import epic.easystock.data.PantryDbAdapter;
+import epic.easystock.data.PantriesDbAdapter;
 
 public class ListPantryProductTask extends AsyncTask<Context, Integer, List<LocalMetaProduct>> {
-	static private final String LOG_TAG = AddProductToPantryTask.class.getCanonicalName();
+	private final String LOG_TAG = this.getClass().getCanonicalName();
 	private MetaProductAdapter adapter;
-	private PantryDbAdapter dbAdapter;
+	private PantriesDbAdapter.PantryDB pantryDB;
 	private String pantryID;
 	private Boolean pantryLoaded;
 	private Boolean productLoaded;
 	
-	public ListPantryProductTask(MetaProductAdapter adapter, String pantryID) {
+	public ListPantryProductTask(MetaProductAdapter adapter, PantriesDbAdapter.PantryDB pantryDB, String pantryID) {
 		this.adapter = adapter;
 		this.pantryID = pantryID;
-		this.dbAdapter = EndPointCall.getPantryDbAdapter();
+		this.pantryDB = pantryDB;
 	}
 	@Override
 	protected void onPostExecute(List<LocalMetaProduct> result) {
 		super.onPostExecute(result);
-		if (!pantryLoaded) {
+		/*if (!pantryLoaded) {
 			EndPointCall.msg(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PANTRY);
 		}
 		if (!productLoaded) {
 			EndPointCall.msg(LOG_TAG ,EndPointCall.FAIL_TO_LIST_PANTRY_PRODUCTS);
-		}
+		}*/
+		Collection<LocalMetaProduct> localProducts = pantryDB.getAllProducts();
+		result = (List<LocalMetaProduct>)localProducts;
 		if (result != null) {
-			Collection<LocalMetaProduct> localProducts = result;
+			//FIXME Collection<LocalMetaProduct> localProducts = result;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			if (result.isEmpty()){
 				EndPointCall.msg(LOG_TAG ,EndPointCall.PANTRY_IS_EMPTY);
 			}
-			dbAdapter.putAllProducts(localProducts);
+			//FIXME pantryDB.putAllProducts(localProducts); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			adapter.addAll(localProducts);
 		}else {
-			EndPointCall.msg(LOG_TAG ,EndPointCall.ERROR);
+			EndPointCall.msg(LOG_TAG ,EndPointCall.ERROR + " result == null");
 			Log.e(LOG_TAG, EndPointCall.ERROR);
 		}
 	}
 	@Override
 	protected List<LocalMetaProduct> doInBackground(Context... contexts) {
-		Pantry pantry;
+		/*Pantry pantry;
 		try {
 			pantry = EndPointCall.getApiEndpoint().getPantryByMailAndName(EndPointCall.getEmailAccount(), pantryID).execute();
 			pantryLoaded = true;
@@ -59,6 +56,7 @@ public class ListPantryProductTask extends AsyncTask<Context, Integer, List<Loca
 			pantryLoaded = false;
 			pantry = null;
 			Log.e(LOG_TAG, EndPointCall.FAIL_TO_LOAD_PANTRY);
+			Log.e(LOG_TAG, e.toString());
 			e.printStackTrace();
 		}
 		List<LocalMetaProduct> result = new ArrayList<LocalMetaProduct>();
@@ -86,6 +84,7 @@ public class ListPantryProductTask extends AsyncTask<Context, Integer, List<Loca
 		}
 		// }
 		// }
-		return result;
+		return result;*/
+		return null;
 	}
 }

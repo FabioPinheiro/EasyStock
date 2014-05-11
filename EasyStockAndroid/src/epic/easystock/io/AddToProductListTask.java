@@ -13,8 +13,7 @@ import com.google.api.client.util.Strings;
 import epic.easystock.apiEndpoint.model.Product;
 
 public class AddToProductListTask extends AsyncTask<Void, Integer, Void> {
-	static private final String LOG_TAG = AuthorizationCheckTask.class
-			.getCanonicalName();
+	private final String LOG_TAG = this.getClass().getCanonicalName();
 	static private final String FAIL_TO_ADD_PRODUCT = "FAIL_TO_ADD_PRODUCT"; // FIXME RES
 	// Context context;
 	// Intent intent;

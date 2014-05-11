@@ -18,11 +18,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import epic.easystock.R;
-import epic.easystock.assist.AppConstants;
 import epic.easystock.assist.ProductAdapter;
-import epic.easystock.apiEndpoint.model.CollectionResponseProduct;
-import epic.easystock.apiEndpoint.model.Key;
-import epic.easystock.apiEndpoint.model.Product;
+import epic.easystock.data.LocalMetaProduct;
+import epic.easystock.data.LocalProduct;
 import epic.easystock.io.EndPointCall;
 
 public class ProductListActivity extends ListActivity {
@@ -42,15 +40,15 @@ public class ProductListActivity extends ListActivity {
 
 		mail = EndPointCall.getEmailAccount();//FIXME LIXO getIntent().getStringExtra("MAIL");
 		// 1. pass context and data to the custom adapter
-		ProductAdapter adapter = new ProductAdapter(this, new ArrayList<Product>());
+		ProductAdapter adapter = new ProductAdapter(this, new ArrayList<LocalProduct>());
 		// 2. setListAdapter
 		setListAdapter(adapter);
-		EndPointCall.listProductTask(adapter);
+		EndPointCall.listAllProductTask(adapter);
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Product product = (Product) getListAdapter().getItem(position);
+		LocalMetaProduct product = (LocalMetaProduct) getListAdapter().getItem(position);
 		//Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
 		xpto.setVisibility(View.VISIBLE);
 		TextView x = (TextView) findViewById(R.id.myMail);
