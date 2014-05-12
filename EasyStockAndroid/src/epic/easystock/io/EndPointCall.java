@@ -120,7 +120,7 @@ public class EndPointCall {
 		if(productsDbAdapter == null) throw new RuntimeException(); //FIXME
 		return productsDbAdapter;
 	}
-	public static Long nextLocalObjectKey() {
+	public static Long xptonextLocalObjectKey() {
 		long aux = globalSettings.getLong(PREFS_NEXT_LOCAL_KEY, 0);
 		globalSettings.edit().putLong(PREFS_NEXT_LOCAL_KEY, ++aux).commit(); //FIXME sera que alguem consege chegar ao fim?
 		if(aux != 0)

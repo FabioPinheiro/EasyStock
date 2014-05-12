@@ -51,28 +51,28 @@ public abstract class LocalObject {
 	private DataState dataState;
 	private DateTime timestamp;
 	
-	public LocalObject(Long key, DataState dataState, DateTime timestamp) {
+	/*public LocalObject(Long key, DataState dataState, DateTime timestamp) {
 		super();
 		this.key = key;
 		this.dataState = dataState;
 		this.timestamp = timestamp;
-	}
-	public LocalObject(Cursor cursor) {
+	}*/
+	protected LocalObject(Cursor cursor) {
 		super();
 		this.key = cursor.getLong(cursor.getColumnIndex(STR_O_LONG_KEY));
 		this.dataState = DataState.values()[cursor.getInt(cursor.getColumnIndex(STR_O_INT_CHANGED))];//FIXME não gosto to nasted
 		this.timestamp = new DateTime(cursor.getLong(cursor.getColumnIndex(STR_O_LONG_TIMESTAMP)));
 	}
 
-	public LocalObject(Product product) {
+	protected LocalObject(Product product) {
 		this.key = product.getKey().longValue();
 		this.dataState = DataState.FETCH_FROM_CLOUD;
-		this.timestamp = product.getTimeStamp();
+		this.timestamp = new DateTime(new Date().getTime());		
 	}
-	public LocalObject() {
-		this.key = EndPointCall.nextLocalObjectKey();
+	protected LocalObject(LocalProduct product) {
+		this.key = product.getKey().longValue();
 		this.dataState = DataState.NEW;
-		this.timestamp = new DateTime(new Date().getTime());
+		this.timestamp = new DateTime(new Date().getTime());		
 	}
 	protected ContentValues getContentValues() {
 		ContentValues aux = new ContentValues();

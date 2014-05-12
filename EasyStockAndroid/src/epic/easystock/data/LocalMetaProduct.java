@@ -20,11 +20,13 @@ public class LocalMetaProduct extends LocalObject{
 		this.amount = cursor.getDouble(cursor.getColumnIndex(STR_MP_REAL_AMOUNT));
 	}
 	public LocalMetaProduct(LocalProduct localProduct, double amount) {
-		super();
-		long aux = localProduct.getKey();
-		if(aux == 0 ) throw new RuntimeException(); //FIXME REMOVE
-		this.localProduct = EndPointCall.getProductsDbAdapter().getProductByKey(aux); //FIXME isto pode ser adiado para mais trade
+		super(localProduct);
+		//long aux = localProduct.getKey();
+		//if(aux == 0 ) throw new RuntimeException(); 
+		this.localProduct = localProduct;//FIXME REMOVE EndPointCall.getProductsDbAdapter().getProductByKey(aux); //FIXME isto pode ser adiado para mais trade
 		this.amount = amount;
+		if(localProduct.getKey() == getKey() || getKey() == 0)
+			throw new RuntimeException();//FIXME REMOVE
 	}
 	/*public LocalMetaProduct(Long localMetaProductKey, LocalProduct localProduct, Double amount, DataState dataState) {
 		super(localMetaProductKey, dataState);
