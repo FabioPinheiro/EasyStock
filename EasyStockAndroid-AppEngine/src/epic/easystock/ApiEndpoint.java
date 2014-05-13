@@ -1,6 +1,7 @@
 package epic.easystock;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -231,8 +232,8 @@ public class ApiEndpoint {
 		}
 		return userpantry;
 	}
-	
-	
+
+
 	/**
 	 * This inserts a new entity into App Engine datastore. If the entity already exists in the datastore, an exception is thrown. It uses HTTP POST method.
 	 * 
@@ -242,6 +243,8 @@ public class ApiEndpoint {
 	 */
 	@ApiMethod(name = "insertUserPantry")
 	public UserPantry insertUserPantry(UserPantryDTO userPantryDTO/* UserPantry userpantry, User user, Pantry pantry */) {
+		final java.util.logging.Logger log = java.util.logging.Logger.getLogger(ApiEndpoint.class.getName());
+		log.info("insertUserPantry!");
 		EntityManager mgr = getEntityManager();
 		UserPantry userpantry;
 		User user = userPantryDTO.getUser();
@@ -254,6 +257,7 @@ public class ApiEndpoint {
 				throw new EntityExistsException("insertUserPantry: Object (pantry) already exists");
 			if (pantryIsNull) {
 				pantry = new Pantry(userPantryDTO.getPantryName());
+				pantry.setTimeStamp(userPantryDTO.getPantryTimeStamp());
 				//pantry.setProducts(new ArrayList<MetaProduct>());
 				//pantry.setName(userPantryDTO.getPantryName());
 				pantry = insertPantry(pantry); //mgr.persist();// FIXME verificar se está aqui bem devido if (containsUserPantry(userpantry))			
@@ -347,8 +351,7 @@ public class ApiEndpoint {
 		List<UserPantry> execute = null;
 		try {
 			mgr = getEntityManager();
-			Query queryUP = mgr
-			.createQuery("select from UserPantry as UserPantry");
+			Query queryUP = mgr.createQuery("select from UserPantry as UserPantry");
 			execute = (List<UserPantry>) queryUP.getResultList();
 			// Tight loop for fetching all entities from datastore and
 			// accomodate
@@ -490,6 +493,8 @@ public class ApiEndpoint {
 	 */
 	//CARE @ApiMethod(name = "insertPantry")
 	public Pantry insertPantry(Pantry pantry) {
+		final java.util.logging.Logger log = java.util.logging.Logger.getLogger(ApiEndpoint.class.getName());
+		log.info("insertPantry!");
 		EntityManager mgr = getEntityManager();
 		try {
 			if (containsPantry(pantry)) {
@@ -509,17 +514,27 @@ public class ApiEndpoint {
 	 * @return The updated entity.
 	 */
 	@ApiMethod(name = "updatePantry")
-	public Pantry updatePantry(Pantry pantry) {
+	public PantrySynchronizationDTO updatePantry(PantrySynchronizationDTO pantrySynchronizationDTO) {
+		final java.util.logging.Logger log = java.util.logging.Logger.getLogger(ApiEndpoint.class.getName());
+		log.info("updatePantry!");
 		EntityManager mgr = getEntityManager();
 		try {
-			if (!containsPantry(pantry)) {
-				throw new EntityNotFoundException("Object does not exist");
+			Pantry pantry = mgr.find(Pantry.class, pantrySynchronizationDTO.getPantryKey());
+			if ( null == pantrySynchronizationDTO.getListMetaProducts()){
+				throw new RuntimeException();//ERROR REMOVE
 			}
-			mgr.persist(pantry);
+			if(pantrySynchronizationDTO.getPantryTimeStamp().after(pantry.getTimeStamp())){
+				log.info("updatePantry: need to update");
+				pantry.setProducts(pantrySynchronizationDTO.getListMetaProducts());
+				//for (MetaProduct it : pantrySynchronizationDTO.getListMetaProducts()) {}//FIXME
+				pantry.setTimeStamp(new Date()); //FIXME só se over ediçoes
+				pantrySynchronizationDTO.setPantryTimeStamp(pantry.getTimeStamp()); //FIXME não gosto
+				//ERROR mgr.persist(pantry);
+			}else throw new RuntimeException();//ERROR REMOVE
 		} finally {
 			mgr.close();
 		}
-		return pantry;
+		return pantrySynchronizationDTO;
 	}
 	/**
 	 * This method removes the entity with primary key id. It uses HTTP DELETE method.

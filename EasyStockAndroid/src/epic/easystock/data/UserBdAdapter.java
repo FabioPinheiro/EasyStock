@@ -38,6 +38,7 @@ import android.util.Pair;
  * recommended).
  */
 public class UserBdAdapter {
+	private final String LOG_TAG = this.getClass().getCanonicalName();
 	public static final String TABLE_NAME = "users";
 	public static final String USER = "user_id";
 	public static final String PANTRY_ID = "pantry_id";
@@ -189,5 +190,42 @@ public class UserBdAdapter {
 		long pantryID = cursor.getLong(cursor.getColumnIndex(PANTRY_ID));
 		String pantryName = cursor.getString(cursor.getColumnIndex(PANTRY_NAME));
 		return new UserPantryAux(user, pantryID, pantryName);
+	}
+	
+	private /*REMOVE public*/ UserPantryAux getPantry(Long pantryKey) {
+		Log.d(LOG_TAG, "getPantry(Long pantryKey): pantryKey=" + pantryKey);
+		List<UserPantryAux> list = getAllPantry();
+		int iii = 0;//FIXME NAME
+		UserPantryAux ret = null;
+		for (UserPantryAux el : list) {
+			Log.d(LOG_TAG, "getPantry(Long pantryKey): for el.pantryID=" + el.pantryID);
+			if (pantryKey.equals(el.pantryID))  {
+				ret = el; //FIXME return aqui!!!!
+				iii++;
+			}
+		}
+		if(iii != 1) throw new RuntimeException(); //FIXME REMOVE;
+		return ret;
+	}
+	public String getPantryName(Long pantryKey) {
+		return getPantry(pantryKey).pantryName;
+	}
+	private /*REMOVE public*/ UserPantryAux getPantry(String user, String pantryName) {
+		Log.d(LOG_TAG, "getPantry(String user, String pantryName): user=" + user  + " pantryName=" + pantryName);
+		List<UserPantryAux> list = getAllPantry();
+		int iii = 0;//FIXME NAME
+		UserPantryAux ret = null;
+		for (UserPantryAux el : list) {
+			Log.d(LOG_TAG, "getPantry(String user, String pantryName) for: user=" + el.user  + " pantryName=" + el.pantryName);
+			if (el.pantryName.equalsIgnoreCase(pantryName) && el.user.equalsIgnoreCase(user))  {
+				ret = el; //FIXME return aqui!!!!
+				iii++;
+			}
+		}
+		if(iii != 1) throw new RuntimeException(); //FIXME REMOVE;
+		return ret;
+	}
+	public long getPantryKey(String user, String pantryName) {
+		return getPantry(user, pantryName).pantryID;
 	}
 }

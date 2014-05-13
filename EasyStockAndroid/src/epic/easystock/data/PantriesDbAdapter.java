@@ -17,14 +17,18 @@ package epic.easystock.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import com.google.android.gms.internal.ar;
+import com.google.api.client.util.DateTime;
 
 import epic.easystock.apiEndpoint.model.MetaProduct;
+import epic.easystock.apiEndpoint.model.Pantry;
+import epic.easystock.apiEndpoint.model.PantrySynchronizationDTO;
 import epic.easystock.io.AddProductToLocalPantryTask;
 import epic.easystock.io.EndPointCall;
 import android.content.ContentValues;
@@ -45,7 +49,7 @@ public class PantriesDbAdapter {
 	private final String LOG_TAG = this.getClass().getCanonicalName();
 	private static final String DATABASE_NAME = "pantry_data";
 	private static final int DATABASE_VERSION = 1;
-	private static Map<String, PantryDB> openPantries = new TreeMap<String, PantryDB>();
+	private static Map<Long, PantryDB> openPantries = new TreeMap<Long, PantryDB>();
 	private Context mCtx;
 	
 	public PantriesDbAdapter(Context context) {
@@ -56,32 +60,35 @@ public class PantriesDbAdapter {
 			it.close();
 		}
 	}
-	public PantryDB getPantryDB(String pantryName){
-		PantryDB aux = openPantries.get(pantryName);
+	public PantryDB getPantryDB(Long pantryKey){//, String pantryName){
+		PantryDB aux = openPantries.get(pantryKey);
 		if (aux == null){
-			aux = new PantryDB(pantryName);
+			aux = new PantryDB(pantryKey, EndPointCall.getPantryNameFromKey(pantryKey));
 			aux.open();
-			openPantries.put(pantryName,aux);
+			openPantries.put(pantryKey,aux);
 		}
 		return aux;
 	}
 	
+	//#***********************************************************************************#//
 	public class PantryDB {
 		protected final String DATABASE_CREATE;
 		protected final String DATABASE_TABLE;
 		protected boolean isOpen = false;
 		protected DatabaseHelper mDbHelper;
 		protected SQLiteDatabase mDb;
+		private long pantryKey;
 
 		
-		public PantryDB(String database_table) {
+		public PantryDB(Long pantryKey, String pantryName) {
 			//this.mCtx = context;
-			this.DATABASE_TABLE = database_table;
-			this.DATABASE_CREATE = m_DATABASE_CREATE(database_table);
+			this.pantryKey = pantryKey;
+			this.DATABASE_TABLE = "table_" + pantryKey + "_" + pantryName ;
+			this.DATABASE_CREATE = m_DATABASE_CREATE();
 			this.mDbHelper = new DatabaseHelper(mCtx);
 		}
-		private String m_DATABASE_CREATE(String database_table) {
-			return "create table " + database_table + " ("
+		private String m_DATABASE_CREATE() {
+			return "create table " + this.DATABASE_TABLE + " ("
 				+ LocalObject.STR_O_LONG_KEY + " integer primary key, "
 				+ LocalObject.STR_O_LONG_TIMESTAMP + " integer not null, "
 				+ LocalObject.STR_O_INT_CHANGED + " integer not null, "
@@ -174,6 +181,19 @@ public class PantriesDbAdapter {
 		}
 		public List<LocalMetaProduct> getAllChangedProducts() {
 			return null;
+		}
+		public PantrySynchronizationDTO getPantrySynchronizationDTO() {
+			List<LocalMetaProduct> listMP = this.getAllProducts();
+			List<MetaProduct> aux = LocalMetaProduct.convert(listMP);
+			PantrySynchronizationDTO dto = new PantrySynchronizationDTO();
+			dto.setListMetaProducts(aux);
+			dto.setPantryKey(this.pantryKey);
+			dto.setPantryTimeStamp(new DateTime(new Date())); //FIXME ERROR
+			if(dto.getPantryKey() == 0 ) throw new RuntimeException(); //FIXME REMOVE ME
+			return dto;
+		}
+		public void update(PantrySynchronizationDTO result) {
+			// TODO ERROR Auto-generated method stub
 		}
 	}
 }

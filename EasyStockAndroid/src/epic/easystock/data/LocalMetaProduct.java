@@ -1,7 +1,11 @@
 package epic.easystock.data;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
+import epic.easystock.apiEndpoint.model.Key;
+import epic.easystock.apiEndpoint.model.MetaProduct;
 import epic.easystock.io.EndPointCall;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -11,7 +15,17 @@ import android.database.Cursor;
 public class LocalMetaProduct extends LocalObject{
 	private final LocalProduct localProduct;
 	private Double amount;
-	
+	public static List<MetaProduct> convert(List<LocalMetaProduct> list){
+		List<MetaProduct> ret = new ArrayList<MetaProduct>();
+		for (LocalMetaProduct localMetaProduct : list) {
+			MetaProduct mp = new MetaProduct();
+			mp.setProduct(localMetaProduct.getKey());
+			mp.setTimeStamp(localMetaProduct.getTimestamp());
+			mp.setAmount(localMetaProduct.getAmount());
+			ret.add(mp);
+		}
+		return ret;
+	}
 	public LocalMetaProduct(Cursor cursor) {
 		super(cursor);
 		long aux = cursor.getLong(cursor.getColumnIndex(STR_MP_LONG_PRODUCT_KEY));

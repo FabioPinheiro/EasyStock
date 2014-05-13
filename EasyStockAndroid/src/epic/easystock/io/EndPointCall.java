@@ -43,7 +43,8 @@ public class EndPointCall {
 	static private final String PREFS_LAST_USED_PANTRY = "PREFS_LAST_USED_PANTRY";
 	static private final String PREFS_NEXT_LOCAL_KEY = "PREFS_NEXT_LOCAL_KEY";
 	
-	static private final String ERROR_PANTRY_NAME = "ERROR_PANTRY_NAME";
+	//static private final String ERROR_PANTRY_NAME = "ERROR_PANTRY_NAME";
+	static private final Long ERROR_PANTRY_KEY = 0l;
 
 	static public final String FAIL_TO_LIST_PRODUCTS = "FAIL_TO_LIST_PRODUCTS";
 	static public final String FAIL_TO_LIST_PANTRY_PRODUCTS = "FAIL_TO_LIST_PANTRY_PRODUCTS";
@@ -52,11 +53,13 @@ public class EndPointCall {
 	static public final String FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME = "FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME";
 	static public final String FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER = "FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER";
 	static public final String FAIL_PRODUCT_ALREADY_IN_THE_PANTRY = "FAIL_PRODUCT_ALREADY_IN_THE_PANTRY";
+	static public final String FAIL_TO_SYNCHRONIZED_PANTRY = "FAIL_TO_SYNCHRONIZED_PANTRY";
 
 	static public final String INSERT_NEW_USER_IN_APPENGINE = "INSERT_NEW_USER_IN_APPENGINE";
 	static public final String PANTRY_IS_EMPTY = "PANTRY_IS_EMPTY";
 	public static final String PRODUCT_ADDED_TO_LOCAL_PANTRY = "PRODUCT_ADDED_TO_LOCAL_PANTRY";
 	public static final String PANTRY_IS_ALREADY_OPEN = "PANTRY_IS_ALREADY_OPEN";
+	static public final String PANTRY_SYNCHRONIZED = "PANTRY_SYNCHRONIZED";
 
 	static public final String DONE = "AsyncTask Done"; // FIXME remove!!! use
 	static public final String DEBUG = "DEBUG";
@@ -84,27 +87,45 @@ public class EndPointCall {
 		return (!Strings.isNullOrEmpty(mEmailAccount) ? true : false);
 	}
 	public static PantriesDbAdapter pantriesDbAdapter =null;
-	public static PantriesDbAdapter.PantryDB getPantryDB(String selectedPantry) {
-		if(Strings.isNullOrEmpty(selectedPantry)){
+	public static void setLastUsedPantry(long pantryKey){
+		getPantryDB(pantryKey);
+	}
+	public static PantriesDbAdapter.PantryDB getPantryDB(Long pantryKey){//, String selectedPantry) {
+		if(pantryKey == null || pantryKey == 0){
+			msg(EndPointCall_TAG,"getSelectedPantry is null or 0"); //FIXME TEXT
+			Log.e(EndPointCall_TAG, "getSelectedPantry is null or 0"); //FIXME TEXT
+			throw new RuntimeException();
+		}
+//LIXO		if(Strings.isNullOrEmpty(selectedPantry)){
+//			msg(EndPointCall_TAG,"getSelectedPantry is null or empty"); //FIXME TEXT
+//			Log.e(EndPointCall_TAG, "getSelectedPantry is null or empty"); //FIXME TEXT
+//			throw new RuntimeException();
+//		}
+		else{
+			globalSettings.edit().putLong(PREFS_LAST_USED_PANTRY, pantryKey).commit();
+			if(pantriesDbAdapter == null){
+				throw new RuntimeException();
+			}
+			return pantriesDbAdapter.getPantryDB(pantryKey);//, selectedPantry);
+		}
+	}
+	public static PantriesDbAdapter.PantryDB getPantryDB(String pantryName){//, String selectedPantry) {
+		if(Strings.isNullOrEmpty(pantryName)){
 			msg(EndPointCall_TAG,"getSelectedPantry is null or empty"); //FIXME TEXT
 			Log.e(EndPointCall_TAG, "getSelectedPantry is null or empty"); //FIXME TEXT
 			throw new RuntimeException();
 		}else{
-			globalSettings.edit().putString(PREFS_LAST_USED_PANTRY, selectedPantry).commit();
-			if(pantriesDbAdapter == null){
-				throw new RuntimeException();
-			}
-			return pantriesDbAdapter.getPantryDB(selectedPantry);
+			long pantryKey = userBdAdapter.getPantryKey(EndPointCall.getEmailAccount(), pantryName);
+			return pantriesDbAdapter.getPantryDB(pantryKey);//, selectedPantry);
 		}
 	}
+	public static String getPantryNameFromKey(Long pantryKey) {
+		return userBdAdapter.getPantryName(pantryKey);
+	}
 	public static String getPantryName() {
-		String aux = globalSettings.getString(PREFS_LAST_USED_PANTRY, ERROR_PANTRY_NAME);
-		if(Strings.isNullOrEmpty(aux)){
-			msg(EndPointCall_TAG,"getPantryName is null or empty"); //FIXME TEXT
-			Log.e(EndPointCall_TAG, "getPantryName is null or empty"); //FIXME TEXT
-			throw new RuntimeException();
-		}
-		return aux;
+		Long aux = globalSettings.getLong(PREFS_LAST_USED_PANTRY, ERROR_PANTRY_KEY);
+		if(aux == ERROR_PANTRY_KEY) throw new RuntimeException(); //FIXME REMOVE
+		return getPantryNameFromKey(aux);
 	}
 	/*LIXO FIXME UHWEKFHWKJFHLWJI public static PantryDbAdapter getPantryDbAdapteri() {
 		if(pantryDbAdapter == null) throw new RuntimeException(); //FIXME
@@ -145,6 +166,7 @@ public class EndPointCall {
 		Toast.makeText(EndPointCall.getGlobalContext(), message, Toast.LENGTH_LONG).show();
 	}
 	static public void msg(String TAG, String message) {
+		Log.i(TAG, message);
 		msg(TAG + ":" + message); // FIXME tag is for debug
 	}
 	static public void msgNotSignedIn() {
@@ -256,9 +278,9 @@ public class EndPointCall {
 	}
 	static public void SynchronizePantry(PantryDB pantryDB) {
 		if(isConnected()){
-			new SynchronizePantryTask(pantryDB);
+			new SynchronizePantryTask(pantryDB).execute();
 		}else{
-			msg(EndPointCall_TAG, "SynchronizePantry_FAIL"); //FIXME TEXT e ver estado
+			msg(EndPointCall_TAG, "SynchronizePantry_FAIL: is not Connected"); //FIXME TEXT e ver estado
 		}
 	}
 }

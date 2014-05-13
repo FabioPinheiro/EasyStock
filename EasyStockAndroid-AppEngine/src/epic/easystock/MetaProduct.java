@@ -9,16 +9,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 import com.google.appengine.api.datastore.Key;
 
-//@Entity
+@Entity
 public class MetaProduct {
 	
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//private Key key;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Key key;
 	
 	private Long product;
 	

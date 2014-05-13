@@ -9,25 +9,43 @@ import android.util.Log;
 import com.google.api.client.util.Strings;
 
 import epic.easystock.apiEndpoint.ApiEndpoint;
-import epic.easystock.data.LocalMetaProduct;
+import epic.easystock.apiEndpoint.model.Pantry;
+import epic.easystock.apiEndpoint.model.PantrySynchronizationDTO;
 import epic.easystock.data.PantriesDbAdapter.PantryDB;
 
-public class SynchronizePantryTask extends AsyncTask<Void, Void, Void> {
+public class SynchronizePantryTask extends AsyncTask<Void, Void, PantrySynchronizationDTO> {
 	private final String LOG_TAG = this.getClass().getCanonicalName();
 	private PantryDB pantryDB;
+	private boolean fail_to_update = false;
 	
 	SynchronizePantryTask(PantryDB pantryDB) {
 		this.pantryDB = pantryDB;
+		//EndPointCall.msg(LOG_TAG, "AQUI 3");
 	}
 	
 	@Override
-	protected void onPostExecute(Void result) {
+	protected void onPostExecute(PantrySynchronizationDTO result) {
 		super.onPostExecute(result);
-		List<LocalMetaProduct> list = pantryDB.getAllChangedProducts();
+		if(fail_to_update){
+			EndPointCall.msg(LOG_TAG, EndPointCall.FAIL_TO_SYNCHRONIZED_PANTRY);
+		}else{
+			pantryDB.update(result);
+			EndPointCall.msg(LOG_TAG, EndPointCall.PANTRY_SYNCHRONIZED);
+		}
 	}
 	
 	@Override
-	protected Void doInBackground(Void... vvv) {
+	protected PantrySynchronizationDTO doInBackground(Void... vvv) {
+		//List<LocalMetaProduct> list = pantryDB.getAllChangedProducts();
+		PantrySynchronizationDTO dto = pantryDB.getPantrySynchronizationDTO();
+		try {
+			ApiEndpoint api = EndPointCall.getApiEndpoint();
+			return api.updatePantry(dto).execute();
+		} catch (IOException e) {
+			fail_to_update = true;
+			Log.e(LOG_TAG, "Fail to update", e); //FIXME TEXT
+		}
+		
 		return null;
 	}
 }

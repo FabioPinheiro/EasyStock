@@ -63,7 +63,7 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 				newList.add(metaP);
 			}
 			pantry.setProducts(newList);
-			EndPointCall.getApiEndpoint().updatePantry(pantry).execute();
+			//ERROR EndPointCall.getApiEndpoint().updatePantry(pantry).execute();
 			Log.i(LOG_TAG, "AddProductTask:" + "Product added to pantry");
 			throw new RuntimeException();
 			//FIXME return new LocalMetaProduct(newProd.getBarCode(), newProd.getName(), newProd.getDescription(), newProd.getKey(), metaP.getAmount());
