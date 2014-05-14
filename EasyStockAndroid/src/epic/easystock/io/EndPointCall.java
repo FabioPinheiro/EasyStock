@@ -55,12 +55,14 @@ public class EndPointCall {
 	static public final String FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER = "FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER";
 	static public final String FAIL_PRODUCT_ALREADY_IN_THE_PANTRY = "FAIL_PRODUCT_ALREADY_IN_THE_PANTRY";
 	static public final String FAIL_TO_SYNCHRONIZED_PANTRY = "FAIL_TO_SYNCHRONIZED_PANTRY";
+	static public final String FAIL_TO_SYNCHRONIZED_USER = "FAIL_TO_SYNCHRONIZED_USER";
 	//___TAGS
 	static public final String INSERT_NEW_USER_IN_APPENGINE = "INSERT_NEW_USER_IN_APPENGINE";
 	static public final String PANTRY_IS_EMPTY = "PANTRY_IS_EMPTY";
 	static public final String PRODUCT_ADDED_TO_LOCAL_PANTRY = "PRODUCT_ADDED_TO_LOCAL_PANTRY";
 	static public final String PANTRY_IS_ALREADY_OPEN = "PANTRY_IS_ALREADY_OPEN";
 	static public final String PANTRY_SYNCHRONIZED = "PANTRY_SYNCHRONIZED";
+	static public final String USER_SYNCHRONIZED = "USER_SYNCHRONIZED";
 	//DEBUG_TAGS
 	static public final String DONE = "AsyncTask Done"; // FIXME remove!!! use
 	static public final String DEBUG = "DEBUG";
