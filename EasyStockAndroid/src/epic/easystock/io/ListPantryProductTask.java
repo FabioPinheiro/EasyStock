@@ -8,17 +8,17 @@ import android.os.AsyncTask;
 import android.util.Log;
 import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.data.LocalMetaProduct;
-import epic.easystock.data.PantriesDbAdapter;
+import epic.easystock.data.PantriesDBAdapter;
 
 public class ListPantryProductTask extends AsyncTask<Context, Integer, List<LocalMetaProduct>> {
 	private final String LOG_TAG = this.getClass().getCanonicalName();
 	private MetaProductAdapter adapter;
-	private PantriesDbAdapter.PantryDB pantryDB;
+	private PantriesDBAdapter.PantryDB pantryDB;
 	private String pantryID;
 	private Boolean pantryLoaded;
 	private Boolean productLoaded;
 	
-	public ListPantryProductTask(MetaProductAdapter adapter, PantriesDbAdapter.PantryDB pantryDB, String pantryID) {
+	public ListPantryProductTask(MetaProductAdapter adapter, PantriesDBAdapter.PantryDB pantryDB, String pantryID) {
 		this.adapter = adapter;
 		this.pantryID = pantryID;
 		this.pantryDB = pantryDB;

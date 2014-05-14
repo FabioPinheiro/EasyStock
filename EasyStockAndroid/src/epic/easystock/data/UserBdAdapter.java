@@ -131,7 +131,7 @@ public class UserBdAdapter {
 	 * 
 	 * @return Cursor over all notes
 	 */
-	public Cursor fetchAllPantry() {
+	private Cursor fetchAllPantry() {
 		return mDb.query(DATABASE_TABLE, null, null, null, null, null, null);
 	}
 	/**
@@ -152,7 +152,7 @@ public class UserBdAdapter {
 		cursor.close();
 		return users_pantrys;
 	}
-	private/*FIXME public*/ List<UserPantryAux> avalablePantrysFromUser(String user) {
+	public List<UserPantryAux> avalablePantrysFromUser(String user) {
 		List<UserPantryAux> list = getAllPantry();
 		List<UserPantryAux> ret = new ArrayList<UserPantryAux>();
 		for (UserPantryAux el : list) {

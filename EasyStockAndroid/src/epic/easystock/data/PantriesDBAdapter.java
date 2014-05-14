@@ -45,14 +45,14 @@ import android.util.Log;
  * 
  * This has been improved from the first version of this tutorial through the addition of better error handling and also using returning a Cursor instead of using a collection of inner classes (which is less scalable and not recommended).
  */
-public class PantriesDbAdapter {
+public class PantriesDBAdapter {
 	private final String LOG_TAG = this.getClass().getCanonicalName();
 	private static final String DATABASE_NAME = "pantry_data";
 	private static final int DATABASE_VERSION = 1;
 	private static Map<Long, PantryDB> openPantries = new TreeMap<Long, PantryDB>();
 	private Context mCtx;
 	
-	public PantriesDbAdapter(Context context) {
+	public PantriesDBAdapter(Context context) {
 		this.mCtx = context;
 	}
 	public void closeAllPantries(){

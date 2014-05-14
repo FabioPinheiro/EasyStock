@@ -11,30 +11,38 @@ import com.google.api.client.util.Strings;
 import epic.easystock.apiEndpoint.ApiEndpoint;
 import epic.easystock.apiEndpoint.model.Pantry;
 import epic.easystock.apiEndpoint.model.PantrySynchronizationDTO;
+import epic.easystock.apiEndpoint.model.User;
 import epic.easystock.data.PantriesDBAdapter.PantryDB;
+import epic.easystock.data.UserBdAdapter.UserPantryAux;
 
-public class SynchronizePantryTask extends AsyncTask<Void, Void, PantrySynchronizationDTO> {
+public class SynchronizeUserDBTask extends AsyncTask<Void, Void, Void> {
 	private final String LOG_TAG = this.getClass().getCanonicalName();
-	private PantryDB pantryDB;
+	private User user;
 	private boolean fail_to_update = false;
 	
-	SynchronizePantryTask(PantryDB pantryDB) {
-		this.pantryDB = pantryDB;
+	SynchronizeUserDBTask(User user) {
+		this.user = user;
 	}
 	
 	@Override
-	protected void onPostExecute(PantrySynchronizationDTO result) {
-		super.onPostExecute(result);
+	protected void onPostExecute(Void vvv) {
+		super.onPostExecute(vvv);
+		List<UserPantryAux> aux = EndPointCall.getUserDBAdapter().avalablePantrysFromUser(user.getEmail());
+		for (UserPantryAux userPantryAux : aux) {
+			PantryDB pantryDB = EndPointCall.getPantryDB(userPantryAux.pantryID);
+			//SynchronizePantry(pantryDB); 
+			new SynchronizePantryTask(pantryDB).execute();//FIXME isto esta a quiar multiplas  use .get()
+		}
 		if(fail_to_update){
-			EndPointCall.msg(LOG_TAG, EndPointCall.FAIL_TO_SYNCHRONIZED_PANTRY);
+			EndPointCall.msg(LOG_TAG, EndPointCall.FAIL_TO_SYNCHRONIZED_USER);
 		}else{
 			pantryDB.update(result);
-			EndPointCall.msg(LOG_TAG, EndPointCall.PANTRY_SYNCHRONIZED);
+			EndPointCall.msg(LOG_TAG, EndPointCall.USER_SYNCHRONIZED);
 		}
 	}
 	
 	@Override
-	protected PantrySynchronizationDTO doInBackground(Void... vvv) {
+	protected User doInBackground(Void... vvv) {
 		//List<LocalMetaProduct> list = pantryDB.getAllChangedProducts();
 		PantrySynchronizationDTO dto = pantryDB.getPantrySynchronizationDTO();
 		try {

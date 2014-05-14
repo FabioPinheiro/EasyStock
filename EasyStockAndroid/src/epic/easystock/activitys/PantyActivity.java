@@ -16,13 +16,13 @@ import android.widget.EditText;
 import epic.easystock.R;
 import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.data.LocalMetaProduct;
-import epic.easystock.data.PantriesDbAdapter;
-import epic.easystock.data.PantriesDbAdapter.PantryDB;
+import epic.easystock.data.PantriesDBAdapter;
+import epic.easystock.data.PantriesDBAdapter.PantryDB;
 import epic.easystock.io.EndPointCall;
 
 public class PantyActivity extends ListActivity {
 	private final String LOG_TAG = this.getClass().getCanonicalName();
-	private PantriesDbAdapter.PantryDB pantryDB;
+	private PantriesDBAdapter.PantryDB pantryDB;
 	String mail;
 	Button addProduct;
 	MetaProductAdapter adapter;
@@ -39,7 +39,7 @@ public class PantyActivity extends ListActivity {
 		setListAdapter(adapter);
 		
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		final String[] pantreisName = EndPointCall.getUserDbAdapter().avalablePantrysNamesFromUser(EndPointCall.getEmailAccount());
+		final String[] pantreisName = EndPointCall.getUserDBAdapter().avalablePantrysNamesFromUser(EndPointCall.getEmailAccount());
 		alert.setTitle("Select Pantry");
 		alert.setItems(pantreisName, new DialogInterface.OnClickListener() {
 			@Override

@@ -12,8 +12,8 @@ import epic.easystock.apiEndpoint.model.Product;
 import epic.easystock.assist.MetaProductAdapter;
 import epic.easystock.data.LocalMetaProduct;
 import epic.easystock.data.LocalProduct;
-import epic.easystock.data.PantriesDbAdapter;
-import epic.easystock.data.PantriesDbAdapter.PantryDB;
+import epic.easystock.data.PantriesDBAdapter;
+import epic.easystock.data.PantriesDBAdapter.PantryDB;
 
 //FIXME isto tem muito problemasde syscronização(falar com ofabio)
 public class AddProductToLocalPantryTask extends AsyncTask<Void, Integer, LocalMetaProduct> {
@@ -21,12 +21,12 @@ public class AddProductToLocalPantryTask extends AsyncTask<Void, Integer, LocalM
 
 	private MetaProductAdapter adapter;
 	private String mail;
-	private PantriesDbAdapter.PantryDB pantryDB;
+	private PantriesDBAdapter.PantryDB pantryDB;
 	private boolean fail_product_already_in_the_pantry = false;
 	private boolean error_no_pantryDB_createProduct = false;
 	private LocalMetaProduct product;
 
-	public AddProductToLocalPantryTask(MetaProductAdapter adapter, PantriesDbAdapter.PantryDB pantryDB, LocalMetaProduct localMetaProduct) {
+	public AddProductToLocalPantryTask(MetaProductAdapter adapter, PantriesDBAdapter.PantryDB pantryDB, LocalMetaProduct localMetaProduct) {
 		this.adapter = adapter;
 		this.mail = EndPointCall.getEmailAccount();
 		this.pantryDB = pantryDB;

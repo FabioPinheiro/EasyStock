@@ -17,7 +17,7 @@ import epic.easystock.apiEndpoint.model.User;
 import epic.easystock.apiEndpoint.model.UserPantry;
 import epic.easystock.apiEndpoint.model.UserPantryDTO;
 import epic.easystock.data.LocalMetaProduct;
-import epic.easystock.data.PantriesDbAdapter;
+import epic.easystock.data.PantriesDBAdapter;
 
 enum State {NULL, FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME , FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER,INSERT_NEW_USER_IN_APPENGINE}
 
@@ -34,10 +34,10 @@ public class NewPantryTask extends AsyncTask<Void, Integer, UserPantry> {
 	protected void onPostExecute(UserPantry result) {
 		super.onPostExecute(result);
 		if(result != null){
-			EndPointCall.getUserDbAdapter().createPantry(EndPointCall.getEmailAccount(), result.getPantry(), pantryName);
+			EndPointCall.getUserDBAdapter().createPantry(EndPointCall.getEmailAccount(), result.getPantry(), pantryName);
 			EndPointCall.setLastUsedPantry(result.getPantry());
 			//PantriesDbAdapter.PantryDB aux = EndPointCall.getPantryDB(pantryName);//FIXME REMOVE
-			EndPointCall.msg(EndPointCall.DEBUG, "! Pantry size= "+ EndPointCall.getUserDbAdapter().getAllPantry().size()); //FIXME REMOVE
+			EndPointCall.msg(EndPointCall.DEBUG, "! Pantry size= "+ EndPointCall.getUserDBAdapter().getAllPantry().size()); //FIXME REMOVE
 			EndPointCall.msg(LOG_TAG, EndPointCall.DONE);
 		}
 		if(state == State.FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME)

@@ -26,7 +26,7 @@ public class MetaProduct {
 	private Date TimeStamp;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Pantry pantry;
+	private Pantry pantry; //FIXME isto esta aqui bem?
 	
 	public Long getProduct() {
 		return product;
