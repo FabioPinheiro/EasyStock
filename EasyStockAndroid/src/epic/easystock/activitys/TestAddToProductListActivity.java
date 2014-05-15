@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +28,7 @@ import epic.easystock.io.EndPointCall;
 
 public class TestAddToProductListActivity extends Activity {
 
-	//LIXO private OnTouchListener addListener = null;
+	// LIXO private OnTouchListener addListener = null;
 	private static String mail;
 
 	@Override
@@ -43,7 +47,14 @@ public class TestAddToProductListActivity extends Activity {
 	static final int REQUEST_IMAGE_CAPTURE = 1;
 
 	public void takePic(View view) {
-		dispatchTakePictureIntent();
+		// dispatchTakePictureIntent();
+		dispatchBarcode();
+
+	}
+
+	private void dispatchBarcode() {
+		IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+		scanIntegrator.initiateScan();
 	}
 
 	static String mCurrentPhotoPath;
@@ -102,10 +113,34 @@ public class TestAddToProductListActivity extends Activity {
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-			setPic();
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+		/*
+		 * protected void onActivityResult(int requestCode, int resultCode,
+		 * Intent data) { if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode
+		 * == RESULT_OK) { setPic(); }
+		 */
+
+		// retrieve scan result
+		IntentResult scanningResult = IntentIntegrator.parseActivityResult(
+				requestCode, resultCode, intent);
+
+		if (scanningResult != null) {
+			// we have a result
+			String scanContent = scanningResult.getContents();
+			String scanFormat = scanningResult.getFormatName();
+			((EditText) findViewById(R.id.activity_test_add_to_product_list_barCode))
+					.setText(scanContent);
+			/*
+			 * formatTxt.setText("FORMAT: " + scanFormat);
+			 * contentTxt.setText("CONTENT: " + scanContent);
+			 */
+		} else {
+			Toast toast = Toast.makeText(getApplicationContext(),
+					"No scan data received!", Toast.LENGTH_SHORT);
+			toast.show();
 		}
+
 	}
 
 	private void setPic() {
@@ -137,10 +172,15 @@ public class TestAddToProductListActivity extends Activity {
 
 	public void addXPTO(View view) {
 		// new EndpointsTask().execute(getApplicationContext());
-		String name = ((EditText) findViewById(R.id.activity_test_add_to_product_list_name)).getText().toString();
-		Long barCode = Long.parseLong(((EditText) findViewById(R.id.activity_test_add_to_product_list_barCode)).getText().toString());
-		String description = ((EditText) findViewById(R.id.activity_test_add_to_product_list_description)).getText().toString();
-		EndPointCall.addToProductListTask(name, barCode, description,mCurrentPhotoPath);
+		String name = ((EditText) findViewById(R.id.activity_test_add_to_product_list_name))
+				.getText().toString();
+		Long barCode = Long
+				.parseLong(((EditText) findViewById(R.id.activity_test_add_to_product_list_barCode))
+						.getText().toString());
+		String description = ((EditText) findViewById(R.id.activity_test_add_to_product_list_description))
+				.getText().toString();
+		EndPointCall.addToProductListTask(name, barCode, description,
+				mCurrentPhotoPath);
 	}
 
 	/*
