@@ -112,13 +112,13 @@ public class ApiEndpoint {
 		}
 		return user;
 	}
-	/**
+	/*
 	 * This method is used for updating an existing entity. If the entity does not exist in the datastore, an exception is thrown. It uses HTTP PUT method.
 	 * 
 	 * @param user
 	 *            the entity to be updated.
 	 * @return The updated entity.
-	 */
+	 *
 	@ApiMethod(name = "updateUser")
 	public User updateUser(User user) {
 		EntityManager mgr = getEntityManager();
@@ -131,13 +131,13 @@ public class ApiEndpoint {
 			mgr.close();
 		}
 		return user;
-	}
-	/**
+	}*/
+	/*
 	 * This method removes the entity with primary key id. It uses HTTP DELETE method.
 	 * 
 	 * @param id
 	 *            the primary key of the entity to be deleted.
-	 */
+	 *
 	@ApiMethod(name = "removeUser")
 	public void removeUser(@Named("id") Long id) {//ERROR LONG ?
 		EntityManager mgr = getEntityManager();
@@ -147,7 +147,7 @@ public class ApiEndpoint {
 		} finally {
 			mgr.close();
 		}
-	}
+	}*/
 	private boolean containsUser(User user) {
 		EntityManager mgr = getEntityManager();
 		boolean contains = true;
@@ -177,6 +177,10 @@ public class ApiEndpoint {
 			if (users.size() > 0){
 				user = users.get(0);
 				for (UserPantry iii : user.getUserPantriesList());
+				
+				if(user.getUserPantriesList() == null)
+					user.setUserPantriesList(new ArrayList<UserPantry>()); //FIXME Não gosto
+				
 			}
 		} finally {
 			mgr.close();
