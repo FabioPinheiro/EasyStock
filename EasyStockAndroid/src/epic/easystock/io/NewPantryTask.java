@@ -62,12 +62,9 @@ public class NewPantryTask extends AsyncTask<Void, Integer, UserPantry> {
 					state=State.FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER;
 					return null;// FIXME update
 				}*/
-				User user = EndPointCall.getUser();
-				user = api1.findUserByMail(user).execute();
+				User user = api1.getUserByEmail(EndPointCall.getEmailAccount()).execute();
 				if (user == null) {
-					user = api1.insertUser(EndPointCall.getUser()).execute(); //FIXME isto devia esta noutro sitio
-					Log.e(LOG_TAG, EndPointCall.INSERT_NEW_USER_IN_APPENGINE); //FIXME Log.i verificar só se funciona
-					state=State.INSERT_NEW_USER_IN_APPENGINE;
+					throw new RuntimeException(); //FIXME REMOVE
 				}
 				UserPantryDTO aux = new UserPantryDTO();
 				aux.setUser(user);

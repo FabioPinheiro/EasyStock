@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -21,10 +21,11 @@ public class UserPantry {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key key;
-	@OneToOne(cascade = CascadeType.ALL)
-	private Long pantry;
-	@OneToOne(cascade = CascadeType.ALL)
-	private Long user; // FIXME isto não devia ser long!!
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Long pantry; //FIXME 
+	
+	@ManyToOne(cascade = CascadeType.ALL) //@OneToOne(cascade = CascadeType.ALL)
+	private User user; // FIXME isto não devia ser long!!
 	private PermissionType permissionType; //TODO
 	private Date userPantryTimeStamp; //TODO
 	
@@ -36,11 +37,11 @@ public class UserPantry {
 		this.pantry = pantry;
 	}
 	
-	public Long getUser() {
+	public User getUser() {
 		return user;
 	}
 	
-	public void setUser(Long user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	

@@ -84,13 +84,11 @@ public class EndPointCall {
 		return mEmailAccount;
 	}
 	
-	static public User getUser() {
+	/*static public User getUser() { //REMOVE 
 		User user = new User();
 		user.setEmail(EndPointCall.getEmailAccount());
-		String[] uMail = EndPointCall.getEmailAccount().split("@");
-		user.setNick(uMail[0]);
 		return user;
-	}
+	}*/
 	
 	static public void setLastUsedPantry(long pantryKey) {
 		getPantryDB(pantryKey);
@@ -218,6 +216,7 @@ public class EndPointCall {
 		userBdAdapter = new UserBdAdapter(EndPointCall.getGlobalContext());
 		userBdAdapter.open();
 		pantriesDbAdapter = new PantriesDBAdapter(EndPointCall.getGlobalContext());
+		EndPointCall.SynchronizeAll();
 	}
 	
 	static public void onInit(Activity activity) {
@@ -300,12 +299,11 @@ public class EndPointCall {
 		}
 	}
 	
-	static public void SynchronizePantries() {
+	static public void SynchronizeAll() {
 		if (isConnected()) {
-			User user = EndPointCall.getUser();
-			new SynchronizeUserDBTask().execute().get();
+			new SynchronizeAll(EndPointCall.getEmailAccount()).execute();
 		} else {
-			msg(EndPointCall_TAG, "SynchronizePantries_FAIL: is not Connected"); // FIXME TEXT e ver estado
+			msg(EndPointCall_TAG, "Synchronize_FAIL: is not Connected"); // FIXME TEXT e ver estado
 		}
 	}
 }
