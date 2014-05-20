@@ -52,7 +52,13 @@ public class SynchronizeAll extends AsyncTask<Void, Void, List<Pantry>> {
 				Log.e(LOG_TAG, EndPointCall.INSERT_NEW_USER_IN_APPENGINE);
 				//state=State.INSERT_NEW_USER_IN_APPENGINE; //FIXME TODO
 			}
+
+			if(user.getUserPantriesList() == null){
+				user.setUserPantriesList(new ArrayList<UserPantry>()); //ERROR REMOVE Por corrigir
+				Log.e(LOG_TAG, "(user.getUserPantriesList() == null");
+			}
 			List<UserPantry> remoteUserPantries = user.getUserPantriesList();  // ERROR is null !!! 
+			
 			//FIXME List<UserPantry> remoteUserPantries = api.listUserPantryOfUser(email).execute().getItems();
 			List<UserPantryAux> all = EndPointCall.getUserDBAdapter().getAllPantry();
 			List<UserPantry> userPantryToSync = new ArrayList<UserPantry>();

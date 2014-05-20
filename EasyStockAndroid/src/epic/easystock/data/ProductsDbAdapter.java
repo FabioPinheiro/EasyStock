@@ -162,4 +162,14 @@ public class ProductsDbAdapter {
 		Cursor cursor = fetchProductByKey(key);
 		return new LocalProduct(cursor);
 	}
+	/*public void synchronizeAllProducts(Collection<LocalProduct> products) {
+		for (LocalProduct lmp : products) {
+			try {
+				createProduct(lmp);
+			} catch (SQLiteConstraintException e) {
+				Log.e("PantryBDAdapter", "error putAllProducts");
+				updateProduct(lmp);
+			}
+		}
+	}*/
 }
