@@ -107,7 +107,7 @@ public class ProductsDbAdapter {
 	public Cursor fetchAllProduct() {
 		return mDb.query(DATABASE_TABLE, null, null, null, null, null, null);
 	}
-	public void putAllProducts(Collection<LocalProduct> products) {
+	/*public void putAllProducts(Collection<LocalProduct> products) {
 		for (LocalProduct lmp : products) {
 			try {
 				createProduct(lmp);
@@ -116,7 +116,7 @@ public class ProductsDbAdapter {
 				updateProduct(lmp);
 			}
 		}
-	}
+	}*/
 	public List<LocalProduct> getAllProducts() {
 		List<LocalProduct> products = new ArrayList<LocalProduct>();
 		Cursor cursor = mDb.query(DATABASE_TABLE, null, null, null, null, null, null);
@@ -162,14 +162,25 @@ public class ProductsDbAdapter {
 		Cursor cursor = fetchProductByKey(key);
 		return new LocalProduct(cursor);
 	}
-	/*public void synchronizeAllProducts(Collection<LocalProduct> products) {
+	public void synchronizeAllProducts(Collection<LocalProduct> products) {
 		for (LocalProduct lmp : products) {
 			try {
-				createProduct(lmp);
+				
+				if (haveProduct(lmp.getKey())){
+					updateProduct(lmp); //FIXME pode não ser nessecario
+					Log.d(LOG_TAG,"synchronizeAllProducts: createProduct");
+				}else {
+					createProduct(lmp);
+					Log.d(LOG_TAG,"synchronizeAllProducts: createProduct");
+				}
+				
 			} catch (SQLiteConstraintException e) {
-				Log.e("PantryBDAdapter", "error putAllProducts");
-				updateProduct(lmp);
+				Log.e(LOG_TAG, "error synchronizeAllProducts"); //TEXT 
 			}
 		}
-	}*/
+	}
+	private boolean haveProduct(long key) {
+		Cursor cursor = fetchProductByKey(key);
+		return cursor.isAfterLast() ? true : false;
+	}
 }

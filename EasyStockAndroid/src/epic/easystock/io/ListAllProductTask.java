@@ -39,7 +39,7 @@ public class ListAllProductTask extends AsyncTask<Void, Void, List<LocalProduct>
 			if (gottedFrom == FROM.LOCAL_DATA_BASE) {
 				//NONE !! Update datastore in the future
 			}else if (gottedFrom == FROM.APP_ENGINE) {
-				EndPointCall.getProductsDbAdapter().putAllProducts(result);
+				EndPointCall.getProductsDbAdapter().synchronizeAllProducts(result);
 				EndPointCall.msg("AQUI size" + result.size());
 			}
 			if(adapter != null){
