@@ -20,17 +20,17 @@ public class UserPantryDTO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key key;
 	@ManyToMany(cascade = CascadeType.ALL)
-	private User user;
+	private String email; //FIXME 
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Pantry pantry;// FIXME
 	private String pantryName;
 	private Date pantryTimeStamp;
 	
-	public User getUser() {
-		return user;
+	public String getEmail() {
+		return email;
 	}
-	public void setUser(User user) {
-		this.user = user;
+	public void setEmail(String user) {
+		this.email = user;
 	}
 	public Pantry getPantry() {
 		return pantry;

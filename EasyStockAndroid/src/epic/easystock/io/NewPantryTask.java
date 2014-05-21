@@ -34,8 +34,8 @@ public class NewPantryTask extends AsyncTask<Void, Integer, UserPantry> {
 	protected void onPostExecute(UserPantry result) {
 		super.onPostExecute(result);
 		if(result != null){
-			EndPointCall.getUserDBAdapter().createPantry(EndPointCall.getEmailAccount(), result.getPantry(), pantryName);
-			EndPointCall.setLastUsedPantry(result.getPantry());
+			EndPointCall.getUserDBAdapter().createPantry(EndPointCall.getEmailAccount(), result.getPantry().getKey(), pantryName);
+			EndPointCall.setLastUsedPantry(result.getPantry().getKey());
 			//PantriesDbAdapter.PantryDB aux = EndPointCall.getPantryDB(pantryName);//FIXME REMOVE
 			EndPointCall.msg(EndPointCall.DEBUG, "! Pantry size= "+ EndPointCall.getUserDBAdapter().getAllPantry().size()); //FIXME REMOVE
 			EndPointCall.msg(LOG_TAG, EndPointCall.DONE);
@@ -62,12 +62,13 @@ public class NewPantryTask extends AsyncTask<Void, Integer, UserPantry> {
 					state=State.FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER;
 					return null;// FIXME update
 				}*/
-				User user = api1.getUserByEmail(EndPointCall.getEmailAccount()).execute();
-				if (user == null) {
-					throw new RuntimeException(); //FIXME REMOVE
-				}
+				//LIXO User user = api1.getUserByEmail(EndPointCall.getEmailAccount()).execute();
+				//LIXO if (user == null) {
+				//LIXO	throw new RuntimeException(); //FIXME REMOVE
+				//LIXO}
 				UserPantryDTO aux = new UserPantryDTO();
-				aux.setUser(user);
+				//LIXO aux.setUser(user);
+				aux.setEmail(EndPointCall.getEmailAccount());
 				//Pantry p = new Pantry().setTimeStamp(new DateTime( new Date()));
 				aux.setPantryTimeStamp(new DateTime( new Date()));
 				aux.setPantry(null); //FIXME isto é suporto não fazer nada mas não tenho acertesa do defalte

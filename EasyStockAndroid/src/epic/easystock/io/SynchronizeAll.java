@@ -10,7 +10,6 @@ import android.util.Log;
 import com.google.api.client.util.Strings;
 
 import epic.easystock.apiEndpoint.ApiEndpoint;
-import epic.easystock.apiEndpoint.ApiEndpoint.GetPantry;
 import epic.easystock.apiEndpoint.model.Pantry;
 import epic.easystock.apiEndpoint.model.PantrySynchronizationDTO;
 import epic.easystock.apiEndpoint.model.User;
@@ -48,7 +47,7 @@ public class SynchronizeAll extends AsyncTask<Void, Void, List<Pantry>> {
 			ApiEndpoint api =  EndPointCall.getApiEndpoint();
 			User user = api.getUserByEmail(EndPointCall.getEmailAccount()).execute();
 			if (user == null) {
-				user = api.insertUser(email).execute();
+				user = api.registerUser(email).execute();
 				Log.e(LOG_TAG, EndPointCall.INSERT_NEW_USER_IN_APPENGINE);
 				//state=State.INSERT_NEW_USER_IN_APPENGINE; //FIXME TODO
 			}
@@ -85,10 +84,10 @@ public class SynchronizeAll extends AsyncTask<Void, Void, List<Pantry>> {
 			//
 			List<Pantry> pantriesToSync = new ArrayList<Pantry>();
 			for (UserPantry  aux : userPantryToSync) { 
-				pantriesToSync.add(EndPointCall.getApiEndpoint().getPantry(aux.getPantry()).execute());
+				pantriesToSync.add(EndPointCall.getApiEndpoint().getPantry(aux.getPantry().getKey()).execute());
 			}
 			for (UserPantry  aux : userPantryToCreate) { 
-				Pantry iii = EndPointCall.getApiEndpoint().getPantry(aux.getPantry()).execute();
+				Pantry iii = EndPointCall.getApiEndpoint().getPantry(aux.getPantry().getKey()).execute();
 				pantriesToSync.add(iii);
 				EndPointCall.getUserDBAdapter().createPantry(email, iii.getKey(), iii.getName());
 			}

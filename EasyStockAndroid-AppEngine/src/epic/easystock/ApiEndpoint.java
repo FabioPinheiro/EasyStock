@@ -16,6 +16,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.TransactionOptions;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
 
 @Api(name = "apiEndpoint", namespace = @ApiNamespace(ownerDomain = "easystock.epic", ownerName = "easystock.epic", packagePath = ""), version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = {
@@ -24,175 +25,79 @@ public class ApiEndpoint {
 	private static EntityManager getEntityManager() {
 		return EMF.get().createEntityManager();
 	}
-	// ################################# USER #################################
-	/**
-	 * This method lists all the entities inserted in datastore. It uses HTTP GET method and paging support.
-	 * 
-	 * @return A CollectionResponse class containing the list of all entities persisted and a cursor to the next page.
-	 */
-	@SuppressWarnings({ "unchecked", "unused" })
-	@ApiMethod(name = "listUser")
-	public CollectionResponse<User> listUser(
-	@Nullable @Named("cursor") String cursorString,
-	@Nullable @Named("limit") Integer limit) {
-		EntityManager mgr = null;
-		Cursor cursor = null;
-		List<User> execute = null;
-		try {
-			mgr = getEntityManager();
-			Query query = mgr.createQuery("select from User as User");
-			if (cursorString != null && cursorString != "") {
-				cursor = Cursor.fromWebSafeString(cursorString);
-				query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
-			}
-			if (limit != null) {
-				query.setFirstResult(0);
-				query.setMaxResults(limit);
-			}
-			execute = (List<User>) query.getResultList();
-			cursor = JPACursorHelper.getCursor(execute);
-			if (cursor != null)
-				cursorString = cursor.toWebSafeString();
-			// Tight loop for fetching all entities from datastore and
-			// accomodate
-			// for lazy fetch.
-			for (User obj : execute);
-		} finally {
-			mgr.close();
-		}
-		return CollectionResponse.<User> builder().setItems(execute)
-		.setNextPageToken(cursorString).build();
-	}
-	/**
-	 * This method gets the entity having primary key id. It uses HTTP GET method.
-	 * 
-	 * @param id
-	 *            return false;
-	 * 
-	 *            the primary key of the java bean.
-	 * @return The entity with primary key id.
-	 */
-	@ApiMethod(name = "getUser")
-	public User getUser(@Named("id") Long id) {
-		EntityManager mgr = getEntityManager();
-		User user = null;
-		try {
-			user = mgr.find(User.class, id); //ERROR id LONG ??
-		} finally {
-			mgr.close();
-		}
-		return user;
-	}
-
 	
-	/**
-	 * This inserts a new entity into App Engine datastore. If the entity already exists in the datastore, an excepti on is thrown. It uses HTTP POST method.
-	 * 
-	 * @param user
-	 *            the entity to be inserted.
-	 * @return The inserted entity.
-	 */
-	@ApiMethod(name = "insertUser")
-	public User insertUser(@Named("userEmail") String userEmail) {
+	// ################################# API INTERFACE ADMIN #################################
+	@ApiMethod(name = "insertProduct")
+	public Product insertProduct(Product product) {
+		EntityManager mgr = getEntityManager();
+		try {
+			if (mContainsProduct(mgr, product)) {
+				throw new EntityExistsException("Object already exists");
+			}
+			mgr.persist(product);
+		} finally {
+			mgr.close();
+		}
+		return product;
+	}
+	
+	@ApiMethod(name = "updateProduct")
+	public Product updateProduct(Product product) {
+		EntityManager mgr = getEntityManager();
+		try {
+			if (!mContainsProduct(mgr, product)) {
+				throw new EntityNotFoundException("Object does not exist");
+			}
+			mgr.persist(product);
+		} finally {
+			mgr.close();
+		}
+		return product;
+	}
+	
+	@ApiMethod(name = "removeProduct")
+	public void removeProduct(@Named("id") Long id) {
+		EntityManager mgr = getEntityManager();
+		try {
+			Product product = mgr.find(Product.class, id);
+			mgr.remove(product);
+		} finally {
+			mgr.close();
+		}
+	}
+	
+	// ################################# API INTERFACE #################################
+	@ApiMethod(name = "registerUser")
+	public User registerUser(@Named("userEmail") String userEmail) { // FIXME não devia reseber nada, devia ir buscar o email ao cretividado
 		EntityManager mgr = getEntityManager();
 		User user = null;
 		try {
-			user = getUserByEmail(userEmail);
+			user = mGetUserByEmail(mgr, userEmail);
 			if (user != null) {
 				throw new EntityExistsException("Object already exists");
 			}
 			user = new User();
 			user.setEmail(userEmail);
 			String[] uMail = userEmail.split("@");
-			user.setNick(uMail[0]); //user.setNick("NICK");  //FIXME
-			user.setUserPantriesList(new ArrayList<UserPantry>());
+			user.setNick(uMail[0]); // user.setNick("NICK"); //FIXME
+			user.setUserPantriesList(new ArrayList<UserPantry>()); //FIXME NOTWORKING
 			mgr.persist(user);
 		} finally {
 			mgr.close();
 		}
 		return user;
 	}
-	/*
-	 * This method is used for updating an existing entity. If the entity does not exist in the datastore, an exception is thrown. It uses HTTP PUT method.
-	 * 
-	 * @param user
-	 *            the entity to be updated.
-	 * @return The updated entity.
-	 *
-	@ApiMethod(name = "updateUser")
-	public User updateUser(User user) {
-		EntityManager mgr = getEntityManager();
-		try {
-			if (!containsUser(user)) {
-				throw new EntityNotFoundException("Object does not exist");
-			}
-			mgr.persist(user);
-		} finally {
-			mgr.close();
-		}
-		return user;
-	}*/
-	/*
-	 * This method removes the entity with primary key id. It uses HTTP DELETE method.
-	 * 
-	 * @param id
-	 *            the primary key of the entity to be deleted.
-	 *
-	@ApiMethod(name = "removeUser")
-	public void removeUser(@Named("id") Long id) {//ERROR LONG ?
-		EntityManager mgr = getEntityManager();
-		try {
-			User user = mgr.find(User.class, id); 
-			mgr.remove(user);
-		} finally {
-			mgr.close();
-		}
-	}*/
-	private boolean containsUser(User user) {
-		EntityManager mgr = getEntityManager();
-		boolean contains = true;
-		try {
-			if (user == null) {
-				return false;
-			}
-			User item = getUserByEmail(user.getEmail());
-			if (item == null) {
-				contains = false;
-			}
-		} finally {
-			mgr.close();
-		}
-		return contains;
-	}
-
+	
 	@ApiMethod(name = "getUserByEmail", path = "getUserByEmail")
-	public User getUserByEmail(@Named("userEmail") String userEmail) {
+	public User getUserByEmaili(@Named("userEmail") String userEmail) { // FIXME getUserByEmaili i
 		EntityManager mgr = getEntityManager();
-		User user = null;
 		try {
-			Query query = mgr.createQuery("SELECT u FROM User u WHERE u.email=:email").setParameter("email", userEmail);
-			query.setFirstResult(0);
-			@SuppressWarnings("unchecked")
-			List<User> users = query.getResultList();
-			if (users.size() > 0){
-				user = users.get(0);
-				for (UserPantry iii : user.getUserPantriesList());
-				
-				if(user.getUserPantriesList() == null)
-					user.setUserPantriesList(new ArrayList<UserPantry>()); //FIXME Não gosto
-				
-			}
+			return mGetUserByEmail(mgr, userEmail);
 		} finally {
 			mgr.close();
 		}
-		return user;
 	}
-	// ################################# USER PANTRY #################################
-	/**
-	 * This method lists all the entities inserted in datastore. It uses HTTP GET method and paging support.
-	 * 
-	 * @return A CollectionResponse class containing the list of all entities persisted and a cursor to the next page.
-	 */
+	
 	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "listUserPantryOfUser")
 	public List<UserPantry> listUserPantryOfUser(@Named("userKey") String userEmail) {
@@ -201,75 +106,46 @@ public class ApiEndpoint {
 		User user = null;
 		try {
 			mgr = getEntityManager();
-			//FIXME User user = getUserByEmail(userEmail);
+			// FIXME User user = getUserByEmail(userEmail);
 			Query query = mgr.createQuery("SELECT u FROM User u WHERE u.email=:email").setParameter("email", userEmail);
 			query.setFirstResult(0);
 			@SuppressWarnings("unchecked")
 			List<User> users = query.getResultList();
-			if (users.size() > 0){
+			if (users.size() > 0) {
 				user = users.get(0);
 				for (UserPantry iii : user.getUserPantriesList());
 			}
-			
 			userPantriesList = user.getUserPantriesList();
 		} finally {
 			mgr.close();
 		}
 		return userPantriesList;
-		//return CollectionResponse.<UserPantry> builder().setItems(execute).setNextPageToken(cursorString).build();
+		// return CollectionResponse.<UserPantry> builder().setItems(execute).setNextPageToken(cursorString).build();
 	}
-//	/**
-//	 * This method gets the entity having primary key id. It uses HTTP GET method.
-//	 * 
-//	 * @param id
-//	 *            the primary key of the java bean.
-//	 * @return The entity with primary key id.
-//	 */
-//	@ApiMethod(name = "getUserPantry")
-//	public UserPantry getUserPantry(@Named("id") Long id) {
-//		EntityManager mgr = getEntityManager();
-//		UserPantry userpantry = null;
-//		try {
-//			userpantry = mgr.find(UserPantry.class, id);
-//		} finally {
-//			mgr.close();
-//		}
-//		return userpantry;
-//	}
-
-
-	/**
-	 * This inserts a new entity into App Engine datastore. If the entity already exists in the datastore, an exception is thrown. It uses HTTP POST method.
-	 * 
-	 * @param userpantry
-	 *            the entity to be inserted.
-	 * @return The inserted entity.
-	 */
+	
 	@ApiMethod(name = "insertUserPantry")
 	public UserPantry insertUserPantry(UserPantryDTO userPantryDTO/* UserPantry userpantry, User user, Pantry pantry */) {
-		final java.util.logging.Logger log = java.util.logging.Logger.getLogger(ApiEndpoint.class.getName());
-		log.info("insertUserPantry!");
-		EntityManager mgr = getEntityManager();
 		UserPantry userpantry;
-		User user = userPantryDTO.getUser();
 		Pantry pantry = userPantryDTO.getPantry();
 		boolean pantryIsNull = (pantry == null);
+		EntityManager mgr = getEntityManager();
 		try {
-			if (!containsUser(user))
+			User user = this.mGetUserByEmail(mgr, userPantryDTO.getEmail());
+			if (!mContainsUser(mgr, user)) // FIXME não gosto
 				throw new EntityExistsException("insertUserPantry: User is not regiter in the system: user=" + user.toString());
-			if (containsPantry(pantry))
+			if (mContainsPantry(mgr, pantry))
 				throw new EntityExistsException("insertUserPantry: Object (pantry) already exists");
 			if (pantryIsNull) {
 				pantry = new Pantry(userPantryDTO.getPantryName());
 				pantry.setTimeStamp(userPantryDTO.getPantryTimeStamp());
-				//pantry.setProducts(new ArrayList<MetaProduct>());
-				//pantry.setName(userPantryDTO.getPantryName());
-				pantry = insertPantry(pantry); //mgr.persist();// FIXME verificar se está aqui bem devido if (containsUserPantry(userpantry))			
-			}else {}//FIXME care pantry.getKey()
+				pantry.setProducts(new ArrayList<MetaProduct>());
+				pantry.setName(userPantryDTO.getPantryName());
+				mInsertPantry(pantry); //FIXME Caused by: java.lang.IllegalArgumentException: cross-group transaction need to be explicitly specified, see TransactionOptions.Builder.withXG
+			} else {}// FIXME care pantry.getKey()
 			userpantry = new UserPantry();
-			userpantry.setUser(user);//.getKey().getId());
-			userpantry.setPantry(pantry.getKey());
-			if (containsUserPantry(userpantry)) {
+			userpantry.setUser(user);
+			userpantry.setPantry(pantry);
+			if (mContainsUserPantry(mgr, userpantry)) {
 				throw new EntityExistsException("insertUserPantry: Object (userpantry) already exists");
 			}
 			mgr.persist(userpantry);
@@ -278,161 +154,7 @@ public class ApiEndpoint {
 		}
 		return userpantry;
 	}
-	/**
-	 * This method is used for updating an existing entity. If the entity does not exist in the datastore, an exception is thrown. It uses HTTP PUT method.
-	 * 
-	 * @param userpantry
-	 *            the entity to be updated.
-	 * @return The updated entity.
-	 */
-	@ApiMethod(name = "updateUserPantry")
-	public UserPantry updateUserPantry(UserPantry userpantry) {
-		EntityManager mgr = getEntityManager();
-		try {
-			if (!containsUserPantry(userpantry)) {
-				throw new EntityNotFoundException("Object does not exist");
-			}
-			mgr.persist(userpantry);
-		} finally {
-			mgr.close();
-		}
-		return userpantry;
-	}
-	/**
-	 * This method removes the entity with primary key id. It uses HTTP DELETE method. FIXME need to remove Pantry maybe to! And maybe the User as despença podem ser partilhadas
-	 * 
-	 * @param id
-	 *            the primary key of the entity to be deleted.
-	 */
-	@ApiMethod(name = "removeUserPantry")
-	public void removeUserPantry(@Named("id") Long id) {
-		EntityManager mgr = getEntityManager();
-		try {
-			UserPantry userpantry = mgr.find(UserPantry.class, id);
-			mgr.remove(userpantry);
-		} finally {
-			mgr.close();
-		}
-	}
-	private boolean containsUserPantry(UserPantry userpantry) {
-		EntityManager mgr = getEntityManager();
-		boolean contains = true;
-		try {
-			if (userpantry == null || userpantry.getKey() == null) {
-				return false;
-			}
-			UserPantry item = findUserPantryByIds(userpantry);
-			if (item == null) {
-				contains = false;
-			}
-		} finally {
-			mgr.close();
-		}
-		return contains;
-	}
-	@SuppressWarnings({ "unchecked", "unused" })
-	private UserPantry findUserPantryByIds(UserPantry userpantry) {
-		EntityManager mgr = null;
-		List<UserPantry> execute = null;
-		try {
-			mgr = getEntityManager();
-			Query query = mgr.createQuery(
-			"select up from UserPantry up WHERE up.pantry=:pantry AND up.user=:user").setParameter(
-			"user", userpantry.getUser()).setParameter("pantry", userpantry.getPantry());
-			query.setFirstResult(0);
-			execute = query.getResultList();
-		} finally {
-			mgr.close();
-		}
-		if (execute.size() > 0)
-			return execute.get(0);
-		return null;
-	}
-	/*@SuppressWarnings("unchecked")
-	@ApiMethod(name = "getMyPantryByMail", path = "getPantryByMail")
-	public Pantry getMyPantryByMail(@Named("mail") String mail) {
-		EntityManager mgr = null;
-		List<UserPantry> execute = null;
-		try {
-			mgr = getEntityManager();
-			Query queryUP = mgr.createQuery("select from UserPantry as UserPantry");
-			execute = (List<UserPantry>) queryUP.getResultList();
-			// Tight loop for fetching all entities from datastore and
-			// accomodate
-			// for lazy fetch.
-			Pantry ret = null;
-			for (UserPantry obj : execute) {
-				User usr = mgr.find(User.class, obj.getUser());
-				if (usr != null && usr.getEmail().equals(mail)) {
-					ret = mgr.find(Pantry.class, obj.getPantry());
-					break;
-				}
-			}
-			if (ret != null) {
-				for (MetaProduct p : ret.getProducts())
-					p.getProduct();
-				return ret;
-			}
-		} finally {
-			mgr.close();
-		}
-		return null;
-	}*/
-	// ################################# PANTRY #################################
-	/**
-	 * This method lists all the entities inserted in datastore. It uses HTTP GET method and paging support.
-	 * 
-	 * @return A CollectionResponse class containing the list of all entities persisted and a cursor to the next page.
-	 */
-	@SuppressWarnings({ "unchecked", "unused" })
-	@ApiMethod(name = "listPantry")
-	public CollectionResponse<Pantry> listPantry(
-	@Nullable @Named("cursor") String cursorString,
-	@Nullable @Named("limit") Integer limit) {
-		EntityManager mgr = null;
-		Cursor cursor = null;
-		List<Pantry> execute = null;
-		try {
-			mgr = getEntityManager();
-			Query query = mgr.createQuery("select from Pantry as Pantry");
-			if (cursorString != null && cursorString != "") {
-				cursor = Cursor.fromWebSafeString(cursorString);
-				query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
-			}
-			if (limit != null) {
-				query.setFirstResult(0);
-				query.setMaxResults(limit);
-			}
-			execute = (List<Pantry>) query.getResultList();
-			cursor = JPACursorHelper.getCursor(execute);
-			if (cursor != null)
-				cursorString = cursor.toWebSafeString();
-			// Tight loop for fetching all entities from datastore and accomodate for lazy fetch.
-			for (Pantry obj : execute);
-		} finally {
-			mgr.close();
-		}
-		return CollectionResponse.<Pantry> builder().setItems(execute)
-		.setNextPageToken(cursorString).build();
-	}
-	/**
-	 * This method gets the entity having primary key id. It uses HTTP GET method.
-	 * 
-	 * @param id
-	 *            the primary key of the java bean.
-	 * @return The entity with primary key id.
-	 */
-	@ApiMethod(name = "getPantry")
-	public Pantry getPantry(@Named("id") Long id) {
-		EntityManager mgr = getEntityManager();
-		Pantry pantry = null;
-		try {
-			pantry = mgr.find(Pantry.class, id);
-		} finally {
-			mgr.close();
-		}
-		return pantry;
-	}
+	
 	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "getPantryByMailAndName")
 	public Pantry getPantryByMailAndName(@Named("mail") String mail,
@@ -470,15 +192,8 @@ public class ApiEndpoint {
 		}
 		return ret;
 	}
-	/**LIXO
-	 * This method gets the entity having primary key id. It uses HTTP GET method.
-	 * 
-	 * @param id
-	 *            the primary key of the java bean.
-	 * @return The entity with primary key id.
-	 */
-	/*@ApiMethod(name = "getPantryProducts")
-	public List<MetaProduct> getPantryProducts(@Named("id") Long id) {
+	@ApiMethod(name = "getPantry") //TODO REMOVE passar a usar o "synchronizationPantry"
+	public Pantry getPantry(@Named("id") Long id) {
 		EntityManager mgr = getEntityManager();
 		Pantry pantry = null;
 		try {
@@ -486,98 +201,30 @@ public class ApiEndpoint {
 		} finally {
 			mgr.close();
 		}
-		return pantry.getProducts();
-	}*/
-	/*
-	 * LIXO FIXME see insertUserPantry(userpantry, user, pantry) This inserts a new entity into App Engine datastore. If the entity already exists in the datastore, an exception is thrown. It uses HTTP POST method.
-	 * 
-	 * @param pantry the entity to be inserted.
-	 * 
-	 * @return The inserted entity.
-	 */
-	//CARE @ApiMethod(name = "insertPantry")
-	public Pantry insertPantry(Pantry pantry) {
-		final java.util.logging.Logger log = java.util.logging.Logger.getLogger(ApiEndpoint.class.getName());
-		log.info("insertPantry!");
-		EntityManager mgr = getEntityManager();
-		try {
-			if (containsPantry(pantry)) {
-				throw new EntityExistsException("Object already exists");
-			}
-			mgr.persist(pantry);
-		} finally {
-			mgr.close();
-		}
 		return pantry;
 	}
-	/**
-	 * This method is used for updating an existing entity. If the entity does not exist in the datastore, an exception is thrown. It uses HTTP PUT method.
-	 * 
-	 * @param pantry
-	 *            the entity to be updated.
-	 * @return The updated entity.
-	 */
-	@ApiMethod(name = "updatePantry")
-	public PantrySynchronizationDTO updatePantry(PantrySynchronizationDTO pantrySynchronizationDTO) {
-		final java.util.logging.Logger log = java.util.logging.Logger.getLogger(ApiEndpoint.class.getName());
-		log.info("updatePantry!");
+	@ApiMethod(name = "synchronizationPantry")
+	public PantrySynchronizationDTO synchronizationPantry(PantrySynchronizationDTO pantrySynchronizationDTO) {
 		EntityManager mgr = getEntityManager();
 		try {
 			Pantry pantry = mgr.find(Pantry.class, pantrySynchronizationDTO.getPantryKey());
-			if ( null == pantrySynchronizationDTO.getListMetaProducts()){
-				throw new RuntimeException();//ERROR REMOVE
+			if (null == pantrySynchronizationDTO.getListMetaProducts()) {
+				throw new RuntimeException();// ERROR REMOVE
 			}
-			if(pantrySynchronizationDTO.getPantryTimeStamp().after(pantry.getTimeStamp())){
-				log.info("updatePantry: need to update");
+			if (pantrySynchronizationDTO.getPantryTimeStamp().after(pantry.getTimeStamp())) {
 				pantry.setProducts(pantrySynchronizationDTO.getListMetaProducts());
-				//for (MetaProduct it : pantrySynchronizationDTO.getListMetaProducts()) {}//FIXME
-				pantry.setTimeStamp(new Date()); //FIXME só se over ediçoes
-				pantrySynchronizationDTO.setPantryTimeStamp(pantry.getTimeStamp()); //FIXME não gosto
-				//ERROR mgr.persist(pantry);
-			}else throw new RuntimeException();//ERROR REMOVE
+				// for (MetaProduct it : pantrySynchronizationDTO.getListMetaProducts()) {}//FIXME
+				pantry.setTimeStamp(new Date()); // FIXME só se over ediçoes
+				pantrySynchronizationDTO.setPantryTimeStamp(pantry.getTimeStamp()); // FIXME não gosto
+				// ERROR mgr.persist(pantry);
+			} else
+				throw new RuntimeException();// ERROR REMOVE
 		} finally {
 			mgr.close();
 		}
 		return pantrySynchronizationDTO;
 	}
-	/**
-	 * This method removes the entity with primary key id. It uses HTTP DELETE method.
-	 * 
-	 * @param id
-	 *            the primary key of the entity to be deleted.
-	 */
-	@ApiMethod(name = "removePantry")
-	public void removePantry(@Named("id") Long id) {
-		EntityManager mgr = getEntityManager();
-		try {
-			Pantry pantry = mgr.find(Pantry.class, id);
-			mgr.remove(pantry);
-		} finally {
-			mgr.close();
-		}
-	}
-	private boolean containsPantry(Pantry pantry) {
-		EntityManager mgr = getEntityManager();
-		boolean contains = true;
-		try {
-			if (pantry == null || pantry.getKey() == null) {
-				return false;
-			}
-			Pantry item = mgr.find(Pantry.class, pantry.getKey());
-			if (item == null) {
-				contains = false;
-			}
-		} finally {
-			mgr.close();
-		}
-		return contains;
-	}
-	// ################################# PRODUCT #################################
-	/**
-	 * This method lists all the entities inserted in datastore. It uses HTTP GET method and paging support.
-	 * 
-	 * @return A CollectionResponse class containing the list of all entities persisted and a cursor to the next page.
-	 */
+	
 	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "listProduct")
 	public CollectionResponse<Product> listProduct(
@@ -611,24 +258,7 @@ public class ApiEndpoint {
 		return CollectionResponse.<Product> builder().setItems(execute)
 		.setNextPageToken(cursorString).build();
 	}
-	/**
-	 * This method gets the entity having primary key id. It uses HTTP GET method.
-	 * 
-	 * @param id
-	 *            the primary key of the java bean.
-	 * @return The entity with primary key id.
-	 */
-	@ApiMethod(name = "getProduct")
-	public Product getProduct(@Named("id") Long id) {
-		EntityManager mgr = getEntityManager();
-		Product product = null;
-		try {
-			product = mgr.find(Product.class, id);
-		} finally {
-			mgr.close();
-		}
-		return product;
-	}
+	@SuppressWarnings({ "unchecked", "unused" })
 	@ApiMethod(name = "getProductByBarCode", path = "getProductByBarCode")
 	public Product getProductByBarCode(@Named("id") Long id) {
 		EntityManager mgr = null;
@@ -648,225 +278,325 @@ public class ApiEndpoint {
 			return execute.get(0);
 		return null;
 	}
-	/**
-	 * This inserts a new entity into App Engine datastore. If the entity already exists in the datastore, an exception is thrown. It uses HTTP POST method.
-	 * 
-	 * @param product
-	 *            the entity to be inserted.
-	 * @return The inserted entity.
-	 */
-	@ApiMethod(name = "insertProduct")
-	public Product insertProduct(Product product) {
+	
+	// ################################# API não usada INTERFACE #################################
+	// @ApiMethod(name = "updateUserPantry")
+	public UserPantry updateUserPantry(UserPantry userpantry) {
 		EntityManager mgr = getEntityManager();
 		try {
-			if (containsProduct(product)) {
-				throw new EntityExistsException("Object already exists");
-			}
-			mgr.persist(product);
-		} finally {
-			mgr.close();
-		}
-		return product;
-	}
-	/**
-	 * This method is used for updating an existing entity. If the entity does not exist in the datastore, an exception is thrown. It uses HTTP PUT method.
-	 * 
-	 * @param product
-	 *            the entity to be updated.
-	 * @return The updated entity.
-	 */
-	@ApiMethod(name = "updateProduct")
-	public Product updateProduct(Product product) {
-		EntityManager mgr = getEntityManager();
-		try {
-			if (!containsProduct(product)) {
+			if (!mContainsUserPantry(mgr, userpantry)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
-			mgr.persist(product);
+			mgr.persist(userpantry);
+		} finally {
+			mgr.close();
+		}
+		return userpantry;
+	}
+	
+	// @ApiMethod(name = "removeUserPantry")
+	public void removeUserPantry(@Named("id") Long id) {
+		EntityManager mgr = getEntityManager();
+		try {
+			UserPantry userpantry = mgr.find(UserPantry.class, id);
+			mgr.remove(userpantry);
+		} finally {
+			mgr.close();
+		}
+	}
+	
+	@SuppressWarnings({ "unchecked", "unused" })
+	// @ApiMethod(name = "listPantry")
+	public CollectionResponse<Pantry> listPantry(
+	@Nullable @Named("cursor") String cursorString,
+	@Nullable @Named("limit") Integer limit) {
+		EntityManager mgr = null;
+		Cursor cursor = null;
+		List<Pantry> execute = null;
+		try {
+			mgr = getEntityManager();
+			Query query = mgr.createQuery("select from Pantry as Pantry");
+			if (cursorString != null && cursorString != "") {
+				cursor = Cursor.fromWebSafeString(cursorString);
+				query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
+			}
+			if (limit != null) {
+				query.setFirstResult(0);
+				query.setMaxResults(limit);
+			}
+			execute = (List<Pantry>) query.getResultList();
+			cursor = JPACursorHelper.getCursor(execute);
+			if (cursor != null)
+				cursorString = cursor.toWebSafeString();
+			// Tight loop for fetching all entities from datastore and accomodate for lazy fetch.
+			for (Pantry obj : execute);
+		} finally {
+			mgr.close();
+		}
+		return CollectionResponse.<Pantry> builder().setItems(execute)
+		.setNextPageToken(cursorString).build();
+	}
+	
+	// @ApiMethod(name = "removePantry")
+	public void removePantry(@Named("id") Long id) {
+		EntityManager mgr = getEntityManager();
+		try {
+			Pantry pantry = mgr.find(Pantry.class, id);
+			mgr.remove(pantry);
+		} finally {
+			mgr.close();
+		}
+	}
+	
+	@ApiMethod(name = "getProduct")
+	public Product getProduct(@Named("id") Long id) {
+		EntityManager mgr = getEntityManager();
+		Product product = null;
+		try {
+			product = mgr.find(Product.class, id);
 		} finally {
 			mgr.close();
 		}
 		return product;
 	}
-	/**
-	 * This method removes the entity with primary key id. It uses HTTP DELETE method.
-	 * 
-	 * @param id
-	 *            the primary key of the entity to be deleted.
-	 */
-	@ApiMethod(name = "removeProduct")
-	public void removeProduct(@Named("id") Long id) {
-		EntityManager mgr = getEntityManager();
-		try {
-			Product product = mgr.find(Product.class, id);
-			mgr.remove(product);
-		} finally {
-			mgr.close();
+	
+	// ################################# SUPORT #################################
+	private User mGetUserByEmail(EntityManager mgr, String userEmail) {
+		User user = null;
+		Query query = mgr.createQuery("SELECT u FROM User u WHERE u.email=:email").setParameter("email", userEmail);
+		query.setFirstResult(0);
+		@SuppressWarnings("unchecked")
+		List<User> users = query.getResultList();
+		if (users.size() > 0) {
+			user = users.get(0);
+			
+			if (user.getUserPantriesList() == null)
+				user.setUserPantriesList(new ArrayList<UserPantry>()); // FIXME Não gosto
+			else for (UserPantry iii : user.getUserPantriesList()); //FIXME para carregar !!!
 		}
+		return user;
 	}
-	private boolean containsProduct(Product product) {
-		EntityManager mgr = getEntityManager();
+	
+	private boolean mContainsUser(EntityManager mgr, User user) {
 		boolean contains = true;
-		try {
-			if (product == null || product.getKey() == null) {
-				return false;
-			}
-			Product item = mgr.find(Product.class, product.getKey());
-			if (item == null) {
-				contains = false;
-			}
-		} finally {
-			mgr.close();
+		if (user == null) {
+			return false;
+		}
+		User item = mGetUserByEmail(mgr, user.getEmail());
+		if (item == null) {
+			contains = false;
 		}
 		return contains;
 	}
+	
+	private boolean mContainsUserPantry(EntityManager mgr, UserPantry userpantry) {
+		if (userpantry == null || userpantry.getKey() == null) {
+			return false;
+		}
+		UserPantry item = mFindUserPantryByIds(mgr, userpantry);
+		if (item == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	@SuppressWarnings({ "unchecked", "unused" })
+	private UserPantry mFindUserPantryByIds(EntityManager mgr, UserPantry userpantry) {
+		List<UserPantry> execute = null;
+		Query query = mgr.createQuery(
+		"select up from UserPantry up WHERE up.pantry=:pantry AND up.user=:user").setParameter(
+		"user", userpantry.getUser()).setParameter("pantry", userpantry.getPantry());
+		query.setFirstResult(0);
+		execute = query.getResultList();
+		if (execute.size() > 0)
+			return execute.get(0);
+		return null;
+	}
+	
+	private void mInsertPantry(Pantry pantry) { // EntityManager mgr, FIXME TransactionOptions.Builder.allowMultipleEntityGroups(true)
+		EntityManager mgr = getEntityManager();
+		try {
+			if (mContainsPantry(mgr, pantry)) {
+				throw new EntityExistsException("Object already exists");
+			}
+			mgr.persist(pantry);
+		} finally {
+			mgr.close();
+		}
+	}
+	
+	private boolean mContainsPantry(EntityManager mgr, Pantry pantry) {
+		if (pantry == null || pantry.getKey() == null) {
+			return false;
+		}
+		Pantry item = mgr.find(Pantry.class, pantry.getKey());
+		if (item == null) {
+			return false;
+		}
+		return true;
+	}
+	private boolean mContainsProduct(EntityManager mgr, Product product) {
+		if (product == null || product.getKey() == null) {
+			return false;
+		}
+		Product item = mgr.find(Product.class, product.getKey());
+		if (item == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	// ################################# USER #################################
+	// ################################# USER PANTRY #################################
+	// ################################# PANTRY #################################
+	// ################################# PRODUCT #################################
 	// ################################# META PRODUCT #################################
-//	/**
-//	 * This method lists all the entities inserted in datastore. It uses HTTP GET method and paging support.
-//	 * 
-//	 * @return A CollectionResponse class containing the list of all entities persisted and a cursor to the next page.
-//	 */
-//	@SuppressWarnings({ "unchecked", "unused" })
-//	@ApiMethod(name = "listMetaProduct")
-//	public CollectionResponse<MetaProduct> listMetaProduct(
-//	@Nullable @Named("cursor") String cursorString,
-//	@Nullable @Named("limit") Integer limit) {
-//		EntityManager mgr = null;
-//		Cursor cursor = null;
-//		List<MetaProduct> execute = null;
-//		try {
-//			mgr = getEntityManager();
-//			Query query = mgr
-//			.createQuery("select from MetaProduct as MetaProduct");
-//			if (cursorString != null && cursorString != "") {
-//				cursor = Cursor.fromWebSafeString(cursorString);
-//				query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
-//			}
-//			if (limit != null) {
-//				query.setFirstResult(0);
-//				query.setMaxResults(limit);
-//			}
-//			execute = (List<MetaProduct>) query.getResultList();
-//			cursor = JPACursorHelper.getCursor(execute);
-//			if (cursor != null)
-//				cursorString = cursor.toWebSafeString();
-//			// Tight loop for fetching all entities from datastore and
-//			// accomodate
-//			// for lazy fetch.
-//			for (MetaProduct obj : execute);
-//		} finally {
-//			mgr.close();
-//		}
-//		return CollectionResponse.<MetaProduct> builder().setItems(execute)
-//		.setNextPageToken(cursorString).build();
-//	}
-//	/**
-//	 * This method gets the entity having primary key id. It uses HTTP GET method.
-//	 * 
-//	 * @param id
-//	 *            the primary key of the java bean.
-//	 * @return The entity with primary key id.
-//	 */
-//	@ApiMethod(name = "getMetaProduct")
-//	public MetaProduct getMetaProduct(@Named("id") Long id) {
-//		EntityManager mgr = getEntityManager();
-//		MetaProduct metaproduct = null;
-//		try {
-//			metaproduct = mgr.find(MetaProduct.class, id);
-//		} finally {
-//			mgr.close();
-//		}
-//		return metaproduct;
-//	}
-//	/**
-//	 * This inserts a new entity into App Engine datastore. If the entity already exists in the datastore, an exception is thrown. It uses HTTP POST method.
-//	 * 
-//	 * @param metaproduct
-//	 *            the entity to be inserted.
-//	 * @return The inserted entity.
-//	 */
-//	@ApiMethod(name = "insertMetaProduct")
-//	public MetaProduct insertMetaProduct(MetaProduct metaproduct) {
-//		EntityManager mgr = getEntityManager();
-//		try {
-//			if (containsMetaProduct(metaproduct)) {
-//				metaproduct.setAmount(metaproduct.getAmount() + 1);
-//				updateMetaProduct(metaproduct);
-//				return metaproduct;
-//			}
-//			mgr.persist(metaproduct);
-//		} finally {
-//			mgr.close();
-//		}
-//		return metaproduct;
-//	}
-//	/**
-//	 * This method is used for updating an existing entity. If the entity does not exist in the datastore, an exception is thrown. It uses HTTP PUT method.
-//	 * 
-//	 * @param metaproduct
-//	 *            the entity to be updated.
-//	 * @return The updated entity.
-//	 */
-//	@ApiMethod(name = "updateMetaProduct")
-//	public MetaProduct updateMetaProduct(MetaProduct metaproduct) {
-//		EntityManager mgr = getEntityManager();
-//		try {
-//			if (!containsMetaProduct(metaproduct)) {
-//				throw new EntityNotFoundException("Object does not exist");
-//			}
-//			mgr.persist(metaproduct);
-//		} finally {
-//			mgr.close();
-//		}
-//		return metaproduct;
-//	}
-//	/**
-//	 * This method removes the entity with primary key id. It uses HTTP DELETE method.
-//	 * 
-//	 * @param id
-//	 *            the primary key of the entity to be deleted.
-//	 */
-//	@ApiMethod(name = "removeMetaProduct")
-//	public void removeMetaProduct(@Named("id") Long id) {
-//		EntityManager mgr = getEntityManager();
-//		try {
-//			MetaProduct metaproduct = mgr.find(MetaProduct.class, id);
-//			mgr.remove(metaproduct);
-//		} finally {
-//			mgr.close();
-//		}
-//	}
-//	private boolean containsMetaProduct(MetaProduct metaproduct) {
-//		EntityManager mgr = getEntityManager();
-//		boolean contains = true;
-//		try {
-//			if (metaproduct == null)
-//				return false;
-//			MetaProduct item = containsByProduct(metaproduct);
-//			if (item == null) {
-//				contains = false;
-//			}
-//		} finally {
-//			mgr.close();
-//		}
-//		return contains;
-//	}
-//	@SuppressWarnings({ "unused", "unchecked" })
-//	private MetaProduct containsByProduct(MetaProduct metaproduct) {
-//		EntityManager mgr = null;
-//		List<MetaProduct> execute = null;
-//		try {
-//			mgr = getEntityManager();
-//			Query query = mgr.createQuery(
-//			"SELECT m FROM MetaProduct m WHERE m.product=:product")
-//			.setParameter("product", metaproduct.getProduct());
-//			query.setFirstResult(0);
-//			execute = query.getResultList();
-//		} finally {
-//			mgr.close();
-//		}
-//		if (execute.size() > 0)
-//			return execute.get(0);
-//		return null;
-//	}
+	// /**
+	// * This method lists all the entities inserted in datastore. It uses HTTP GET method and paging support.
+	// *
+	// * @return A CollectionResponse class containing the list of all entities persisted and a cursor to the next page.
+	// */
+	// @SuppressWarnings({ "unchecked", "unused" })
+	// @ApiMethod(name = "listMetaProduct")
+	// public CollectionResponse<MetaProduct> listMetaProduct(
+	// @Nullable @Named("cursor") String cursorString,
+	// @Nullable @Named("limit") Integer limit) {
+	// EntityManager mgr = null;
+	// Cursor cursor = null;
+	// List<MetaProduct> execute = null;
+	// try {
+	// mgr = getEntityManager();
+	// Query query = mgr
+	// .createQuery("select from MetaProduct as MetaProduct");
+	// if (cursorString != null && cursorString != "") {
+	// cursor = Cursor.fromWebSafeString(cursorString);
+	// query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
+	// }
+	// if (limit != null) {
+	// query.setFirstResult(0);
+	// query.setMaxResults(limit);
+	// }
+	// execute = (List<MetaProduct>) query.getResultList();
+	// cursor = JPACursorHelper.getCursor(execute);
+	// if (cursor != null)
+	// cursorString = cursor.toWebSafeString();
+	// // Tight loop for fetching all entities from datastore and
+	// // accomodate
+	// // for lazy fetch.
+	// for (MetaProduct obj : execute);
+	// } finally {
+	// mgr.close();
+	// }
+	// return CollectionResponse.<MetaProduct> builder().setItems(execute)
+	// .setNextPageToken(cursorString).build();
+	// }
+	// /**
+	// * This method gets the entity having primary key id. It uses HTTP GET method.
+	// *
+	// * @param id
+	// * the primary key of the java bean.
+	// * @return The entity with primary key id.
+	// */
+	// @ApiMethod(name = "getMetaProduct")
+	// public MetaProduct getMetaProduct(@Named("id") Long id) {
+	// EntityManager mgr = getEntityManager();
+	// MetaProduct metaproduct = null;
+	// try {
+	// metaproduct = mgr.find(MetaProduct.class, id);
+	// } finally {
+	// mgr.close();
+	// }
+	// return metaproduct;
+	// }
+	// /**
+	// * This inserts a new entity into App Engine datastore. If the entity already exists in the datastore, an exception is thrown. It uses HTTP POST method.
+	// *
+	// * @param metaproduct
+	// * the entity to be inserted.
+	// * @return The inserted entity.
+	// */
+	// @ApiMethod(name = "insertMetaProduct")
+	// public MetaProduct insertMetaProduct(MetaProduct metaproduct) {
+	// EntityManager mgr = getEntityManager();
+	// try {
+	// if (containsMetaProduct(metaproduct)) {
+	// metaproduct.setAmount(metaproduct.getAmount() + 1);
+	// updateMetaProduct(metaproduct);
+	// return metaproduct;
+	// }
+	// mgr.persist(metaproduct);
+	// } finally {
+	// mgr.close();
+	// }
+	// return metaproduct;
+	// }
+	// /**
+	// * This method is used for updating an existing entity. If the entity does not exist in the datastore, an exception is thrown. It uses HTTP PUT method.
+	// *
+	// * @param metaproduct
+	// * the entity to be updated.
+	// * @return The updated entity.
+	// */
+	// @ApiMethod(name = "updateMetaProduct")
+	// public MetaProduct updateMetaProduct(MetaProduct metaproduct) {
+	// EntityManager mgr = getEntityManager();
+	// try {
+	// if (!containsMetaProduct(metaproduct)) {
+	// throw new EntityNotFoundException("Object does not exist");
+	// }
+	// mgr.persist(metaproduct);
+	// } finally {
+	// mgr.close();
+	// }
+	// return metaproduct;
+	// }
+	// /**
+	// * This method removes the entity with primary key id. It uses HTTP DELETE method.
+	// *
+	// * @param id
+	// * the primary key of the entity to be deleted.
+	// */
+	// @ApiMethod(name = "removeMetaProduct")
+	// public void removeMetaProduct(@Named("id") Long id) {
+	// EntityManager mgr = getEntityManager();
+	// try {
+	// MetaProduct metaproduct = mgr.find(MetaProduct.class, id);
+	// mgr.remove(metaproduct);
+	// } finally {
+	// mgr.close();
+	// }
+	// }
+	// private boolean containsMetaProduct(MetaProduct metaproduct) {
+	// EntityManager mgr = getEntityManager();
+	// boolean contains = true;
+	// try {
+	// if (metaproduct == null)
+	// return false;
+	// MetaProduct item = containsByProduct(metaproduct);
+	// if (item == null) {
+	// contains = false;
+	// }
+	// } finally {
+	// mgr.close();
+	// }
+	// return contains;
+	// }
+	// @SuppressWarnings({ "unused", "unchecked" })
+	// private MetaProduct containsByProduct(MetaProduct metaproduct) {
+	// EntityManager mgr = null;
+	// List<MetaProduct> execute = null;
+	// try {
+	// mgr = getEntityManager();
+	// Query query = mgr.createQuery(
+	// "SELECT m FROM MetaProduct m WHERE m.product=:product")
+	// .setParameter("product", metaproduct.getProduct());
+	// query.setFirstResult(0);
+	// execute = query.getResultList();
+	// } finally {
+	// mgr.close();
+	// }
+	// if (execute.size() > 0)
+	// return execute.get(0);
+	// return null;
+	// }
 }

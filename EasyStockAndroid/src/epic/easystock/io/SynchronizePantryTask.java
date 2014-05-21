@@ -39,7 +39,7 @@ public class SynchronizePantryTask extends AsyncTask<Void, Void, PantrySynchroni
 		PantrySynchronizationDTO dto = pantryDB.getPantrySynchronizationDTO();
 		try {
 			ApiEndpoint api = EndPointCall.getApiEndpoint();
-			return api.updatePantry(dto).execute();
+			return api.synchronizationPantry(dto).execute();
 		} catch (IOException e) {
 			fail_to_update = true;
 			Log.e(LOG_TAG, "Fail to update", e); //FIXME TEXT
