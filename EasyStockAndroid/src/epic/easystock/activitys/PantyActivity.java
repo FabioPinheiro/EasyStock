@@ -76,9 +76,6 @@ public class PantyActivity extends ListActivity {
 		alert.show();
 
 		addProduct.setOnClickListener(new OnClickListener() {
-			Intent intent = new Intent(EndPointCall.getGlobalContext(),
-					AddProductToPantryActivity.class);
-
 			@Override
 			public void onClick(View v) {
 				/*
