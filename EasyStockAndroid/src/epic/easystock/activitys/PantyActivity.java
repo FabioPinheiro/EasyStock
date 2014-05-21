@@ -35,6 +35,7 @@ public class PantyActivity extends ListActivity {
 	private final String LOG_TAG = this.getClass().getCanonicalName();
 	private PantriesDBAdapter.PantryDB pantryDB;
 	String mail;
+	Button readBarcode;
 	Button addProduct;
 	MetaProductAdapter adapter;
 	String selectedPantryName;
@@ -47,10 +48,14 @@ public class PantyActivity extends ListActivity {
 		// LIXO mail = getIntent().getStringExtra("MAIL");
 		mail = EndPointCall.getEmailAccount();// FIXME
 		addProduct = (Button) findViewById(R.id.AddProduct);
+		readBarcode = (Button) findViewById(R.id.read_bar_code_button);
 		adapter = new MetaProductAdapter(this,
 				new ArrayList<LocalMetaProduct>());
 		xpto = findViewById(R.id.layout_edit_botons_pantry_list);
 		setListAdapter(adapter);
+
+		selectedPantryName = getIntent().getStringExtra("PANTRYNAME");
+		getIntent().removeExtra("PANTRYNAME");
 
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		final String[] pantreisName = EndPointCall.getUserDBAdapter()
@@ -73,19 +78,32 @@ public class PantyActivity extends ListActivity {
 				aux.finish();
 			}
 		});
-		alert.show();
+		if (Strings.isNullOrEmpty(selectedPantryName)
+				&& pantreisName.length > 1)
+			alert.show();
+		else {
+			if (Strings.isNullOrEmpty(selectedPantryName)
+					&& pantreisName.length == 1)
+				selectedPantryName = pantreisName[0];
+			pantryDB = EndPointCall.getPantryDB(selectedPantryName);
+			EndPointCall.listPantryProductTask(adapter, pantryDB);
+		}
 
 		addProduct.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				/*
-				 * intent.putExtra("PANTRYNAME", selectedPantryName);
-				 * startActivityForResult(intent, ADDPRODUCT);
-				 */
+				EndPointCall.addProductToPantryTask(adapter, pantryDB, Long
+						.valueOf(((EditText) findViewById(R.id.NumberId))
+								.getText().toString()));
+			}
+		});
+		readBarcode.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
 				dispatchBarcode();
 			}
 		});
-
 	}
 
 	private void dispatchBarcode() {
@@ -107,31 +125,38 @@ public class PantyActivity extends ListActivity {
 		Button r1 /* remove one */= (Button) findViewById(R.id.buttonRemoveOne);
 		a1.setOnClickListener(new OnClickListener() {
 			Integer number;
+
 			@Override
 			public void onClick(View v) {
 				String str = ((EditText) findViewById(R.id.editNumber))
 						.getText().toString();
-				Toast.makeText(getApplicationContext(), "THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(),
+						"THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
 				if (!Strings.isNullOrEmpty(str))
-					number = Integer.valueOf(((EditText) findViewById(R.id.editNumber))
-							.getText().toString());
+					number = Integer
+							.valueOf(((EditText) findViewById(R.id.editNumber))
+									.getText().toString());
 				else
 					number = 1;
 				DecimalFormat twoDForm = new DecimalFormat("#.00");
-				product.setAmount(Double.valueOf(twoDForm.format(product.getAmount().intValue() + number)));
+				product.setAmount(Double.valueOf(twoDForm.format(product
+						.getAmount().intValue() + number)));
 				EndPointCall.plusOneOnProductAmoutTask(product, pantryDB);
 			}
 		});
 		r1.setOnClickListener(new OnClickListener() {
 			Integer number;
+
 			@Override
 			public void onClick(View v) {
 				String str = ((EditText) findViewById(R.id.editNumber))
 						.getText().toString();
-				Toast.makeText(getApplicationContext(), "THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(),
+						"THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
 				if (!Strings.isNullOrEmpty(str))
-					number = Integer.valueOf(((EditText) findViewById(R.id.editNumber))
-							.getText().toString());
+					number = Integer
+							.valueOf(((EditText) findViewById(R.id.editNumber))
+									.getText().toString());
 				else
 					number = 1;
 				if (product.getAmount() >= number) {
@@ -152,8 +177,8 @@ public class PantyActivity extends ListActivity {
 
 		if (scanningResult != null) {
 			String scanContent = scanningResult.getContents();
-			EndPointCall.addProductToPantryTask(adapter, pantryDB,
-					Long.valueOf(scanContent));
+			EditText barcode = (EditText) findViewById(R.id.NumberId);
+			barcode.setText(scanContent);
 		} else {
 			Toast toast = Toast.makeText(getApplicationContext(),
 					"No scan data received!", Toast.LENGTH_SHORT);

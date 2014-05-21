@@ -1,41 +1,26 @@
 package epic.easystock.activitys;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
+import android.app.ListActivity;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.Strings;
-
 import epic.easystock.R;
-import epic.easystock.apiEndpoint.ApiEndpoint;
-import epic.easystock.apiEndpoint.ApiEndpoint.InsertUserPantry;
-import epic.easystock.apiEndpoint.model.MetaProduct;
-import epic.easystock.apiEndpoint.model.Pantry;
-import epic.easystock.apiEndpoint.model.User;
-import epic.easystock.apiEndpoint.model.UserPantry;
-import epic.easystock.apiEndpoint.model.UserPantryDTO;
-import epic.easystock.assist.AppConstants;
-import epic.easystock.io.AddProductToPantryTask;
+import epic.easystock.assist.PantryAdapter;
+import epic.easystock.data.UserBdAdapter.UserPantryAux;
 import epic.easystock.io.EndPointCall;
 
-public class MyPantriesActivity extends Activity {
+public class MyPantriesActivity extends ListActivity {
 	// String mail;
 	Button newPantry;
 	
@@ -46,7 +31,9 @@ public class MyPantriesActivity extends Activity {
 		TextView myMail = (TextView) findViewById(R.id.myMail);
 		myMail.setText(EndPointCall.getEmailAccount());
 
-		//FIXME final String[] pantreisName = EndPointCall.getUserDbAdapter().avalablePantrysNamesFromUser(EndPointCall.getEmailAccount());
+		PantryAdapter adapter = new PantryAdapter(this, new ArrayList<UserPantryAux>());
+		
+		setListAdapter(adapter);
 		
 		newPantry = (Button) findViewById(R.id.createnewpantry);
 		newPantry.setOnClickListener(new OnClickListener() {
@@ -55,6 +42,8 @@ public class MyPantriesActivity extends Activity {
 				xpto();
 			}
 		});
+		
+		EndPointCall.listAllPantriesTask(adapter);
 	}
 	public void xpto() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -71,7 +60,14 @@ public class MyPantriesActivity extends Activity {
 		alert.show();
 	}
 	
-	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		UserPantryAux pantry = (UserPantryAux) getListAdapter().getItem(position);
+		Intent intent = new Intent(this, PantyActivity.class);
+		intent.putExtra("PANTRYNAME", pantry.pantryName);
+		startActivity(intent);
+		
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

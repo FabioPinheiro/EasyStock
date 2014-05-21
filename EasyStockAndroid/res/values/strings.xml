@@ -43,5 +43,6 @@
 
     <string name="title_activity_add_product_to_pantry">AddProductToPantryActivity</string>
     <string name="read_bar_code_button">Read Barcode</string>
+    <string name="add_product">Add Product</string>
 
 </resources>

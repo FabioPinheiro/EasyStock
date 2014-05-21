@@ -26,6 +26,7 @@ import epic.easystock.apiEndpoint.ApiEndpoint;
 import epic.easystock.apiEndpoint.model.User;
 import epic.easystock.assist.AppConstants;
 import epic.easystock.assist.MetaProductAdapter;
+import epic.easystock.assist.PantryAdapter;
 import epic.easystock.assist.ProductAdapter;
 import epic.easystock.data.LocalMetaProduct;
 import epic.easystock.data.LocalProduct;
@@ -310,5 +311,9 @@ public class EndPointCall {
 
 	public static void plusOneOnProductAmoutTask(LocalMetaProduct product,PantryDB pantryDB) {
 		new ChangeProductAmountTask(pantryDB).execute(product);
+	}
+
+	public static void listAllPantriesTask(PantryAdapter adapter) {
+		new ListAllPantriesTask(getUserDBAdapter().avalablePantrysFromUser(getEmailAccount())).execute(adapter);
 	}
 }

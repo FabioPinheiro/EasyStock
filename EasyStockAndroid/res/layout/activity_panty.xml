@@ -101,13 +101,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
+            <Button
+                android:id="@+id/read_bar_code_button"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/read_bar_code_button" />
+
             <EditText
                 android:id="@+id/NumberId"
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Product ID"
+                android:hint="Product BarCode"
                 android:inputType="number" />
 
             <Button
@@ -115,10 +122,8 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+Product" />
-
+                android:text="@string/add_product" />
         </LinearLayout>
-
     </LinearLayout>
 
 </FrameLayout>

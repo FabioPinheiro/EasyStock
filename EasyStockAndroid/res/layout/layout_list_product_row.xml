@@ -17,6 +17,7 @@
         android:id="@+id/product_row_label_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceListItem"
         android:layout_toRightOf="@id/product_row_label_idProduct"
         android:layout_alignParentTop="true"
         android:paddingLeft="5dp"

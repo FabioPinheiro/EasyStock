@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="epic.easystock.activitys.AddProductToPantryActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <EditText
+        android:id="@+id/activity_test_add_to_product_list_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+
+    <EditText
+        android:id="@+id/activity_test_add_to_product_list_barCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+
+    <EditText
+        android:id="@+id/activity_test_add_to_product_list_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+
+    <Button
+        android:id="@+id/AddItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="addXPTO"
+        android:text="Add Item" />
+
+    <Button
+        android:id="@+id/take_pic_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="takePic"
+        android:text="@string/read_bar_code_button" />
+
+    <ImageView
+        android:id="@+id/add_prod_pic"
+        android:layout_width="241dp"
+        android:layout_height="241dp"
+        android:layout_gravity="center"
+        android:layout_weight="0.94" />
+
+</LinearLayout>
