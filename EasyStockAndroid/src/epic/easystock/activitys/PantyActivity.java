@@ -1,6 +1,11 @@
 package epic.easystock.activitys;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import com.google.api.client.util.Strings;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,6 +18,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import epic.easystock.R;
 import epic.easystock.apiEndpoint.model.Product;
 import epic.easystock.assist.MetaProductAdapter;
@@ -30,28 +38,32 @@ public class PantyActivity extends ListActivity {
 	Button addProduct;
 	MetaProductAdapter adapter;
 	String selectedPantryName;
+	private View xpto;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(epic.easystock.R.layout.activity_panty);
-		//LIXO mail = getIntent().getStringExtra("MAIL");
-		mail = EndPointCall.getEmailAccount();//FIXME
+		// LIXO mail = getIntent().getStringExtra("MAIL");
+		mail = EndPointCall.getEmailAccount();// FIXME
 		addProduct = (Button) findViewById(R.id.AddProduct);
-		adapter = new MetaProductAdapter(this, new ArrayList<LocalMetaProduct>());
+		adapter = new MetaProductAdapter(this,
+				new ArrayList<LocalMetaProduct>());
+		xpto = findViewById(R.id.layout_edit_botons_pantry_list);
 		setListAdapter(adapter);
-		
+
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		final String[] pantreisName = EndPointCall.getUserDBAdapter().avalablePantrysNamesFromUser(EndPointCall.getEmailAccount());
+		final String[] pantreisName = EndPointCall.getUserDBAdapter()
+				.avalablePantrysNamesFromUser(EndPointCall.getEmailAccount());
 		alert.setTitle("Select Pantry");
 		alert.setItems(pantreisName, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				selectedPantryName = pantreisName[which];//FIXME
+				selectedPantryName = pantreisName[which];// FIXME
 				pantryDB = EndPointCall.getPantryDB(selectedPantryName);
-				EndPointCall.listPantryProductTask(adapter, pantryDB); //FIXME
-				
-				//NÂO gosto
+				EndPointCall.listPantryProductTask(adapter, pantryDB); // FIXME
+
+				// NÂO gosto
 			}
 		});
 		final Activity aux = this;
@@ -62,75 +74,96 @@ public class PantyActivity extends ListActivity {
 			}
 		});
 		alert.show();
-		
+
 		addProduct.setOnClickListener(new OnClickListener() {
-			Intent intent = new Intent(EndPointCall.getGlobalContext(),AddProductToPantryActivity.class);
+			Intent intent = new Intent(EndPointCall.getGlobalContext(),
+					AddProductToPantryActivity.class);
+
 			@Override
 			public void onClick(View v) {
-				intent.putExtra("PANTRYNAME", selectedPantryName);
-				startActivityForResult(intent, ADDPRODUCT);
-	/*			
-				Log.i(LOG_TAG, "new AddProductTask: " + mail);
-				Long productBarCode = Long.valueOf(((EditText) findViewById(R.id.NumberId)).getText().toString());
-				EndPointCall.addProductToPantryTask(adapter, pantryDB, productBarCode);//FIXME BARCODE*/
+				/*
+				 * intent.putExtra("PANTRYNAME", selectedPantryName);
+				 * startActivityForResult(intent, ADDPRODUCT);
+				 */
+				dispatchBarcode();
 			}
 		});
-		
-		
-		final AlertDialog.Builder addproduct = new AlertDialog.Builder(this);
-		addproduct.setTitle("Change Product");
-		addproduct.setItems(pantreisName, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				selectedPantryName = pantreisName[which];//FIXME
-				pantryDB = EndPointCall.getPantryDB(selectedPantryName);
-				EndPointCall.listPantryProductTask(adapter, pantryDB); //FIXME
-				
-				//NÂO gosto
-			}
-		});
-		
-		addproduct.setNeutralButton("new",new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				
-			}
-		});
-		addproduct.setOnCancelListener(new OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				aux.finish();
-			}
-		});
-	/*	
-		addProduct.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				addproduct.show();
-				
-				Log.i(LOG_TAG, "new AddProductTask: " + mail);
-				Long productBarCode = Long.valueOf(((EditText) findViewById(R.id.NumberId)).getText().toString());
-				EndPointCall.addProductToPantryTask(adapter, pantryDB, productBarCode);//FIXME BARCODE
-			}
-		});*/
+
 	}
+
+	private void dispatchBarcode() {
+		IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+		scanIntegrator.initiateScan();
+	}
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		final LocalMetaProduct product = (LocalMetaProduct) getListAdapter()
+				.getItem(position);
+		// Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
+
+		xpto.setVisibility(View.VISIBLE);
+		TextView x = (TextView) findViewById(R.id.selectProduct);
+		x.setText(product.getName());
+
+		Button a1 /* add one */= (Button) findViewById(R.id.buttonAddOne);
+		Button r1 /* remove one */= (Button) findViewById(R.id.buttonRemoveOne);
+		a1.setOnClickListener(new OnClickListener() {
+			Integer number;
+			@Override
+			public void onClick(View v) {
+				String str = ((EditText) findViewById(R.id.editNumber))
+						.getText().toString();
+				Toast.makeText(getApplicationContext(), "THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
+				if (!Strings.isNullOrEmpty(str))
+					number = Integer.valueOf(((EditText) findViewById(R.id.editNumber))
+							.getText().toString());
+				else
+					number = 1;
+				DecimalFormat twoDForm = new DecimalFormat("#.00");
+				product.setAmount(Double.valueOf(twoDForm.format(product.getAmount().intValue() + number)));
+				EndPointCall.plusOneOnProductAmoutTask(product, pantryDB);
+			}
+		});
+		r1.setOnClickListener(new OnClickListener() {
+			Integer number;
+			@Override
+			public void onClick(View v) {
+				String str = ((EditText) findViewById(R.id.editNumber))
+						.getText().toString();
+				Toast.makeText(getApplicationContext(), "THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
+				if (!Strings.isNullOrEmpty(str))
+					number = Integer.valueOf(((EditText) findViewById(R.id.editNumber))
+							.getText().toString());
+				else
+					number = 1;
+				if (product.getAmount() >= number) {
+					product.setAmount(product.getAmount() - number);
+					EndPointCall.plusOneOnProductAmoutTask(product, pantryDB);
+				} else
+					Toast.makeText(EndPointCall.getGlobalContext(),
+							"AMOUNT IS TO LOW", Toast.LENGTH_LONG).show();
+			}
+		});
+
+	}
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-	    if (requestCode == ADDPRODUCT) {
-	        if(resultCode == RESULT_OK){
-	            String name=data.getStringExtra("PRODNAME");
-	            String description=data.getStringExtra("PRODDESCRIPTION");
-	            Long barCode=data.getLongExtra("PRODBARCODE", -1l);
-				Product result = new Product();
-				result.setBarCode(barCode);
-				result.setDescription(description);
-				result.setName(name);
-	        }
-	        if (resultCode == RESULT_CANCELED) {
-	            //Write your code if there's no result
-	        }
-	    }
-	}//onActivityResult
+		IntentResult scanningResult = IntentIntegrator.parseActivityResult(
+				requestCode, resultCode, data);
+
+		if (scanningResult != null) {
+			String scanContent = scanningResult.getContents();
+			EndPointCall.addProductToPantryTask(adapter, pantryDB,
+					Long.valueOf(scanContent));
+		} else {
+			Toast toast = Toast.makeText(getApplicationContext(),
+					"No scan data received!", Toast.LENGTH_SHORT);
+			toast.show();
+		}
+	}// onActivityResult
+
 	@Override
 	protected void onStop() {
 		super.onStop();

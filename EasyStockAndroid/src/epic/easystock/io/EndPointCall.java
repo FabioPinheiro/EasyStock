@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.internal.db;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.Strings;
 
@@ -305,5 +306,9 @@ public class EndPointCall {
 		} else {
 			msg(EndPointCall_TAG, "Synchronize_FAIL: is not Connected"); // FIXME TEXT e ver estado
 		}
+	}
+
+	public static void plusOneOnProductAmoutTask(LocalMetaProduct product,PantryDB pantryDB) {
+		new ChangeProductAmountTask(pantryDB).execute(product);
 	}
 }
