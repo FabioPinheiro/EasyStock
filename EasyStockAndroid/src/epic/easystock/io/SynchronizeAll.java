@@ -46,7 +46,7 @@ public class SynchronizeAll extends AsyncTask<Void, Void, List<Pantry>> {
 		try {
 			ApiEndpoint api =  EndPointCall.getApiEndpoint();
 			User user = api.getUserByEmail(EndPointCall.getEmailAccount()).execute();
-			if (user == null) {
+			if (user == null) { //FIXME isto devia estar noutro sitio
 				user = api.registerUser(email).execute();
 				Log.e(LOG_TAG, EndPointCall.INSERT_NEW_USER_IN_APPENGINE);
 				//state=State.INSERT_NEW_USER_IN_APPENGINE; //FIXME TODO

@@ -175,7 +175,7 @@ public class PantriesDBAdapter {
 			}
 			return mCursor;
 		}
-		public boolean updateProduct(LocalMetaProduct localMetaProduct) {
+		public boolean updateProduct(LocalMetaProduct localMetaProduct) { //FIXME ao fazer update do produto mudar o time stamp do produto e da pantry
 			ContentValues args = localMetaProduct.getContentValues();
 			return mDb.update(DATABASE_TABLE, args, LocalObject.STR_O_LONG_KEY + "=" + localMetaProduct.getKey(), null) > 0;
 		}
