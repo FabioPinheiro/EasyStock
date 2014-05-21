@@ -124,10 +124,10 @@ public class ApiEndpoint {
 	}
 	
 	@ApiMethod(name = "insertUserPantry")
-	public UserPantry insertUserPantry(UserPantryDTO userPantryDTO/* UserPantry userpantry, User user, Pantry pantry */) {
+	public UserPantry insertUserPantry(UserPantryDTO userPantryDTO) {
 		UserPantry userpantry;
 		Pantry pantry = userPantryDTO.getPantry();
-		boolean pantryIsNull = (pantry == null);
+		boolean pantryIsNull = (pantry == null); //new pantry!!
 		EntityManager mgr = getEntityManager();
 		try {
 			User user = this.mGetUserByEmail(mgr, userPantryDTO.getEmail());
@@ -149,6 +149,8 @@ public class ApiEndpoint {
 				throw new EntityExistsException("insertUserPantry: Object (userpantry) already exists");
 			}
 			mgr.persist(userpantry);
+			user.addUserPantry(userpantry);
+			mgr.persist(user);
 		} finally {
 			mgr.close();
 		}

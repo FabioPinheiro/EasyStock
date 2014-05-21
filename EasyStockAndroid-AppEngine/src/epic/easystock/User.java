@@ -51,4 +51,10 @@ public class User {
 	public void setUserPantriesList(List<UserPantry> userPantriesList) {
 		this.userPantriesList = userPantriesList;
 	}
+	
+	public void addUserPantry(UserPantry userPantry) {
+		List<UserPantry> aux = getUserPantriesList();
+		aux.add(userPantry);
+		setUserPantriesList(aux);
+	}
 }
