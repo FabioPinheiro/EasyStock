@@ -1,5 +1,6 @@
 package epic.easystock.io;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,8 +40,14 @@ public class ListPantryProductTask extends AsyncTask<Context, Integer, List<Loca
 			if (result.isEmpty()){
 				EndPointCall.msg(LOG_TAG ,EndPointCall.PANTRY_IS_EMPTY);
 			}
+			List<LocalMetaProduct> localProductsAux = new ArrayList<LocalMetaProduct>();
+			for(LocalMetaProduct lmp : localProducts){
+				if(lmp.getAmount()>0)
+					localProductsAux.add(lmp);
+			}
 			//FIXME pantryDB.putAllProducts(localProducts); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			adapter.addAll(localProducts);
+			adapter.clear();
+			adapter.addAll(localProductsAux);
 		}else {
 			EndPointCall.msg(LOG_TAG ,EndPointCall.ERROR + " result == null");
 			Log.e(LOG_TAG, EndPointCall.ERROR);

@@ -11,12 +11,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import epic.easystock.R;
 import epic.easystock.assist.PantryAdapter;
+import epic.easystock.data.LocalMetaProduct;
 import epic.easystock.data.UserBdAdapter.UserPantryAux;
 import epic.easystock.io.EndPointCall;
 
@@ -44,6 +49,23 @@ public class MyPantriesActivity extends ListActivity {
 		});
 		
 		EndPointCall.listAllPantriesTask(adapter);
+		
+		getListView().setLongClickable(true);
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent,
+					View v, int position, long id) {
+				
+				UserPantryAux userPantry = (UserPantryAux) getListAdapter()
+						.getItem(position);
+				
+				Toast.makeText(EndPointCall.getGlobalContext(), "Long Click on pantry " + userPantry.pantryName, Toast.LENGTH_SHORT).show();
+				//GO TO SETTINGS				
+				
+				return false;
+			}
+		});
 	}
 	public void xpto() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
