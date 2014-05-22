@@ -48,8 +48,46 @@ public class TestAddToProductListActivity extends Activity {
 
 	public void takePic(View view) {
 		// dispatchTakePictureIntent();
-		dispatchBarcode();
+		// dispatchBarcode();
+		addProducts();
+	}
 
+	private void addProducts() {
+		String name = "Leite com Chocolate - Mimosa";
+		Long barCode = 5601049141287l;
+		String description = "Leite com chocolate, Fonte Natural de Cálcio";
+		EndPointCall.addToProductListTask(name, barCode, description,
+				mCurrentPhotoPath);
+		name = "Agua Mineral Natural - Luso ";
+		barCode = 5601163100313l;
+		description = "50cl";
+		EndPointCall.addToProductListTask(name, barCode, description,
+				mCurrentPhotoPath);
+		name = "Água de Nascente - Pingo Doce";
+		barCode = 5601009964406l;
+		description = "50cl Cristalina e Refrescante";
+		EndPointCall.addToProductListTask(name, barCode, description,
+				mCurrentPhotoPath);
+		name = "Caderno Espiral - Note-It";
+		barCode = 5601493064545l;
+		description = "Caderno pautado";
+		EndPointCall.addToProductListTask(name, barCode, description,
+				mCurrentPhotoPath);
+		name = "Caneta Azul - UniBall";
+		barCode = 4902778762646l;
+		description = "Caneta UniBall";
+		EndPointCall.addToProductListTask(name, barCode, description,
+				mCurrentPhotoPath);
+		name = "Caneta Vermelha - UniBall eye";
+		barCode = 4902778913789l;
+		description = "Caneta UniBall";
+		EndPointCall.addToProductListTask(name, barCode, description,
+				mCurrentPhotoPath);
+		name = "Minas para lapiseira - Rotring";
+		barCode = 4006856505535l;
+		description = "Minas 0.5 HB 12";
+		EndPointCall.addToProductListTask(name, barCode, description,
+				mCurrentPhotoPath);
 	}
 
 	private void dispatchBarcode() {

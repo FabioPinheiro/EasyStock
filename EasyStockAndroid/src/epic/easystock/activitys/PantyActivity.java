@@ -92,9 +92,14 @@ public class PantyActivity extends ListActivity {
 		addProduct.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				EndPointCall.addProductToPantryTask(adapter, pantryDB, Long
-						.valueOf(((EditText) findViewById(R.id.NumberId))
-								.getText().toString()));
+				String barcodeStr = ((EditText) findViewById(R.id.NumberId))
+						.getText().toString();
+				if(Strings.isNullOrEmpty(barcodeStr))
+					return;
+				Long barcode = Long
+						.valueOf(barcodeStr);
+				Log.i(LOG_TAG, "Adding product with barcode: "+barcode);
+				EndPointCall.addProductToPantryTask(adapter, pantryDB, barcode);
 			}
 		});
 		readBarcode.setOnClickListener(new OnClickListener() {
@@ -142,6 +147,8 @@ public class PantyActivity extends ListActivity {
 				product.setAmount(Double.valueOf(twoDForm.format(product
 						.getAmount().intValue() + number)));
 				EndPointCall.plusOneOnProductAmoutTask(product, pantryDB);
+				adapter.clear();
+				adapter.addAll(pantryDB.getAllProducts());
 			}
 		});
 		r1.setOnClickListener(new OnClickListener() {
@@ -165,6 +172,8 @@ public class PantyActivity extends ListActivity {
 				} else
 					Toast.makeText(EndPointCall.getGlobalContext(),
 							"AMOUNT IS TO LOW", Toast.LENGTH_LONG).show();
+				adapter.clear();
+				adapter.addAll(pantryDB.getAllProducts());
 			}
 		});
 

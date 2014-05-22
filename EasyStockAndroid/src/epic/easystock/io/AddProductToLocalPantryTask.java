@@ -24,6 +24,7 @@ public class AddProductToLocalPantryTask extends AsyncTask<Void, Integer, LocalM
 	private PantriesDBAdapter.PantryDB pantryDB;
 	private boolean fail_product_already_in_the_pantry = false;
 	private boolean error_no_pantryDB_createProduct = false;
+	private boolean error_no_pantryDB_updateProduct = true;
 	private LocalMetaProduct product;
 
 	public AddProductToLocalPantryTask(MetaProductAdapter adapter, PantriesDBAdapter.PantryDB pantryDB, LocalMetaProduct localMetaProduct) {
@@ -38,18 +39,20 @@ public class AddProductToLocalPantryTask extends AsyncTask<Void, Integer, LocalM
 	@Override
 	protected void onPostExecute(LocalMetaProduct result) {
 		super.onPostExecute(result);
-		if(fail_product_already_in_the_pantry) {
-			EndPointCall.msg(LOG_TAG, EndPointCall.FAIL_PRODUCT_ALREADY_IN_THE_PANTRY);
+		if(!error_no_pantryDB_updateProduct) {
+			EndPointCall.msg(LOG_TAG, EndPointCall.PRODUCT_ALREADY_IN_THE_PANTRY_UPDATED);
 		}else if (error_no_pantryDB_createProduct){
 			EndPointCall.msg(LOG_TAG, "error_no_pantryDB_createProduct"); //FIXME TEXT
 		}else if(result == null){
 			Log.e(LOG_TAG, "No fails and result == null    why?");
-			EndPointCall.msg(LOG_TAG, EndPointCall.ERROR + 2); //WTF se isto acontecer!!
+			EndPointCall.msg(LOG_TAG, EndPointCall.ERROR + 3); //WTF se isto acontecer!!
 		}else{
 			adapter.add(result);
 			Log.i(LOG_TAG, "PROTUDCT_ADDED"); //FIXME TEXT
 			EndPointCall.msg(LOG_TAG, EndPointCall.PRODUCT_ADDED_TO_LOCAL_PANTRY);
 		}
+		adapter.clear();
+		adapter.addAll(pantryDB.getAllProducts());
 	}
 	@Override
 	protected LocalMetaProduct doInBackground(Void... v) {
@@ -57,13 +60,15 @@ public class AddProductToLocalPantryTask extends AsyncTask<Void, Integer, LocalM
 		//LIXO FIXME Product newProd = EndPointCall.getApiEndpoint().getProductByBarCode(productBarCode).execute(); //FIXME !!!
 		for (LocalMetaProduct mp : newListInLocalPantry) {
 			if (mp.getKey().equals(product.getKey())) {
+				mp.setAmount(mp.getAmount()+1);
+				pantryDB.updateProduct(mp);
 				Log.e(LOG_TAG, EndPointCall.FAIL_PRODUCT_ALREADY_IN_THE_PANTRY);
-				fail_product_already_in_the_pantry = true;
-				Log.e(LOG_TAG, "Product NOT added to pantry"); //FIXME TEXT
+				error_no_pantryDB_updateProduct = false;
+				//Log.e(LOG_TAG, "Product NOT added to pantry"); //FIXME TEXT
 				break;
 			}
 		}
-		if (!fail_product_already_in_the_pantry) {
+		if (error_no_pantryDB_updateProduct) {
 			if( -1 != pantryDB.createProduct(product)){
 				newListInLocalPantry.add(product);//FIXME
 				return product;

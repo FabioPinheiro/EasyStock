@@ -168,7 +168,7 @@ public class ProductsDbAdapter {
 				
 				if (haveProduct(lmp.getKey())){
 					updateProduct(lmp); //FIXME pode não ser nessecario
-					Log.d(LOG_TAG,"synchronizeAllProducts: createProduct");
+					Log.d(LOG_TAG,"synchronizeAllProducts: updateProduct");
 				}else {
 					createProduct(lmp);
 					Log.d(LOG_TAG,"synchronizeAllProducts: createProduct");
@@ -181,6 +181,6 @@ public class ProductsDbAdapter {
 	}
 	private boolean haveProduct(long key) {
 		Cursor cursor = fetchProductByKey(key);
-		return cursor.isAfterLast() ? true : false;
+		return cursor.isAfterLast() ? false : true;
 	}
 }

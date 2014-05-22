@@ -1,7 +1,7 @@
 1- Refactor the Adapters make a super class
 2- Refactor layout_edit_botons_product_list in XML (activitys: product)
 3- Fixe the FIXEME
-
+4- Ao adicionar produtos a lista geral, nao há verificação, adiciona produtos iguais
 
 
 

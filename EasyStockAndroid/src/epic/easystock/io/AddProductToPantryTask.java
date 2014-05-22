@@ -47,9 +47,6 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 					exist = true;
 					metaP = mp;
 					mp.setAmount(mp.getAmount() + 1);
-
-					//FIXME ERROR WTF ? EndPointCall.getApiEndpoint().removeMetaProduct(mp.getKey().getId());  //!!!!!!! EEROR
-					// newList.add(mp);
 					Log.i(LOG_TAG, "AddProductTask: Product was in the list");
 					break;
 				}
@@ -59,14 +56,11 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 				newProd = EndPointCall.getApiEndpoint().getProductByBarCode(productId).execute();
 				metaP.setProduct(newProd.getKey());
 				metaP.setAmount(0.0);
-				// endpoint.insertMetaProduct(metaP).execute();
 				newList.add(metaP);
 			}
 			pantry.setProducts(newList);
-			//ERROR EndPointCall.getApiEndpoint().updatePantry(pantry).execute();
 			Log.i(LOG_TAG, "AddProductTask:" + "Product added to pantry");
 			throw new RuntimeException();
-			//FIXME return new LocalMetaProduct(newProd.getBarCode(), newProd.getName(), newProd.getDescription(), newProd.getKey(), metaP.getAmount());
 		} catch (IOException e) {
 			e.printStackTrace();
 			Log.e(LOG_TAG, "AddProductTask:" + "Product NOT added to pantry", e);
