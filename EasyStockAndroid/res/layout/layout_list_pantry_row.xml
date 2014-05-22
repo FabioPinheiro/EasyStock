@@ -16,7 +16,7 @@
     <TextView
         android:id="@+id/pantry_row_label_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_toRightOf="@id/pantry_row_label_idpantry"
         android:layout_alignParentTop="true"
         android:paddingLeft="5dp"
