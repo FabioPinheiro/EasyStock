@@ -32,7 +32,6 @@ public class AddProductToLocalPantryTask extends AsyncTask<Void, Integer, LocalM
 		this.mail = EndPointCall.getEmailAccount();
 		this.pantryDB = pantryDB;
 		this.product = localMetaProduct;
-		
 	}
 
 

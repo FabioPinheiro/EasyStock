@@ -267,7 +267,7 @@ public class EndPointCall {
 		}
 		else {
 			if (ooo.size() == 1)
-				new AddProductToLocalPantryTask(adapter, pantryDB, new LocalMetaProduct(ooo.get(0), 2.2)).execute();
+				new AddProductToLocalPantryTask(adapter, pantryDB, new LocalMetaProduct(ooo.get(0), 1.0)).execute();
 			else
 				new RuntimeException(); // FIXME
 		}

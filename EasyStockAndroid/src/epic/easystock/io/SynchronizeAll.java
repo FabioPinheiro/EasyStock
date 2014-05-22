@@ -58,6 +58,9 @@ public class SynchronizeAll extends AsyncTask<Void, Void, List<Pantry>> {
 			}
 			List<UserPantry> remoteUserPantries = user.getUserPantriesList();  // ERROR is null !!! 
 			
+			Log.i(LOG_TAG, "ESTOU AQUI");
+			
+			
 			//FIXME List<UserPantry> remoteUserPantries = api.listUserPantryOfUser(email).execute().getItems();
 			List<UserPantryAux> all = EndPointCall.getUserDBAdapter().getAllPantry();
 			List<UserPantry> userPantryToSync = new ArrayList<UserPantry>();
@@ -76,12 +79,14 @@ public class SynchronizeAll extends AsyncTask<Void, Void, List<Pantry>> {
 					//NONE
 				}
 			}
+			Log.i(LOG_TAG, "ESTOU AQUI");
 			for (UserPantry remoteUserPantry : remoteUserPantries) { 
 				if(!userPantryToSync.contains(remoteUserPantry)){
 					userPantryToCreate.add(remoteUserPantry);
 				}
 			}
 			//
+			Log.i(LOG_TAG, "ESTOU AQUI");
 			List<Pantry> pantriesToSync = new ArrayList<Pantry>();
 			for (UserPantry  aux : userPantryToSync) { 
 				pantriesToSync.add(EndPointCall.getApiEndpoint().getPantry(aux.getPantry().getKey()).execute());

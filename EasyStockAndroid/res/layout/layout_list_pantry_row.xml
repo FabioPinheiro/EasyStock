@@ -20,7 +20,8 @@
         android:layout_toRightOf="@id/pantry_row_label_idpantry"
         android:layout_alignParentTop="true"
         android:paddingLeft="5dp"
-        android:textSize="20dp" >
+        android:textAlignment="center"
+        android:textSize="60dp" >
     </TextView>
     
     <!-- Button

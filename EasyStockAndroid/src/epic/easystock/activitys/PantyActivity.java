@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -94,21 +96,49 @@ public class PantyActivity extends ListActivity {
 			public void onClick(View v) {
 				String barcodeStr = ((EditText) findViewById(R.id.NumberId))
 						.getText().toString();
-				if(Strings.isNullOrEmpty(barcodeStr))
+				if (Strings.isNullOrEmpty(barcodeStr))
 					return;
-				Long barcode = Long
-						.valueOf(barcodeStr);
-				Log.i(LOG_TAG, "Adding product with barcode: "+barcode);
+				Long barcode = Long.valueOf(barcodeStr);
+				Log.i(LOG_TAG, "Adding product with barcode: " + barcode);
 				EndPointCall.addProductToPantryTask(adapter, pantryDB, barcode);
 			}
 		});
 		readBarcode.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				dispatchBarcode();
 			}
 		});
+
+		final AlertDialog.Builder detailsAlert = new AlertDialog.Builder(this);
+		detailsAlert.setTitle("Product Details");
+
+		this.getListView().setLongClickable(true);
+		this.getListView().setOnItemLongClickListener(
+				new OnItemLongClickListener() {
+
+					@Override
+					public boolean onItemLongClick(AdapterView<?> parent,
+							View v, int position, long id) {
+
+						LocalMetaProduct product = (LocalMetaProduct) getListAdapter()
+								.getItem(position);
+						String[] details = { product.getName(),
+								product.getDescription(),
+								product.getAmount() + " Items", "Barcode: "+product.getBarCode() };
+						detailsAlert.setItems(details,
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										
+									}
+								});
+						detailsAlert.show();
+						return false;
+					}
+
+				});
 	}
 
 	private void dispatchBarcode() {

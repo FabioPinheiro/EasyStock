@@ -40,16 +40,16 @@ public class ProductAdapter extends ArrayAdapter<LocalProduct> {
 		View rowView = inflater.inflate(R.layout.layout_list_product_row, parent, false);
 
 		// 3. Get the two text view from the rowView
-		TextView labelViewIdProduct = (TextView) rowView.findViewById(R.id.product_row_label_idProduct);
+		//TextView labelViewIdProduct = (TextView) rowView.findViewById(R.id.product_row_label_idProduct);
 		TextView labelViewName = (TextView) rowView.findViewById(R.id.product_row_label_name);
 		TextView labelViewBarCode = (TextView) rowView.findViewById(R.id.product_row_label_barCode);
-		TextView labelViewDescription = (TextView) rowView.findViewById(R.id.product_row_label_description);
+		//TextView labelViewDescription = (TextView) rowView.findViewById(R.id.product_row_label_description);
 
 		// 4. Set the text for textView
-		labelViewIdProduct.setText(productArrayList.get(position).getKey().toString());
+		//labelViewIdProduct.setText(productArrayList.get(position).getKey().toString());
 		labelViewName.setText(productArrayList.get(position).getName());
 		labelViewBarCode.setText(productArrayList.get(position).getBarCode().toString());
-		labelViewDescription.setText(productArrayList.get(position).getDescription());
+		//labelViewDescription.setText(productArrayList.get(position).getDescription());
 
 		// 5. retrn rowView
 		return rowView;
