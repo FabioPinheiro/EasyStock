@@ -154,8 +154,6 @@ public class PantyActivity extends ListActivity {
 			public void onClick(View v) {
 				String str = ((EditText) findViewById(R.id.editNumber))
 				.getText().toString();
-				Toast.makeText(getApplicationContext(),
-				"THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
 				if (!Strings.isNullOrEmpty(str))
 					number = Integer
 					.valueOf(((EditText) findViewById(R.id.editNumber))
@@ -177,8 +175,6 @@ public class PantyActivity extends ListActivity {
 			public void onClick(View v) {
 				String str = ((EditText) findViewById(R.id.editNumber))
 				.getText().toString();
-				Toast.makeText(getApplicationContext(),
-				"THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
 				if (!Strings.isNullOrEmpty(str))
 					number = Integer
 					.valueOf(((EditText) findViewById(R.id.editNumber))
@@ -190,7 +186,7 @@ public class PantyActivity extends ListActivity {
 					EndPointCall.plusOneOnProductAmoutTask(product, pantryDB);
 				} else
 					Toast.makeText(EndPointCall.getGlobalContext(),
-					"AMOUNT IS TO LOW", Toast.LENGTH_LONG).show();
+					"AMOUNT IS TO LOW", Toast.LENGTH_SHORT).show();
 				adapter.clear();
 				adapter.addAll(pantryDB.getAllProducts());
 			}

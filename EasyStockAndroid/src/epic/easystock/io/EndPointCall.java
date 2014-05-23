@@ -76,6 +76,7 @@ public class EndPointCall {
 	static private Context globalContext = null;
 	static private SharedPreferences globalSettings;
 	static private String mEmailAccount = null;
+	static private String mCurrentPantry = null;
 	static private PantriesDBAdapter pantriesDbAdapter = null;	
 	static private UserBdAdapter userBdAdapter = null; // FIXME falta close (o open esta no init)
 	static private ProductsDbAdapter productsDbAdapter = null; // FIXME falta close (o open esta no init)
@@ -96,6 +97,14 @@ public class EndPointCall {
 		return user;
 	}*/
 	
+	public static String getmCurrentPantry() {
+		return mCurrentPantry;
+	}
+
+	public static void setmCurrentPantry(String mCurrentPantry) {
+		EndPointCall.mCurrentPantry = mCurrentPantry;
+	}
+
 	static public void setLastUsedPantry(long pantryKey) {
 		getPantryDB(pantryKey);
 	}
@@ -183,7 +192,7 @@ public class EndPointCall {
 	}
 	
 	static public void msg(String message) {
-		Toast.makeText(EndPointCall.getGlobalContext(), message, Toast.LENGTH_LONG).show();
+		Toast.makeText(EndPointCall.getGlobalContext(), message, Toast.LENGTH_SHORT).show();
 	}
 	
 	static public void msg(String TAG, String message) {
@@ -270,9 +279,10 @@ public class EndPointCall {
 		}
 		else {
 			if (ooo.size() == 1){
-				EndPointCall.getProductsDbAdapter().getProductByKey(ooo.get(0));
-				new LocalMetaProduct(ooo.get(0), 1.0)
-				new AddProductToLocalPantryTask(adapter, pantryDB, ).execute();
+				Log.i(EndPointCall_TAG, "ooo[0].getKey() = " + ooo.get(0).getKey());
+				EndPointCall.getProductsDbAdapter().getProductByKey(ooo.get(0).getKey());
+				LocalMetaProduct aux = new LocalMetaProduct(ooo.get(0), 1.0, 0);
+				new AddProductToLocalPantryTask(adapter, pantryDB, aux).execute();
 			}else
 				new RuntimeException(); // FIXME
 		}

@@ -3,57 +3,45 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" >
 
-    <!-- TextView
-        android:id="@+id/product_row_label_idProduct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:paddingLeft="5dp"
-        android:textSize="10sp" >
-          android:layout_toRightOf="@id/product_row_label_idProduct"-->
-    <!-- /TextView-->
-
     <TextView
         android:id="@+id/product_row_label_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceListItem"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:paddingLeft="5dp"
+        android:textAppearance="?android:attr/textAppearanceListItem"
         android:textSize="30sp" >
     </TextView>
-    
+
+
     <TextView
         android:id="@+id/product_row_label_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/product_row_label_name"
-        android:layout_alignParentBottom="true"
-        android:paddingLeft="5dp"
-        android:textSize="20sp" >
-    </TextView>
-    
-    <TextView
-        android:id="@+id/product_row_label_barCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
         android:paddingLeft="5dp"
         android:textSize="20sp" >
     </TextView>
 
-    <!-- TextView
-        android:id="@+id/product_row_label_description"
+    <TextView
+        android:id="@+id/product_row_label_barCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/product_row_label_idProduct"
-        android:layout_toRightOf="@id/product_row_label_barCode"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:paddingLeft="5dp"
-        android:textSize="15sp" >
-    </TextView-->
-    
+        android:textSize="20sp" >
+    </TextView>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="12dp"
+        android:layout_toLeftOf="@+id/product_row_label_barCode"
+        android:src="@drawable/ic_stat_lowamount" />
+
 
 </RelativeLayout>

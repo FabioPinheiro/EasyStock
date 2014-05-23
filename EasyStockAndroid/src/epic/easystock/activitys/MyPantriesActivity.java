@@ -59,11 +59,11 @@ public class MyPantriesActivity extends ListActivity {
 				
 				UserPantryAux userPantry = (UserPantryAux) getListAdapter()
 						.getItem(position);
-				
-				Toast.makeText(EndPointCall.getGlobalContext(), "Long Click on pantry " + userPantry.pantryName, Toast.LENGTH_SHORT).show();
 				//GO TO SETTINGS				
-				
-				return false;
+				EndPointCall.setmCurrentPantry(userPantry.pantryName);
+				Intent intent = new Intent(EndPointCall.getGlobalContext(),PantrySettingActivity.class);
+				startActivity(intent);
+				return true;
 			}
 		});
 	}
@@ -107,4 +107,5 @@ public class MyPantriesActivity extends ListActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 }

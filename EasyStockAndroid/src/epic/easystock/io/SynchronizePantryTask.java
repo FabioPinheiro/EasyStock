@@ -32,7 +32,7 @@ AsyncTask<Void, Void, PantrySynchronizationDTO> {
 		if (fail_to_update) {
 			EndPointCall.msg(LOG_TAG, EndPointCall.FAIL_TO_SYNCHRONIZED_PANTRY);
 		} else {
-			pantryDB.synch(result);
+			pantryDB.sync(result);
 			EndPointCall.msg(LOG_TAG, EndPointCall.PANTRY_SYNCHRONIZED);
 		}
 	}
@@ -43,6 +43,9 @@ AsyncTask<Void, Void, PantrySynchronizationDTO> {
 		PantrySynchronizationDTO dto = pantryDB.getPantrySynchronizationDTO();
 		try {
 			ApiEndpoint api = EndPointCall.getApiEndpoint();
+			for(MetaProduct mtp : dto.getListMetaProducts()){
+				Log.i("PantrySynchronizationDTO", "SynchronizePantryTask: mtp " + mtp.getProductKey() + " ");
+			}
 			Log.i("PantrySynchronizationDTO", "SynchronizePantryTask: " + dto.getPantryKey() + " ");
 			PantrySynchronizationDTO ret = api.synchronizationPantry(dto).execute();
 			Log.d("PantrySynchronizationDTO", "SynchronizePantryTask: " + ret.getPantryKey() + " DONE");

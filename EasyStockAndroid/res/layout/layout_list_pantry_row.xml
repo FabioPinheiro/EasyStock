@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants" >
 
     <TextView
         android:id="@+id/pantry_row_label_idpantry"
@@ -17,20 +18,31 @@
         android:id="@+id/pantry_row_label_name"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
-        android:layout_toRightOf="@id/pantry_row_label_idpantry"
         android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/pantry_row_label_idpantry"
         android:paddingLeft="5dp"
         android:textAlignment="center"
         android:textSize="60dp" >
     </TextView>
-    
-    <!-- Button
+
+    <!--
+    Button
     android:id="@+id/add_btn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_toRightOf="@id/pantry_row_label_name"
     android:layout_centerVertical="true"
     android:layout_marginRight="10dp"
-    android:text="Add" /-->
-    
+    android:text="Add" /
+    -->
+
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:onClick="gotoSettings"
+        android:src="@drawable/ic_stat_settings" />
+
 </RelativeLayout>

@@ -189,7 +189,7 @@ public class PantriesDBAdapter {
 			if(dto.getPantryKey() == 0 ) throw new RuntimeException(); //FIXME REMOVE ME
 			return dto;
 		}
-		public void synch(PantrySynchronizationDTO result) {
+		public void sync(PantrySynchronizationDTO result) {
 			for (MetaProduct it : result.getListMetaProducts()) {
 				LocalMetaProduct aux = new LocalMetaProduct(it);
 				if(haveProduct(it.getProductKey())) {

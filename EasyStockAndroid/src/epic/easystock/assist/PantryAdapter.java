@@ -3,14 +3,20 @@ package epic.easystock.assist;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import epic.easystock.R;
+import epic.easystock.activitys.PantrySettingActivity;
 import epic.easystock.apiEndpoint.model.Pantry;
 import epic.easystock.data.UserBdAdapter.UserPantryAux;
+import epic.easystock.io.EndPointCall;
 
 public class PantryAdapter extends ArrayAdapter<UserPantryAux> {
 
@@ -40,11 +46,24 @@ public class PantryAdapter extends ArrayAdapter<UserPantryAux> {
 				.findViewById(R.id.pantry_row_label_idpantry);
 		TextView labelViewName = (TextView) rowView
 				.findViewById(R.id.pantry_row_label_name);
-
-
+		ImageButton button = (ImageButton) rowView.findViewById(R.id.imageButton1);
+		
+		
+		
+		final String pantryName = productArrayList.get(position).pantryName;
+		button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				EndPointCall.setmCurrentPantry(pantryName);
+				Intent intent = new Intent(EndPointCall.getGlobalContext(),PantrySettingActivity.class);
+				context.startActivity(intent);
+			}
+		});
+		
 		// 4. Set the text for textView
 		labelViewIdProduct.setText(String.valueOf(productArrayList.get(position).pantryID));
-		labelViewName.setText(productArrayList.get(position).pantryName);
+		labelViewName.setText(pantryName);
 
 
 		// 5. retrn rowView

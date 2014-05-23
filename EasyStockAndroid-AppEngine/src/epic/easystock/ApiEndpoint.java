@@ -152,7 +152,7 @@ public class ApiEndpoint {
 		try {
 			User user = this.mGetUserByEmail(mgr, userPantryDTO.getEmail());
 			if (!mContainsUser(mgr, user)) // FIXME não gosto
-				throw new EntityExistsException("insertUserPantry: User is not regiter in the system: user="+ user.toString());
+				throw new EntityExistsException("insertUserPantry: User is not regited in the system: user="+ user.toString());
 			if (mContainsPantry(mgr, pantry))
 				throw new EntityExistsException("insertUserPantry: Object (pantry) already exists");
 			if (pantryIsNull) {
