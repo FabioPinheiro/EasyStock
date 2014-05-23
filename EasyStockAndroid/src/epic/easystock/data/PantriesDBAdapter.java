@@ -80,7 +80,7 @@ public class PantriesDBAdapter {
 		private long pantryKey;
 
 		
-		public PantryDB(Long pantryKey, String pantryName) {
+		public PantryDB(Long pantryKey, String pantryName) { //REMOVE pantryName
 			//this.mCtx = context;
 			this.pantryKey = pantryKey;
 			this.DATABASE_TABLE = "table_" + pantryKey + "_" + pantryName ;
@@ -137,6 +137,10 @@ public class PantriesDBAdapter {
 		public long createProduct(LocalMetaProduct localMetaProduct) {
 			return mDb.insert(DATABASE_TABLE, null, localMetaProduct.getContentValues());
 		}
+		public boolean updateProduct(LocalMetaProduct localMetaProduct) {
+			ContentValues args = localMetaProduct.getContentValues();
+			return mDb.update(DATABASE_TABLE, args, LocalObject.STR_O_LONG_KEY + "=" + localMetaProduct.getKey(), null) > 0;
+		}
 		public boolean deleteProduct(long rowId) {
 			return mDb.delete(DATABASE_TABLE, LocalObject.STR_O_LONG_KEY + "=" + rowId, null) > 0;
 		}
@@ -166,19 +170,15 @@ public class PantriesDBAdapter {
 			cursor.close();
 			return products;
 		}
-		public Cursor fetchNote(long id) throws SQLException {
+		public boolean haveProduct(long productKey) throws SQLException {
 			Cursor mCursor =
-			mDb.query(true, DATABASE_TABLE, null, LocalObject.STR_O_LONG_KEY + "=" + id, null, null,
-			null, null, null);
+			mDb.query(true, DATABASE_TABLE, null, LocalObject.STR_O_LONG_KEY + "=" + productKey, null, null, null, null, null);
 			if (mCursor != null) {
 				mCursor.moveToFirst();
 			}
-			return mCursor;
+			return !mCursor.isAfterLast();
 		}
-		public boolean updateProduct(LocalMetaProduct localMetaProduct) {
-			ContentValues args = localMetaProduct.getContentValues();
-			return mDb.update(DATABASE_TABLE, args, LocalObject.STR_O_LONG_KEY + "=" + localMetaProduct.getKey(), null) > 0;
-		}
+
 		public List<LocalMetaProduct> getAllChangedProducts() {
 			return null;
 		}
@@ -192,8 +192,15 @@ public class PantriesDBAdapter {
 			if(dto.getPantryKey() == 0 ) throw new RuntimeException(); //FIXME REMOVE ME
 			return dto;
 		}
-		public void update(PantrySynchronizationDTO result) {
-			// TODO ERROR Auto-generated method stub
+		public void synch(PantrySynchronizationDTO result) {
+			for (MetaProduct it : result.getListMetaProducts()) {
+				LocalMetaProduct aux = new LocalMetaProduct(it);
+				if(haveProduct(it.getProductKey())) {
+					updateProduct(aux);
+				}else{
+					createProduct(aux);
+				}
+			}
 		}
 	}
 }

@@ -1,3 +1,4 @@
+//LIXO
 package epic.easystock.io;
 
 import java.io.IOException;
@@ -19,8 +20,7 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 	private MetaProductAdapter adapter;
 	private String mail, pantrySelected;
 	private long productId;
-
-	public AddProductToPantryTask(MetaProductAdapter adapter, String pantrySelected, long productId) {
+	public AddProductToPantryTask(MetaProductAdapter adapter, String pantrySelected, long productId, int LIXO) {
 		this.adapter = adapter;
 		this.mail = EndPointCall.getEmailAccount();
 		this.pantrySelected = pantrySelected;
@@ -32,7 +32,7 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 	protected LocalMetaProduct doInBackground(Void... v) {
 		try {
 			Pantry pantry = EndPointCall.getApiEndpoint().getPantryByMailAndName(mail, pantrySelected).execute();
-			List<MetaProduct> newList = pantry.getProducts();
+			List<MetaProduct> newList = pantry.getMetaProducts();
 			if (newList == null) {
 				Log.e(LOG_TAG, "AddProductTask: newList=null");
 				newList = new ArrayList<MetaProduct>(); // FIXME isto nunca devia de ser null
@@ -42,7 +42,7 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 			boolean exist = false;
 			for (MetaProduct mp : newList) {
 				newProd = EndPointCall.getApiEndpoint().getProductByBarCode(productId).execute();
-				if (mp.getProduct().equals(newProd.getKey())) {
+				if (mp.getProductKey().equals(newProd.getKey())) {
 					newList.remove(mp);
 					exist = true;
 					metaP = mp;
@@ -58,7 +58,7 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 				metaP.setAmount(0.0);
 				newList.add(metaP);
 			}
-			pantry.setProducts(newList);
+			pantry.setMetaProducts(newList);
 			Log.i(LOG_TAG, "AddProductTask:" + "Product added to pantry");
 			throw new RuntimeException();
 		} catch (IOException e) {

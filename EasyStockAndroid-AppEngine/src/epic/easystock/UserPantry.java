@@ -26,7 +26,7 @@ public class UserPantry {
 	@Unowned //@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Pantry pantry; // FIXME
 	@Unowned //@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private User user;
+	private Key userKey;
 	private PermissionType permissionType; // TODO
 	private Date userPantryTimeStamp; // TODO
 	
@@ -38,12 +38,12 @@ public class UserPantry {
 		this.pantry = pantry;
 	}
 	
-	public User getUser() {
-		return user;
+	public Key getUserKey() {
+		return userKey;
 	}
 	
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserKey(Key userKey) {
+		this.userKey = userKey;
 	}
 	
 	public PermissionType getPermissionType() {

@@ -166,6 +166,7 @@ public class UserBdAdapter {
 		String[] pantreisName = new String[aux.size()];
 		int i = 0;
 		for (UserBdAdapter.UserPantryAux el : aux) {
+			if(el.pantryName == null) throw new RuntimeException(); // FIXME REMOVE 
 			pantreisName[i] = el.pantryName;
 			i++;
 		}

@@ -171,7 +171,7 @@ public class ApiEndpoint {
 			if (pantryIsNull) {
 				pantry = new Pantry(userPantryDTO.getPantryName());
 				pantry.setTimeStamp(userPantryDTO.getPantryTimeStamp());
-				pantry.setProducts(new ArrayList<MetaProduct>());
+				pantry.setMetaProducts(new ArrayList<MetaProduct>());
 				pantry.setName(userPantryDTO.getPantryName());
 				mInsertPantry(pantry); // FIXME Caused by:
 										// java.lang.IllegalArgumentException:
@@ -181,7 +181,7 @@ public class ApiEndpoint {
 			} else {
 			}// FIXME care pantry.getKey()
 			userpantry = new UserPantry();
-			userpantry.setUser(user);
+			userpantry.setUserKey(user.getKey());
 			userpantry.setPantry(pantry);
 			if (mContainsUserPantry(mgr, userpantry)) {
 				throw new EntityExistsException(
@@ -225,7 +225,7 @@ public class ApiEndpoint {
 					ret = p;
 			}
 			if (ret != null)
-				for (MetaProduct p : ret.getProducts()) {
+				for (MetaProduct p : ret.getMetaProducts()) {
 				} // FIXME isto é inutil ?! era suporto fazer o que?
 		} finally {
 			mgr.close();
@@ -247,37 +247,21 @@ public class ApiEndpoint {
 	}
 
 	@ApiMethod(name = "synchronizationPantry")
-	public PantrySynchronizationDTO synchronizationPantry(
-			PantrySynchronizationDTO pantrySynchronizationDTO) {
+	public PantrySynchronizationDTO synchronizationPantry(PantrySynchronizationDTO pantrySynchronizationDTO) {
 		EntityManager mgr = getEntityManager();
+		PantrySynchronizationDTO ret = null;
 		try {
-			Pantry pantry = mgr.find(Pantry.class,
-					pantrySynchronizationDTO.getPantryKey());
-			if (null == pantrySynchronizationDTO.getListMetaProducts()) {
-				throw new RuntimeException();// ERROR REMOVE
-			}
-			if (null == pantrySynchronizationDTO.getPantryTimeStamp()) {
-				throw new RuntimeException();// ERROR REMOVE
-			}
-			if (null == pantry) {
-				throw new RuntimeException();// ERROR REMOVE
-			}
-			if (pantrySynchronizationDTO.getPantryTimeStamp().after(
-					pantry.getTimeStamp())) {
-				pantry.setProducts(pantrySynchronizationDTO
-						.getListMetaProducts());
-				// for (MetaProduct it :
-				// pantrySynchronizationDTO.getListMetaProducts()) {}//FIXME
-				pantry.setTimeStamp(new Date()); // FIXME só se over ediçoes
-				pantrySynchronizationDTO.setPantryTimeStamp(pantry
-						.getTimeStamp()); // FIXME não gosto
-				// ERROR mgr.persist(pantry);
-			} else
-				throw new RuntimeException();// ERROR REMOVE
+			Pantry pantry = mgr.find(Pantry.class,pantrySynchronizationDTO.getPantryKey());
+			if (null == pantrySynchronizationDTO.getListMetaProducts()) throw new RuntimeException();// ERROR REMOVE
+			if (null == pantrySynchronizationDTO.getPantryTimeStamp()) throw new RuntimeException();// ERROR REMOVE
+			if (null == pantry) throw new RuntimeException();// ERROR REMOVE
+			ret = pantry.synchronizationMetaProducts(pantrySynchronizationDTO);
+			mgr.persist(pantry);
 		} finally {
 			mgr.close();
 		}
-		return pantrySynchronizationDTO;
+		if (ret == null) throw new RuntimeException();// ERROR REMOVE
+		return ret;
 	}
 
 	@SuppressWarnings({ "unchecked", "unused" })
@@ -439,7 +423,7 @@ public class ApiEndpoint {
 																		// gosto
 			else
 				for (UserPantry iii : user.getUserPantriesList()) {
-					for (MetaProduct p : iii.getPantry().getProducts())
+					for (MetaProduct p : iii.getPantry().getMetaProducts())
 						; // FIXME para carregar !!!
 					//iii.getUser();
 				}
@@ -475,9 +459,8 @@ public class ApiEndpoint {
 			UserPantry userpantry) {
 		List<UserPantry> execute = null;
 		Query query = mgr
-				.createQuery(
-						"select up from UserPantry up WHERE up.pantry=:pantry AND up.user=:user")
-				.setParameter("user", userpantry.getUser())
+				.createQuery("select up from UserPantry up WHERE up.pantry=:pantry AND up.userkey=:userkey")
+				.setParameter("userkey", userpantry.getUserKey())
 				.setParameter("pantry", userpantry.getPantry());
 		query.setFirstResult(0);
 		execute = query.getResultList();

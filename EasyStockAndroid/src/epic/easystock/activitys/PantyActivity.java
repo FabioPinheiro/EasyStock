@@ -42,7 +42,7 @@ public class PantyActivity extends ListActivity {
 	MetaProductAdapter adapter;
 	String selectedPantryName;
 	private View xpto;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,16 +52,14 @@ public class PantyActivity extends ListActivity {
 		addProduct = (Button) findViewById(R.id.AddProduct);
 		readBarcode = (Button) findViewById(R.id.read_bar_code_button);
 		adapter = new MetaProductAdapter(this,
-				new ArrayList<LocalMetaProduct>());
+		new ArrayList<LocalMetaProduct>());
 		xpto = findViewById(R.id.layout_edit_botons_pantry_list);
 		setListAdapter(adapter);
-
 		selectedPantryName = getIntent().getStringExtra("PANTRYNAME");
 		getIntent().removeExtra("PANTRYNAME");
-
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		final String[] pantreisName = EndPointCall.getUserDBAdapter()
-				.avalablePantrysNamesFromUser(EndPointCall.getEmailAccount());
+		.avalablePantrysNamesFromUser(EndPointCall.getEmailAccount());
 		alert.setTitle("Select Pantry");
 		alert.setItems(pantreisName, new DialogInterface.OnClickListener() {
 			@Override
@@ -69,7 +67,6 @@ public class PantyActivity extends ListActivity {
 				selectedPantryName = pantreisName[which];// FIXME
 				pantryDB = EndPointCall.getPantryDB(selectedPantryName);
 				EndPointCall.listPantryProductTask(adapter, pantryDB); // FIXME
-
 				// NÂO gosto
 			}
 		});
@@ -80,22 +77,19 @@ public class PantyActivity extends ListActivity {
 				aux.finish();
 			}
 		});
-		if (Strings.isNullOrEmpty(selectedPantryName)
-				&& pantreisName.length > 1)
+		if (Strings.isNullOrEmpty(selectedPantryName) && pantreisName.length > 1)
 			alert.show();
 		else {
-			if (Strings.isNullOrEmpty(selectedPantryName)
-					&& pantreisName.length == 1)
+			if (Strings.isNullOrEmpty(selectedPantryName) && pantreisName.length == 1)
 				selectedPantryName = pantreisName[0];
 			pantryDB = EndPointCall.getPantryDB(selectedPantryName);
 			EndPointCall.listPantryProductTask(adapter, pantryDB);
 		}
-
 		addProduct.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				String barcodeStr = ((EditText) findViewById(R.id.NumberId))
-						.getText().toString();
+				.getText().toString();
 				if (Strings.isNullOrEmpty(barcodeStr))
 					return;
 				Long barcode = Long.valueOf(barcodeStr);
@@ -109,73 +103,65 @@ public class PantyActivity extends ListActivity {
 				dispatchBarcode();
 			}
 		});
-
 		final AlertDialog.Builder detailsAlert = new AlertDialog.Builder(this);
 		detailsAlert.setTitle("Product Details");
-
 		this.getListView().setLongClickable(true);
 		this.getListView().setOnItemLongClickListener(
-				new OnItemLongClickListener() {
-
+		new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent,
+			View v, int position, long id) {
+				LocalMetaProduct product = (LocalMetaProduct) getListAdapter()
+				.getItem(position);
+				String[] details = { product.getName(),
+				product.getDescription(),
+				product.getAmount() + " Items", "Barcode: " + product.getBarCode() };
+				detailsAlert.setItems(details,
+				new DialogInterface.OnClickListener() {
 					@Override
-					public boolean onItemLongClick(AdapterView<?> parent,
-							View v, int position, long id) {
-
-						LocalMetaProduct product = (LocalMetaProduct) getListAdapter()
-								.getItem(position);
-						String[] details = { product.getName(),
-								product.getDescription(),
-								product.getAmount() + " Items", "Barcode: "+product.getBarCode() };
-						detailsAlert.setItems(details,
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										
-									}
-								});
-						detailsAlert.show();
-						return false;
+					public void onClick(DialogInterface dialog,
+					int which) {
 					}
-
 				});
+				detailsAlert.show();
+				return false;
+			}
+		});
 	}
-
+	
 	private void dispatchBarcode() {
 		IntentIntegrator scanIntegrator = new IntentIntegrator(this);
 		scanIntegrator.initiateScan();
 	}
-
+	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		final LocalMetaProduct product = (LocalMetaProduct) getListAdapter()
-				.getItem(position);
+		.getItem(position);
 		// Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
-
 		xpto.setVisibility(View.VISIBLE);
 		TextView x = (TextView) findViewById(R.id.selectProduct);
 		x.setText(product.getName());
-
 		Button a1 /* add one */= (Button) findViewById(R.id.buttonAddOne);
 		Button r1 /* remove one */= (Button) findViewById(R.id.buttonRemoveOne);
 		a1.setOnClickListener(new OnClickListener() {
 			Integer number;
-
+			
 			@Override
 			public void onClick(View v) {
 				String str = ((EditText) findViewById(R.id.editNumber))
-						.getText().toString();
+				.getText().toString();
 				Toast.makeText(getApplicationContext(),
-						"THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
+				"THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
 				if (!Strings.isNullOrEmpty(str))
 					number = Integer
-							.valueOf(((EditText) findViewById(R.id.editNumber))
-									.getText().toString());
+					.valueOf(((EditText) findViewById(R.id.editNumber))
+					.getText().toString());
 				else
 					number = 1;
 				DecimalFormat twoDForm = new DecimalFormat("#.00");
 				product.setAmount(Double.valueOf(twoDForm.format(product
-						.getAmount().intValue() + number)));
+				.getAmount().intValue() + number)));
 				EndPointCall.plusOneOnProductAmoutTask(product, pantryDB);
 				adapter.clear();
 				adapter.addAll(pantryDB.getAllProducts());
@@ -183,17 +169,17 @@ public class PantyActivity extends ListActivity {
 		});
 		r1.setOnClickListener(new OnClickListener() {
 			Integer number;
-
+			
 			@Override
 			public void onClick(View v) {
 				String str = ((EditText) findViewById(R.id.editNumber))
-						.getText().toString();
+				.getText().toString();
 				Toast.makeText(getApplicationContext(),
-						"THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
+				"THE STRING NUMBER: " + str, Toast.LENGTH_LONG).show();
 				if (!Strings.isNullOrEmpty(str))
 					number = Integer
-							.valueOf(((EditText) findViewById(R.id.editNumber))
-									.getText().toString());
+					.valueOf(((EditText) findViewById(R.id.editNumber))
+					.getText().toString());
 				else
 					number = 1;
 				if (product.getAmount() >= number) {
@@ -201,30 +187,27 @@ public class PantyActivity extends ListActivity {
 					EndPointCall.plusOneOnProductAmoutTask(product, pantryDB);
 				} else
 					Toast.makeText(EndPointCall.getGlobalContext(),
-							"AMOUNT IS TO LOW", Toast.LENGTH_LONG).show();
+					"AMOUNT IS TO LOW", Toast.LENGTH_LONG).show();
 				adapter.clear();
 				adapter.addAll(pantryDB.getAllProducts());
 			}
 		});
-
 	}
-
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
 		IntentResult scanningResult = IntentIntegrator.parseActivityResult(
-				requestCode, resultCode, data);
-
+		requestCode, resultCode, data);
 		if (scanningResult != null) {
 			String scanContent = scanningResult.getContents();
 			EditText barcode = (EditText) findViewById(R.id.NumberId);
 			barcode.setText(scanContent);
 		} else {
 			Toast toast = Toast.makeText(getApplicationContext(),
-					"No scan data received!", Toast.LENGTH_SHORT);
+			"No scan data received!", Toast.LENGTH_SHORT);
 			toast.show();
 		}
 	}// onActivityResult
-
+	
 	@Override
 	protected void onStop() {
 		super.onStop();
