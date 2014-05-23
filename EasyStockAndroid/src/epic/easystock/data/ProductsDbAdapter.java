@@ -160,6 +160,10 @@ public class ProductsDbAdapter {
 	}
 	public LocalProduct getProductByKey(long key) {
 		Cursor cursor = fetchProductByKey(key);
+		if(cursor.isAfterLast()){
+			Log.e(LOG_TAG, "The Porduct does not exist key=" + key);
+			return null;
+		}
 		return new LocalProduct(cursor);
 	}
 	public void synchronizeAllProducts(Collection<LocalProduct> products) {

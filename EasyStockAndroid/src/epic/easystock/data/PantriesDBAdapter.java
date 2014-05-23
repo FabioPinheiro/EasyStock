@@ -179,16 +179,13 @@ public class PantriesDBAdapter {
 			return !mCursor.isAfterLast();
 		}
 
-		public List<LocalMetaProduct> getAllChangedProducts() {
-			return null;
-		}
 		public PantrySynchronizationDTO getPantrySynchronizationDTO() {
 			List<LocalMetaProduct> listMP = this.getAllProducts();
 			List<MetaProduct> aux = LocalMetaProduct.convert(listMP);
 			PantrySynchronizationDTO dto = new PantrySynchronizationDTO();
 			dto.setListMetaProducts(aux);
 			dto.setPantryKey(this.pantryKey);
-			dto.setPantryTimeStamp(new DateTime(new Date())); //FIXME ERROR
+			dto.setPantryTimeStamp(new DateTime(0));//new Date())); //FIXME ERROR
 			if(dto.getPantryKey() == 0 ) throw new RuntimeException(); //FIXME REMOVE ME
 			return dto;
 		}

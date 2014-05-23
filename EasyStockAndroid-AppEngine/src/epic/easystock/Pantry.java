@@ -74,7 +74,9 @@ public class Pantry {
 		PantrySynchronizationDTO ret = new PantrySynchronizationDTO();
 		ret.setPantryKey(this.getKey());
 		ret.setPantryTimeStamp(this.getTimeStamp());
-		ret.setListMetaProducts(listMetaProductsToSynchInClientSide);
+		ret.setListMetaProducts(this.getMetaProducts()); //ERROR REMOVE !!!
+		//ret.setListMetaProducts(listMetaProductsToSynchInClientSide); FIXME why this don't work
+		//if(ret.getListMetaProducts().isEmpty())	 throw new RuntimeException(); //ERROR REMOVE NOW XXX why??!
 		return ret;
 	}
 	
