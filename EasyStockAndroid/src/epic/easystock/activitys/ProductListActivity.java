@@ -48,7 +48,7 @@ public class ProductListActivity extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		LocalMetaProduct product = (LocalMetaProduct) getListAdapter().getItem(position);
+		LocalProduct product = (LocalProduct) getListAdapter().getItem(position);
 		//Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
 		xpto.setVisibility(View.VISIBLE);
 		TextView x = (TextView) findViewById(R.id.myMail);
