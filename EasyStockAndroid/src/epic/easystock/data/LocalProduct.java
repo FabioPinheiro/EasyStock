@@ -21,6 +21,12 @@ public class LocalProduct extends LocalObject{
 		this.barCode = product.getBarCode();
 		this.description = product.getDescription();
 	}
+	protected LocalProduct(long key) {//FIXME HACK
+		super(key);
+		this.name = "unknown key=" + key;
+		this.barCode = -404l; //ERROR
+		this.description = "data not local";
+	}
 	protected LocalProduct(Cursor cursor) {
 		super(cursor);
 		this.name = cursor.getString(cursor.getColumnIndex(STR_P_STRING_NAME));

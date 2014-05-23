@@ -5,10 +5,12 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 import epic.easystock.apiEndpoint.model.MetaProduct;
 import epic.easystock.io.EndPointCall;
 
 public class LocalMetaProduct extends LocalObject {
+	private final String LOG_TAG = this.getClass().getCanonicalName();
 	private final LocalProduct localProduct;
 	private Double amount;
 	
@@ -29,6 +31,8 @@ public class LocalMetaProduct extends LocalObject {
 		LocalProduct aux = EndPointCall.getProductsDbAdapter().getProductByKey(metaProduct.getProductKey()); // FIXME
 		if (aux == null)
 			throw new RuntimeException(); // REMOVE
+		if (aux.getBarCode() == -404l)
+			Log.d(LOG_TAG, "LocalProduct.getBarCode() == -404l");
 		this.localProduct = aux;
 		this.amount = metaProduct.getAmount();
 	}
@@ -42,7 +46,7 @@ public class LocalMetaProduct extends LocalObject {
 		this.amount = cursor.getDouble(cursor.getColumnIndex(STR_MP_REAL_AMOUNT));
 	}
 	
-	public LocalMetaProduct(LocalProduct localProduct, double amount) {
+	public LocalMetaProduct(LocalProduct localProduct, double amount, int i) {
 		super(localProduct);
 		// long aux = localProduct.getKey();
 		// if(aux == 0 ) throw new RuntimeException();

@@ -17,7 +17,7 @@ import epic.easystock.io.EndPointCall;
 
 public abstract class LocalObject {
 	public enum DataState {
-		UNCHANGED, CHANGED, NEW, FINAL, FETCH_FROM_CLOUD; // 0 1 2
+		UNCHANGED, CHANGED, NEW, FINAL, FETCH_FROM_CLOUD, DATAUNKNOWN; // 0 1 2
 		/*
 		 * private int vaule; private static Map<Integer, LegNo> map = new HashMap<Integer, LegNo>(); static { for (LegNo legEnum : LegNo.values()) { map.put(legEnum.legNo, legEnum); } }
 		 */
@@ -44,6 +44,13 @@ public abstract class LocalObject {
 	/*
 	 * public LocalObject(Long key, DataState dataState, DateTime timestamp) { super(); this.key = key; this.dataState = dataState; this.timestamp = timestamp; }
 	 */
+	protected LocalObject(long key) { //FIXME HACK
+		super();
+		this.key = key;
+		this.dataState = DataState.DATAUNKNOWN;
+		this.timestamp = new DateTime(0);
+	}
+	 
 	protected LocalObject(Cursor cursor) {
 		super();
 		this.key = cursor.getLong(cursor.getColumnIndex(STR_O_LONG_KEY));

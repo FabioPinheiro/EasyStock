@@ -101,6 +101,10 @@ public class ProductsDbAdapter {
 	public long createProduct(LocalProduct localProduct) {
 		return mDb.insert(DATABASE_TABLE, null, localProduct.getContentValues());
 	}
+	public boolean updateProduct(LocalProduct localProduct) {
+		ContentValues aux = localProduct.getContentValues();
+		return mDb.update(DATABASE_TABLE, aux, LocalObject.STR_O_LONG_KEY + "=" + localProduct.getKey(), null) > 0;
+	}
 	public boolean deleteProduct(long rowId) {
 		return mDb.delete(DATABASE_TABLE, LocalObject.STR_O_LONG_KEY + "=" + rowId, null) > 0;
 	}
@@ -146,10 +150,6 @@ public class ProductsDbAdapter {
 		}
 		return mCursor;
 	}
-	public boolean updateProduct(LocalProduct localProduct) {
-		ContentValues aux = localProduct.getContentValues();
-		return mDb.update(DATABASE_TABLE, aux, LocalObject.STR_O_LONG_KEY + "=" + localProduct.getKey(), null) > 0;
-	}
 	public List<LocalProduct> getProductByBarCode(Long barCode) {
 		List<LocalProduct> list = new ArrayList<LocalProduct>();
 		Cursor cursor = fetchProductByBarCode(barCode);
@@ -162,7 +162,9 @@ public class ProductsDbAdapter {
 		Cursor cursor = fetchProductByKey(key);
 		if(cursor.isAfterLast()){
 			Log.e(LOG_TAG, "The Porduct does not exist key=" + key);
-			return null;
+			LocalProduct aux = new LocalProduct(key);
+			//createProduct(aux);
+			return aux;
 		}
 		return new LocalProduct(cursor);
 	}

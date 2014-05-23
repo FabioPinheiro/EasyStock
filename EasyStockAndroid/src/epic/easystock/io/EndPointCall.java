@@ -55,7 +55,8 @@ public class EndPointCall {
 	static public final String FAIL_TO_LOAD_PRODUCT = "FAIL_TO_LOAD_PRODUCT";
 	static public final String FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME = "FAIL_TO_CREATE_PANTRY_WITHOUT_A_NAME";
 	static public final String FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER = "FAIL_TO_CREATE_PANTRY_WITH_THE_NAME_OF_ANOTHER";
-	static public final String FAIL_PRODUCT_ALREADY_IN_THE_PANTRY = "FAIL_PRODUCT_ALREADY_IN_THE_PANTRY";
+	static public final String FAIL_PRODUCT_KEY_ALREADY_IN_THE_PANTRY = "FAIL_PRODUCT_KEY_ALREADY_IN_THE_PANTRY";
+	static public final String FAIL_PRODUCT_BARCODE_ALREADY_IN_THE_PANTRY = "FAIL_PRODUCT_BARCODE_ALREADY_IN_THE_PANTRY";
 	static public final String FAIL_TO_SYNCHRONIZED_PANTRY = "FAIL_TO_SYNCHRONIZED_PANTRY";
 	static public final String FAIL_TO_SYNCHRONIZED_USER = "FAIL_TO_SYNCHRONIZED_USER";
 	//___TAGS
@@ -268,9 +269,11 @@ public class EndPointCall {
 			 */
 		}
 		else {
-			if (ooo.size() == 1)
-				new AddProductToLocalPantryTask(adapter, pantryDB, new LocalMetaProduct(ooo.get(0), 1.0)).execute();
-			else
+			if (ooo.size() == 1){
+				EndPointCall.getProductsDbAdapter().getProductByKey(ooo.get(0));
+				new LocalMetaProduct(ooo.get(0), 1.0)
+				new AddProductToLocalPantryTask(adapter, pantryDB, ).execute();
+			}else
 				new RuntimeException(); // FIXME
 		}
 		// new AddProductToPantryTask(adapter, selectedPantry, productId).execute(); // FIXME getSelectedPantry()
