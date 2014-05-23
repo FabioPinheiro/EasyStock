@@ -44,7 +44,8 @@ public class ProductAdapter extends ArrayAdapter<LocalProduct> {
 		TextView labelViewName = (TextView) rowView.findViewById(R.id.product_row_label_name);
 		TextView labelViewBarCode = (TextView) rowView.findViewById(R.id.product_row_label_barCode);
 		//TextView labelViewDescription = (TextView) rowView.findViewById(R.id.product_row_label_description);
-
+		ImageView image = (ImageView) rowView.findViewById(R.id.imageView1);
+		image.setVisibility(View.GONE);
 		// 4. Set the text for textView
 		//labelViewIdProduct.setText(productArrayList.get(position).getKey().toString());
 		labelViewName.setText(productArrayList.get(position).getName());
