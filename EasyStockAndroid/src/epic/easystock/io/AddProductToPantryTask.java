@@ -54,7 +54,7 @@ public class AddProductToPantryTask extends AsyncTask<Void, Integer, LocalMetaPr
 			if (!exist) {
 				metaP = new MetaProduct();
 				newProd = EndPointCall.getApiEndpoint().getProductByBarCode(productId).execute();
-				metaP.setProduct(newProd.getKey());
+				metaP.setProductKey(newProd.getKey());
 				metaP.setAmount(0.0);
 				newList.add(metaP);
 			}

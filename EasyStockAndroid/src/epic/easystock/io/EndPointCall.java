@@ -61,6 +61,7 @@ public class EndPointCall {
 	//___TAGS
 	static public final String PRODUCT_ALREADY_IN_THE_PANTRY_UPDATED = "PRODUCT_ALREADY_IN_THE_PANTRY_UPDATED";
 	static public final String INSERT_NEW_USER_IN_APPENGINE = "INSERT_NEW_USER_IN_APPENGINE";
+	static public final String NO_PANTRY = "NO_PANTRY";
 	static public final String PANTRY_IS_EMPTY = "PANTRY_IS_EMPTY";
 	static public final String PRODUCT_ADDED_TO_LOCAL_PANTRY = "PRODUCT_ADDED_TO_LOCAL_PANTRY";
 	static public final String PANTRY_IS_ALREADY_OPEN = "PANTRY_IS_ALREADY_OPEN";

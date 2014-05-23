@@ -16,7 +16,7 @@ public class LocalMetaProduct extends LocalObject {
 		List<MetaProduct> ret = new ArrayList<MetaProduct>();
 		for (LocalMetaProduct localMetaProduct : list) {
 			MetaProduct mp = new MetaProduct();
-			mp.setProduct(localMetaProduct.getKey());
+			mp.setProductKey(localMetaProduct.getKey());
 			mp.setTimeStamp(localMetaProduct.getTimestamp());
 			mp.setAmount(localMetaProduct.getAmount());
 			ret.add(mp);

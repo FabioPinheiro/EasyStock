@@ -42,7 +42,7 @@ public class Pantry {
 		List<MetaProduct> listToSync = pantrySynchronizationDTO.getListMetaProducts();
 		for (MetaProduct it : getMetaProducts()) {
 			for (MetaProduct itTodync : listToSync) {
-				if(it.getProduct() == itTodync.getProduct()){
+				if(it.getProductKey() == itTodync.getProductKey()){
 					if(itTodync.getTimeStamp().after(it.getTimeStamp())){
 						it.setAmount(itTodync.getAmount());
 						it.setTimeStamp(itTodync.getTimeStamp());

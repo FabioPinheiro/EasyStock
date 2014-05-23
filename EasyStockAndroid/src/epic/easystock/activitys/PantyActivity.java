@@ -57,9 +57,9 @@ public class PantyActivity extends ListActivity {
 		setListAdapter(adapter);
 		selectedPantryName = getIntent().getStringExtra("PANTRYNAME");
 		getIntent().removeExtra("PANTRYNAME");
+		final String[] pantreisName = EndPointCall.getUserDBAdapter().avalablePantrysNamesFromUser(EndPointCall.getEmailAccount());
+		// AlertDialog
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		final String[] pantreisName = EndPointCall.getUserDBAdapter()
-		.avalablePantrysNamesFromUser(EndPointCall.getEmailAccount());
 		alert.setTitle("Select Pantry");
 		alert.setItems(pantreisName, new DialogInterface.OnClickListener() {
 			@Override
@@ -77,7 +77,11 @@ public class PantyActivity extends ListActivity {
 				aux.finish();
 			}
 		});
-		if (Strings.isNullOrEmpty(selectedPantryName) && pantreisName.length > 1)
+		if	(pantreisName.length == 0){ //FIXME (FABIO) não gosto disto 
+			EndPointCall.msg(LOG_TAG, EndPointCall.NO_PANTRY); 
+			this.finish();
+		}
+		else if (Strings.isNullOrEmpty(selectedPantryName) && pantreisName.length > 1)
 			alert.show();
 		else {
 			if (Strings.isNullOrEmpty(selectedPantryName) && pantreisName.length == 1)
@@ -120,8 +124,7 @@ public class PantyActivity extends ListActivity {
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog,
-					int which) {
-					}
+					int which) {}
 				});
 				detailsAlert.show();
 				return false;

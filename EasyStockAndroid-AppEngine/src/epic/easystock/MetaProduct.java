@@ -19,7 +19,7 @@ public class MetaProduct {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key key;
 	
-	private Long product;
+	private Long productKey;
 	
 	private double amount;
 	
@@ -28,12 +28,12 @@ public class MetaProduct {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Pantry pantry; //FIXME isto esta aqui bem?
 	
-	public Long getProduct() {
-		return product;
+	public Long getProductKey() {
+		return productKey;
 	}
 
-	public void setProduct(Long product) {
-		this.product = product;
+	public void setProductKey(Long productKey) {
+		this.productKey = productKey;
 	}
 
 	public double getAmount() {
