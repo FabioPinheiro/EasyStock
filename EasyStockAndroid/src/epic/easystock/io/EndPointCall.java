@@ -67,6 +67,7 @@ public class EndPointCall {
 	static public final String PANTRY_IS_ALREADY_OPEN = "PANTRY_IS_ALREADY_OPEN";
 	static public final String PANTRY_SYNCHRONIZED = "PANTRY_SYNCHRONIZED";
 	static public final String USER_SYNCHRONIZED = "USER_SYNCHRONIZED";
+	static public final String USER_WERE_ALREADY_SYNCHRONIZED = "USER_WERE_ALREADY_SYNCHRONIZED";
 	//DEBUG_TAGS
 	static public final String DONE = "AsyncTask Done"; // FIXME remove!!! use
 	static public final String DEBUG = "DEBUG";

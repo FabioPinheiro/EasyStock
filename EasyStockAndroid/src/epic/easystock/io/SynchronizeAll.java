@@ -2,6 +2,7 @@ package epic.easystock.io;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.os.AsyncTask;
@@ -33,11 +34,16 @@ public class SynchronizeAll extends AsyncTask<Void, Void, List<Pantry>> {
 		if(fail_to_update){
 			EndPointCall.msg(LOG_TAG, EndPointCall.FAIL_TO_SYNCHRONIZED_USER);
 		}else{
-			for (Pantry pantry : pantriesToSync) {
-				PantryDB pantryDB = EndPointCall.getPantryDB(pantry.getKey());
-				new SynchronizePantryTask(pantryDB).execute();
+			if(pantriesToSync.isEmpty()){
+				EndPointCall.msg(LOG_TAG, EndPointCall.USER_WERE_ALREADY_SYNCHRONIZED);
+			}else{
+				for (Pantry pantry : pantriesToSync) {
+					Log.d(LOG_TAG, "I will try to Synchronize Pantry with the key=" + pantry.getKey() );
+					PantryDB pantryDB = EndPointCall.getPantryDB(pantry.getKey());
+					new SynchronizePantryTask(pantryDB).execute();
+				}
+				EndPointCall.msg(LOG_TAG, EndPointCall.USER_SYNCHRONIZED);
 			}
-			EndPointCall.msg(LOG_TAG, EndPointCall.USER_SYNCHRONIZED);
 		}
 	}
 	
@@ -52,24 +58,25 @@ public class SynchronizeAll extends AsyncTask<Void, Void, List<Pantry>> {
 				//state=State.INSERT_NEW_USER_IN_APPENGINE; //FIXME TODO
 			}
 
-			if(user.getUserPantriesList() == null){
+			if(user.getUserPantriesList() == null){ //FIXME
 				user.setUserPantriesList(new ArrayList<UserPantry>()); //ERROR REMOVE Por corrigir
 				Log.e(LOG_TAG, "(user.getUserPantriesList() == null");
 			}
 			List<UserPantry> remoteUserPantries = user.getUserPantriesList();  // ERROR is null !!! 
-			
-			Log.i(LOG_TAG, "ESTOU AQUI");
-			
+			Log.d(LOG_TAG, "I already have all remoteUserPantries size=" + remoteUserPantries.size());
 			
 			//FIXME List<UserPantry> remoteUserPantries = api.listUserPantryOfUser(email).execute().getItems();
-			List<UserPantryAux> all = EndPointCall.getUserDBAdapter().getAllPantry();
+			List<UserPantryAux> all = EndPointCall.getUserDBAdapter().getAllPantry(); //ERROR só pode ser de um user
 			List<UserPantry> userPantryToSync = new ArrayList<UserPantry>();
 			List<UserPantry> userPantryToCreate = new ArrayList<UserPantry>();
 			for (UserPantryAux userPantryAux : all) {
 				if(userPantryAux.user == email){
 					for (UserPantry remoteUserPantry : remoteUserPantries) {
 						if(remoteUserPantry.getKey().getId() == userPantryAux.pantryID){
-							//TODO if(date)
+							Log.d(LOG_TAG, "I already known this remoteUserPantry key=" + remoteUserPantry.getKey().getId());
+							//TODO Date a = new Date(remoteUserPantry.getPantry().getTimeStamp().getValue());
+							//TODO Date b = new Date(userPantryAux.getPantry().getTimeStamp().getValue());
+							//TODO if(remoteUserPantry.getPantry().getTimeStamp().after());
 							userPantryToSync.add(remoteUserPantry);
 						}else{ //new pantry to the 
 							//NONE
@@ -79,20 +86,20 @@ public class SynchronizeAll extends AsyncTask<Void, Void, List<Pantry>> {
 					//NONE
 				}
 			}
-			Log.i(LOG_TAG, "ESTOU AQUI");
 			for (UserPantry remoteUserPantry : remoteUserPantries) { 
 				if(!userPantryToSync.contains(remoteUserPantry)){
+					Log.d(LOG_TAG, "I unknown this Pantry key=" + remoteUserPantry.getKey().getId());
 					userPantryToCreate.add(remoteUserPantry);
 				}
 			}
 			//
-			Log.i(LOG_TAG, "ESTOU AQUI");
 			List<Pantry> pantriesToSync = new ArrayList<Pantry>();
 			for (UserPantry  aux : userPantryToSync) { 
 				pantriesToSync.add(EndPointCall.getApiEndpoint().getPantry(aux.getPantry().getKey()).execute());
 			}
-			for (UserPantry  aux : userPantryToCreate) { 
-				Pantry iii = EndPointCall.getApiEndpoint().getPantry(aux.getPantry().getKey()).execute();
+			for (UserPantry  aux : userPantryToCreate) {
+				Log.d(LOG_TAG, "I will try to create Pantry with the key=" + aux.getKey().getId() );
+				Pantry iii = EndPointCall.getApiEndpoint().getPantry(aux.getPantry().getKey()).execute(); //FIXME ....
 				pantriesToSync.add(iii);
 				EndPointCall.getUserDBAdapter().createPantry(email, iii.getKey(), iii.getName());
 			}

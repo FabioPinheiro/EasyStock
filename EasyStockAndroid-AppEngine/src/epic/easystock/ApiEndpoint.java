@@ -107,9 +107,7 @@ public class ApiEndpoint {
 	}
 
 	@ApiMethod(name = "getUserByEmail", path = "getUserByEmail")
-	public User getUserByEmail(@Named("userEmail") String userEmail) { // FIXME
-																		// getUserByEmaili
-																		// i
+	public User getUserByEmail(@Named("userEmail") String userEmail) {
 		EntityManager mgr = getEntityManager();
 		try {
 			return mGetUserByEmail(mgr, userEmail);
@@ -128,16 +126,13 @@ public class ApiEndpoint {
 		try {
 			mgr = getEntityManager();
 			// FIXME User user = getUserByEmail(userEmail);
-			Query query = mgr.createQuery(
-					"SELECT u FROM User u WHERE u.email=:email").setParameter(
-					"email", userEmail);
+			Query query = mgr.createQuery("SELECT u FROM User u WHERE u.email=:email").setParameter("email", userEmail);
 			query.setFirstResult(0);
 			@SuppressWarnings("unchecked")
 			List<User> users = query.getResultList();
 			if (users.size() > 0) {
 				user = users.get(0);
-				for (UserPantry iii : user.getUserPantriesList())
-					;
+				for (UserPantry iii : user.getUserPantriesList());
 			}
 			userPantriesList = user.getUserPantriesList();
 		} finally {
@@ -149,12 +144,7 @@ public class ApiEndpoint {
 	}
 
 	@ApiMethod(name = "insertUserPantry")
-	public UserPantry insertUserPantry(UserPantryDTO userPantryDTO/*
-																 * UserPantry
-																 * userpantry,
-																 * User user,
-																 * Pantry pantry
-																 */) {
+	public UserPantry insertUserPantry(UserPantryDTO userPantryDTO) {
 		UserPantry userpantry;
 		Pantry pantry = userPantryDTO.getPantry();
 		boolean pantryIsNull = (pantry == null);
@@ -162,32 +152,26 @@ public class ApiEndpoint {
 		try {
 			User user = this.mGetUserByEmail(mgr, userPantryDTO.getEmail());
 			if (!mContainsUser(mgr, user)) // FIXME não gosto
-				throw new EntityExistsException(
-						"insertUserPantry: User is not regiter in the system: user="
-								+ user.toString());
+				throw new EntityExistsException("insertUserPantry: User is not regiter in the system: user="+ user.toString());
 			if (mContainsPantry(mgr, pantry))
-				throw new EntityExistsException(
-						"insertUserPantry: Object (pantry) already exists");
+				throw new EntityExistsException("insertUserPantry: Object (pantry) already exists");
 			if (pantryIsNull) {
 				pantry = new Pantry(userPantryDTO.getPantryName());
 				pantry.setTimeStamp(userPantryDTO.getPantryTimeStamp());
 				pantry.setMetaProducts(new ArrayList<MetaProduct>());
 				pantry.setName(userPantryDTO.getPantryName());
-				mInsertPantry(pantry); // FIXME Caused by:
-										// java.lang.IllegalArgumentException:
-										// cross-group transaction need to be
-										// explicitly specified, see
-										// TransactionOptions.Builder.withXG
+				mInsertPantry(pantry); // FIXME Caused by: java.lang.IllegalArgumentException: cross-group transaction need to be explicitly specified, see TransactionOptions.Builder.withXG
 			} else {
 			}// FIXME care pantry.getKey()
 			userpantry = new UserPantry();
 			userpantry.setUserKey(user.getKey());
 			userpantry.setPantry(pantry);
 			if (mContainsUserPantry(mgr, userpantry)) {
-				throw new EntityExistsException(
-						"insertUserPantry: Object (userpantry) already exists");
+				throw new EntityExistsException("insertUserPantry: Object (userpantry) already exists");
 			}
 			mgr.persist(userpantry);
+			user.addUserPantry(userpantry);
+			mgr.persist(user);
 		} finally {
 			mgr.close();
 		}
@@ -240,6 +224,7 @@ public class ApiEndpoint {
 		Pantry pantry = null;
 		try {
 			pantry = mgr.find(Pantry.class, id);
+			for (MetaProduct xxx : pantry.getMetaProducts());
 		} finally {
 			mgr.close();
 		}
@@ -256,6 +241,10 @@ public class ApiEndpoint {
 			if (null == pantrySynchronizationDTO.getPantryTimeStamp()) throw new RuntimeException();// ERROR REMOVE
 			if (null == pantry) throw new RuntimeException();// ERROR REMOVE
 			ret = pantry.synchronizationMetaProducts(pantrySynchronizationDTO);
+			if (null == ret) throw new RuntimeException();// ERROR REMOVE
+			if (null == ret.getListMetaProducts()) throw new RuntimeException();// ERROR REMOVE
+			for (MetaProduct it : ret.getListMetaProducts());
+			if (null == ret.getPantryTimeStamp()) throw new RuntimeException();// ERROR REMOVE
 			mgr.persist(pantry);
 		} finally {
 			mgr.close();

@@ -23,7 +23,8 @@ public class UserPantry {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key key;
-	@Unowned //@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@Unowned
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Pantry pantry; // FIXME
 	@Unowned //@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Key userKey;

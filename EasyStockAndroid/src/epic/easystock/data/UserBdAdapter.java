@@ -102,10 +102,11 @@ public class UserBdAdapter {
 	/**
 	 * Create a new note using the title and body provided. If the note is successfully created return the new rowId for that note, otherwise return a -1 to indicate failure.
 	 */
-	public long createPantry(String user, long pantryID, String pantryName) {
+	public long createPantry(String user, long pantryKey, String pantryName) {
+		Log.d(LOG_TAG, "Creating the UserPantry user=" + user + " pantryKey=" + pantryKey + " pantryName" + pantryName);
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(USER, user);
-		initialValues.put(PANTRY_ID, pantryID);
+		initialValues.put(PANTRY_ID, pantryKey);
 		initialValues.put(PANTRY_NAME, pantryName);
 		return mDb.insert(DATABASE_TABLE, null, initialValues);
 	}
