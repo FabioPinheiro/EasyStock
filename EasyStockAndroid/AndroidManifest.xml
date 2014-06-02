@@ -12,12 +12,17 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
-    <!--permission
+    <!--
+        permission
         android:name="epic.easystock.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" /-->
-        
-    <!--uses-permission android:name="epic.easystock.permission.C2D_MESSAGE" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /-->
+        android:protectionLevel="signature" /
+    -->
+
+
+    <!--
+    uses-permission android:name="epic.easystock.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /
+    -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -26,19 +31,20 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
-        android:name=".EasyStockApp"
+        android:name="epic.easystock.EasyStockApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name">
+        android:label="@string/app_name" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <activity
             android:name="epic.easystock.activitys.HomeActivity"
-            android:label="@string/title_activity_home">
-            <intent-filter android:label="@string/app_name">
+            android:label="@string/title_activity_home" >
+            <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -58,5 +64,14 @@
             android:name="epic.easystock.activitys.MyPantriesActivity"
             android:label="@string/title_activity_my_pantries" >
         </activity>
+        <activity
+            android:name="epic.easystock.activitys.PantrySettingActivity"
+            android:label="@string/title_activity_pantry_setting" >
+        </activity>
+        <activity
+            android:name="epic.easystock.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
+
 </manifest>

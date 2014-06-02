@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +22,7 @@ public class UserPantryDTO {
 	private Key key;
 	@ManyToMany(cascade = CascadeType.ALL)
 	private String email; //FIXME 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL,fetch= FetchType.LAZY)
 	private Pantry pantry;// FIXME
 	private String pantryName;
 	private Date pantryTimeStamp;

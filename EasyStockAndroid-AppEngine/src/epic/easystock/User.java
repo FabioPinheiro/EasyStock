@@ -25,7 +25,7 @@ public class User {
 	
 	private String nick;
 	private String email;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<UserPantry> userPantriesList;
 	
 	public String getEmail() {
@@ -51,10 +51,8 @@ public class User {
 	public void setUserPantriesList(List<UserPantry> userPantriesList) {
 		this.userPantriesList = userPantriesList;
 	}
-	
-	public void addUserPantry(UserPantry userPantry) {
-		List<UserPantry> aux = getUserPantriesList();
-		aux.add(userPantry);
-		setUserPantriesList(aux);
+
+	public void addUserPantry(UserPantry userpantry) {
+		userPantriesList.add(userpantry);
 	}
 }
