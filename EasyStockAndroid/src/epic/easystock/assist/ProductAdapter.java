@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import epic.easystock.R;
 import epic.easystock.apiEndpoint.model.Product;
@@ -24,7 +25,6 @@ public class ProductAdapter extends ArrayAdapter<LocalProduct> {
 	
 	public ProductAdapter(Context context, ArrayList<LocalProduct> itemsArrayList) {
 		super(context, R.layout.layout_list_product_row, itemsArrayList);
-
 		this.context = context;
 		this.productArrayList = itemsArrayList;
 	}
@@ -38,16 +38,20 @@ public class ProductAdapter extends ArrayAdapter<LocalProduct> {
 
 		// 2. Get rowView from inflater
 		View rowView = inflater.inflate(R.layout.layout_list_product_row, parent, false);
-
 		// 3. Get the two text view from the rowView
 		//TextView labelViewIdProduct = (TextView) rowView.findViewById(R.id.product_row_label_idProduct);
 		TextView labelViewName = (TextView) rowView.findViewById(R.id.product_row_label_name);
 		TextView labelViewBarCode = (TextView) rowView.findViewById(R.id.product_row_label_barCode);
 		//TextView labelViewDescription = (TextView) rowView.findViewById(R.id.product_row_label_description);
-
+		ImageView image = (ImageView) rowView.findViewById(R.id.imageView1);
+		image.setVisibility(View.GONE);
+		
 		// 4. Set the text for textView
 		//labelViewIdProduct.setText(productArrayList.get(position).getKey().toString());
-		labelViewName.setText(productArrayList.get(position).getName());
+		String name = productArrayList.get(position).getName();
+		if(name.length()>23)
+			name = name.substring(0, 20) + "...";
+		labelViewName.setText(name);
 		labelViewBarCode.setText(productArrayList.get(position).getBarCode().toString());
 		//labelViewDescription.setText(productArrayList.get(position).getDescription());
 

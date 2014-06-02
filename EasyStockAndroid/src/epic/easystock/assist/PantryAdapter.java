@@ -25,7 +25,6 @@ public class PantryAdapter extends ArrayAdapter<UserPantryAux> {
 
 	public PantryAdapter(Context context, List<UserPantryAux> objects) {
 		super(context, R.layout.layout_list_pantry_row, objects);
-
 		this.context = context;
 		this.productArrayList = objects;
 	}
