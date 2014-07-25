@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import epic.easystock.R;
 import epic.easystock.io.EndPointCall;
@@ -28,10 +29,20 @@ public class HomeActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Typeface blockFonts = Typeface.createFromAsset(getAssets(),"Futura (Light).ttf");
-		TextView EasyStock = (TextView) findViewById(epic.easystock.R.id.EasyStock);
-		EasyStock.setTypeface(blockFonts);
 		setContentView(epic.easystock.R.layout.activity_home);
+		
+		Typeface blockFonts = Typeface.createFromAsset(getAssets(),"FuturaLight.ttf");
+		TextView fancyPantry = (TextView) findViewById(epic.easystock.R.id.FancyPantry);
+		Button myPantries = (Button) findViewById(epic.easystock.R.id.my_pantries);
+		Button pantryActivity = (Button) findViewById(epic.easystock.R.id.pantry_activity);
+		Button productList = (Button) findViewById(epic.easystock.R.id.product_list);
+		Button addProduct = (Button) findViewById(epic.easystock.R.id.add_product);
+		fancyPantry.setTypeface(blockFonts);
+		myPantries.setTypeface(blockFonts);
+		pantryActivity.setTypeface(blockFonts);
+		productList.setTypeface(blockFonts);
+		addProduct.setTypeface(blockFonts);
+		
 		EndPointCall.onInit(this);
 	}
 

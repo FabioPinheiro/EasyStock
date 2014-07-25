@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">EasyStockAndroid</string>
+
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_product_list">List of Products</string>
@@ -11,7 +11,7 @@
     <string name="title_activity_test_add_to_product_list">TestAddToProductListActivity</string>
     <string name="title_activity_panty">PantyActivity</string>
     <string name="title_activity_example">ExampleActivity</string>
-    <string name="easy_stock">Easy Stock</string>
+    <string name="app_name">Fancy Pantry</string>
     <string name="product_list">Product List</string>
     
   
