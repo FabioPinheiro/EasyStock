@@ -493,9 +493,152 @@ public class ApiEndpoint {
 		return true;
 	}
 
-	// ################################# USER #################################
-	// ################################# USER PANTRY
-	// #################################
+	// ################################# SHOPPINGLIST ################################
+	/**
+	 * This method lists all the entities inserted in datastore.
+	 * It uses HTTP GET method and paging support.
+	 *
+	 * @return A CollectionResponse class containing the list of all entities
+	 * persisted and a cursor to the next page.
+	 */
+	@SuppressWarnings({ "unchecked", "unused" })
+	@ApiMethod(name = "listShoppingList")
+	public CollectionResponse<ShoppingList> listShoppingList(
+			@Nullable @Named("cursor") String cursorString,
+			@Nullable @Named("limit") Integer limit) {
+
+		EntityManager mgr = null;
+		Cursor cursor = null;
+		List<ShoppingList> execute = null;
+
+		try {
+			mgr = getEntityManager();
+			Query query = mgr
+					.createQuery("select from ShoppingList as ShoppingList");
+			if (cursorString != null && cursorString != "") {
+				cursor = Cursor.fromWebSafeString(cursorString);
+				query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
+			}
+
+			if (limit != null) {
+				query.setFirstResult(0);
+				query.setMaxResults(limit);
+			}
+
+			execute = (List<ShoppingList>) query.getResultList();
+			cursor = JPACursorHelper.getCursor(execute);
+			if (cursor != null)
+				cursorString = cursor.toWebSafeString();
+
+			// Tight loop for fetching all entities from datastore and accomodate
+			// for lazy fetch.
+			for (ShoppingList obj : execute)
+				;
+		} finally {
+			mgr.close();
+		}
+
+		return CollectionResponse.<ShoppingList> builder().setItems(execute)
+				.setNextPageToken(cursorString).build();
+	}
+
+	/**
+	 * This method gets the entity having primary key id. It uses HTTP GET method.
+	 *
+	 * @param id the primary key of the java bean.
+	 * @return The entity with primary key id.
+	 */
+	@ApiMethod(name = "getShoppingList")
+	public ShoppingList getShoppingList(@Named("id") Long id) {
+		EntityManager mgr = getEntityManager();
+		ShoppingList shoppinglist = null;
+		try {
+			shoppinglist = mgr.find(ShoppingList.class, id);
+		} finally {
+			mgr.close();
+		}
+		return shoppinglist;
+	}
+
+	/**
+	 * This inserts a new entity into App Engine datastore. If the entity already
+	 * exists in the datastore, an exception is thrown.
+	 * It uses HTTP POST method.
+	 *
+	 * @param shoppinglist the entity to be inserted.
+	 * @return The inserted entity.
+	 */
+	@ApiMethod(name = "insertShoppingList")
+	public ShoppingList insertShoppingList(ShoppingList shoppinglist) {
+		EntityManager mgr = getEntityManager();
+		try {
+			if (containsShoppingList(shoppinglist)) {
+				throw new EntityExistsException("Object already exists");
+			}
+			mgr.persist(shoppinglist);
+		} finally {
+			mgr.close();
+		}
+		return shoppinglist;
+	}
+
+	/**
+	 * This method is used for updating an existing entity. If the entity does not
+	 * exist in the datastore, an exception is thrown.
+	 * It uses HTTP PUT method.
+	 *
+	 * @param shoppinglist the entity to be updated.
+	 * @return The updated entity.
+	 */
+	@ApiMethod(name = "updateShoppingList")
+	public ShoppingList updateShoppingList(ShoppingList shoppinglist) {
+		EntityManager mgr = getEntityManager();
+		try {
+			if (!containsShoppingList(shoppinglist)) {
+				throw new EntityNotFoundException("Object does not exist");
+			}
+			mgr.persist(shoppinglist);
+		} finally {
+			mgr.close();
+		}
+		return shoppinglist;
+	}
+
+	/**
+	 * This method removes the entity with primary key id.
+	 * It uses HTTP DELETE method.
+	 *
+	 * @param id the primary key of the entity to be deleted.
+	 */
+	@ApiMethod(name = "removeShoppingList")
+	public void removeShoppingList(@Named("id") Long id) {
+		EntityManager mgr = getEntityManager();
+		try {
+			ShoppingList shoppinglist = mgr.find(ShoppingList.class, id);
+			mgr.remove(shoppinglist);
+		} finally {
+			mgr.close();
+		}
+	}
+
+	private boolean containsShoppingList(ShoppingList shoppinglist) {
+		EntityManager mgr = getEntityManager();
+		boolean contains = true;
+		try {
+			ShoppingList item = mgr.find(ShoppingList.class,
+					shoppinglist.getKey());
+			if (item == null) {
+				contains = false;
+			}
+		} finally {
+			mgr.close();
+		}
+		return contains;
+	}
+	
+	// ################################# SHOPPINGLIST #################################
+	
+	
 	// ################################# PANTRY
 	// #################################
 	// ################################# PRODUCT
