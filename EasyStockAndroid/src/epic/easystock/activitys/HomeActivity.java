@@ -28,7 +28,9 @@ public class HomeActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//Typeface blockFonts = Typeface.createFromFile("Futura (Light).ttf");
+		Typeface blockFonts = Typeface.createFromAsset(getAssets(),"Futura (Light).ttf");
+		TextView EasyStock = (TextView) findViewById(epic.easystock.R.id.EasyStock);
+		EasyStock.setTypeface(blockFonts);
 		setContentView(epic.easystock.R.layout.activity_home);
 		EndPointCall.onInit(this);
 	}
