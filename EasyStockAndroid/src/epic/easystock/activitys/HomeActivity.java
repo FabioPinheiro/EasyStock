@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import epic.easystock.R;
 import epic.easystock.io.EndPointCall;
+import android.graphics.Typeface;
+
 
 public class HomeActivity extends Activity {
 	//String mail;
@@ -25,6 +28,7 @@ public class HomeActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//Typeface blockFonts = Typeface.createFromFile("Futura (Light).ttf");
 		setContentView(epic.easystock.R.layout.activity_home);
 		EndPointCall.onInit(this);
 	}
