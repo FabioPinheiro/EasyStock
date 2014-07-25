@@ -1,62 +1,77 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:background="@drawable/pantry_image"
+     android:layout_width="fill_parent"
+   android:layout_height="wrap_content"
+    android:background="@android:color/black"
     android:orientation="vertical"
     tools:context="epic.easystock.HomeActivity"
-    tools:ignore="MergeRootFrame" 
-    >
-    
-    <!--com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
+    tools:ignore="MergeRootFrame" >
+
+
+    <TextView
+        android:id="@+id/EasyStock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:enabled="true" 
-        android:onClick="signIn"
-        >
-    </com.google.android.gms.common.SignInButton-->	
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/easy_stock"
+        android:textColor="@color/Gold"
+        android:textSize="40sp" />
+
+    <Button
+        android:id="@+id/pantry_activity"
+        android:layout_width="140dp"
+        android:layout_height="70dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/EasyStock"
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="10dp"
+        android:onClick="changeToPantyActivity"
+        android:text="Pantry Activity" 
+        android:background="@drawable/gray_button"
+        android:textColor="@color/Gold"
+        />
     
+    <Button
+        android:id="@+id/add_product"
+        android:layout_width="140dp"
+        android:layout_height="70dp"
+        android:layout_below="@id/pantry_activity"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/gray_button"
+        android:onClick="changeToTestAddToProductListActivity"
+        android:textColor="@color/Gold"
+        android:text="Add Product" />
+
+
+    <Button
+        android:id="@+id/my_pantries"
+        android:layout_width="140dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:onClick="changeToMyPantriesActivity"
+        android:text="My Pantries" 
+        android:background="@drawable/gray_button"
+        android:layout_below="@id/EasyStock"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/Gold"
+        />
+
     <Button
         android:id="@+id/ProductList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:text="ProductList"
-        android:onClick="changeToProductListActivity" />
+        android:layout_width="140dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@id/my_pantries"
+        android:background="@drawable/gray_button"
+        android:onClick="changeToProductListActivity"
+        android:text="@string/product_list"
+        android:textColor="@color/Gold" />
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:text="TestAddToProductListActivity"
-        android:onClick="changeToTestAddToProductListActivity" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:text="My Pantries" 
-        android:onClick="changeToMyPantriesActivity"/>
-    
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:text="PantyActivity" 
-        android:onClick="changeToPantyActivity"/>
-    
-    <!--Button
-        android:id="@+id/buttonLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:text="LogIn"
-        android:onClick="changeToLogInActivity" /-->
-</LinearLayout>
+</RelativeLayout>

@@ -11,6 +11,11 @@
     <string name="title_activity_test_add_to_product_list">TestAddToProductListActivity</string>
     <string name="title_activity_panty">PantyActivity</string>
     <string name="title_activity_example">ExampleActivity</string>
+    <string name="easy_stock">Easy Stock</string>
+    <string name="product_list">Product List</string>
+    
+  
+    
     <!-- string name="title_activity_login">LoginActivity</string -->
 
     <string name="circles_title">Visible circles:</string>
