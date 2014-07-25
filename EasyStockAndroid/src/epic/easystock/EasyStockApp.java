@@ -5,7 +5,6 @@ import android.content.Context;
 import android.util.Log;
 import epic.easystock.io.EndPointCall;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class EasyStockApp.
  */

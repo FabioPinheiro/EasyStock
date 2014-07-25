@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
-// TODO: Auto-generated Javadoc
 /**
+ * The Class CloudEndpointUtils.
  * Common utilities for working with Cloud Endpoints.
  * 
  * If you'd like to test using a locally-running version of your App Engine

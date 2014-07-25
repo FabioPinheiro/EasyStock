@@ -37,42 +37,72 @@ import android.widget.Toast;
 import android.os.Build;
 import android.provider.MediaStore;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AddProductToPantryActivity.
+ */
 public class AddProductToPantryActivity extends Activity {
-	// LIXO private OnTouchListener addListener = null;
-		private static String mail;
+	/** The mail of the user. */
+	private static String mail;
 
+		/** onCreate add the product to the pantry of the user with that e-mail
+		 */
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.activity_add_product_to_pantry);
 			takePic = (Button) findViewById(R.id.take_pic_button);
 			imageView = (ImageView) findViewById(R.id.add_prod_pic);
-			mail = EndPointCall.getEmailAccount(); // FIXME LIXO
-													// getIntent().getStringExtra("MAIL");
+			mail = EndPointCall.getEmailAccount();
 			pantryName = getIntent().getStringExtra("PANTRYNAME");
 		}
 
+		/** The take pic button. */
 		Button takePic;
+		
+		/** The image view. */
 		ImageView imageView;
+		
+		/** The adapter. */
 		private MetaProductAdapter adapter;
+		
+		/** The pantry name. */
 		private String pantryName;
+		
+		/** The pantry db. */
 		private PantryDB pantryDB = EndPointCall.getPantryDB(pantryName);
 
+		/** The Constant REQUEST_IMAGE_CAPTURE. */
 		static final int REQUEST_IMAGE_CAPTURE = 1;
 
+		/**
+		 * Take pic.
+		 *
+		 * @param view the view
+		 */
 		public void takePic(View view) {
 			// dispatchTakePictureIntent();
 			dispatchBarcode();
 
 		}
 
+		/**
+		 * Dispatch barcode.
+		 */
 		private void dispatchBarcode() {
 			IntentIntegrator scanIntegrator = new IntentIntegrator(this);
 			scanIntegrator.initiateScan();
 		}
 
+		/** The m current photo path. */
 		static String mCurrentPhotoPath;
 
+		/**
+		 * Creates the image file.
+		 *
+		 * @return the file
+		 * @throws IOException Signals that an I/O exception has occurred.
+		 */
 		private File createImageFile() throws IOException {
 			// Create an image file name
 			Toast.makeText(this, "createImageFile called!", Toast.LENGTH_SHORT)
@@ -98,8 +128,12 @@ public class AddProductToPantryActivity extends Activity {
 			return image;
 		}
 
+		/** The Constant REQUEST_TAKE_PHOTO. */
 		static final int REQUEST_TAKE_PHOTO = 1;
 
+		/**
+		 * Dispatch take picture intent.
+		 */
 		private void dispatchTakePictureIntent() {
 			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			// Ensure that there's a camera activity to handle the intent
@@ -126,6 +160,9 @@ public class AddProductToPantryActivity extends Activity {
 			}
 		}
 
+		/* (non-Javadoc)
+		 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+		 */
 		@Override
 		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
@@ -157,6 +194,9 @@ public class AddProductToPantryActivity extends Activity {
 
 		}
 
+		/**
+		 * Sets the pic.
+		 */
 		private void setPic() {
 			// Get the dimensions of the View
 			int targetW = imageView.getWidth();
@@ -184,6 +224,11 @@ public class AddProductToPantryActivity extends Activity {
 
 		}
 
+		/**
+		 * Adds the xpto.
+		 *
+		 * @param view the view
+		 */
 		public void addXPTO(View view) {
 			// new EndpointsTask().execute(getApplicationContext());
 			String name = ((EditText) findViewById(R.id.activity_test_add_to_product_list_name))
@@ -207,6 +252,10 @@ public class AddProductToPantryActivity extends Activity {
 			
 //			EndPointCall.addProductToPantryTask(adapter, pantryDB, barCode);
 		}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -214,6 +263,9 @@ public class AddProductToPantryActivity extends Activity {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
