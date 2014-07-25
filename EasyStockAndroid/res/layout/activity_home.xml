@@ -18,7 +18,7 @@
         android:text="@string/easy_stock"
         android:textColor="@color/Gold"
         android:textSize="40sp" />
-
+    
     <Button
         android:id="@+id/pantry_activity"
         android:layout_width="140dp"
@@ -32,7 +32,7 @@
         android:background="@drawable/gray_button"
         android:textColor="@color/Gold"
         />
-    
+
     <Button
         android:id="@+id/add_product"
         android:layout_width="140dp"
