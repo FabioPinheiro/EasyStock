@@ -19,11 +19,25 @@
         android:textColor="@color/Gold"
         android:textSize="40sp" />
     
+     <Button
+        android:id="@+id/my_pantries"
+        android:layout_width="140dp"
+        android:layout_height="70dp"
+        android:onClick="changeToMyPantriesActivity"
+        android:text="My Pantries" 
+        android:background="@drawable/gray_button"
+        android:layout_below="@id/EasyStock"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/Gold"
+        />
+    
     <Button
         android:id="@+id/pantry_activity"
         android:layout_width="140dp"
         android:layout_height="70dp"
-        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/my_pantries"
         android:layout_below="@id/EasyStock"
         android:layout_marginTop="100dp"
         android:layout_marginRight="10dp"
@@ -34,11 +48,24 @@
         />
 
     <Button
+        android:id="@+id/ProductList"
+        android:layout_width="140dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/my_pantries"
+        android:background="@drawable/gray_button"
+        android:onClick="changeToProductListActivity"
+        android:text="@string/product_list"
+        android:textColor="@color/Gold" />
+    
+    <Button
         android:id="@+id/add_product"
         android:layout_width="140dp"
         android:layout_height="70dp"
         android:layout_below="@id/pantry_activity"
-        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/ProductList"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/gray_button"
@@ -47,31 +74,8 @@
         android:text="Add Product" />
 
 
-    <Button
-        android:id="@+id/my_pantries"
-        android:layout_width="140dp"
-        android:layout_height="70dp"
-        android:layout_alignParentLeft="true"
-        android:onClick="changeToMyPantriesActivity"
-        android:text="My Pantries" 
-        android:background="@drawable/gray_button"
-        android:layout_below="@id/EasyStock"
-        android:layout_marginTop="100dp"
-        android:layout_marginLeft="10dp"
-        android:textColor="@color/Gold"
-        />
+   
 
-    <Button
-        android:id="@+id/ProductList"
-        android:layout_width="140dp"
-        android:layout_height="70dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_below="@id/my_pantries"
-        android:background="@drawable/gray_button"
-        android:onClick="changeToProductListActivity"
-        android:text="@string/product_list"
-        android:textColor="@color/Gold" />
+    
 
 </RelativeLayout>
