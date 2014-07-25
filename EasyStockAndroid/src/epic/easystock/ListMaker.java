@@ -10,6 +10,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.EditText;
 
+import com.google.android.gms.internal.ep;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
@@ -19,10 +20,27 @@ import epic.easystock.apiEndpoint.ApiEndpoint;
 import epic.easystock.apiEndpoint.model.CollectionResponseProduct;
 import epic.easystock.apiEndpoint.model.Product;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ListMaker.
+ */
 public class ListMaker {
+	
+	/** The result List of products.
+	 * The products that will be in the List.
+	 *  */
 	List<Product> result;
+	
+	/** Task that update and compute the result (product list). 
+	 * @see #result*/
 	ListProductsTask a;
 	
+	/**
+	 * Gets the product list.
+	 *
+	 * @return the product list
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public List<Product> getProductList() throws IOException {
 		ApiEndpoint.Builder endpointBuilder = new ApiEndpoint.Builder(
 				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
@@ -43,13 +61,27 @@ public class ListMaker {
 	}
 
 	
+	/**
+	 * The Class ListProductsTask.
+	 * 
+	 * Updates the result.
+	 * Get the product list from AppEngine
+	 * 
+	 */
 	public class ListProductsTask extends AsyncTask<Void, Integer, List<Product>> {
+		
+		/** 
+		 * @return the result
+		 */
 		@Override
 		protected void onPostExecute(List<Product> resultado) {
 			super.onPostExecute(resultado);
 			result = resultado;
 		}
 
+		/** 
+		 * computes the product list from AppEngine.
+		 */
 		@Override
 		protected List<Product> doInBackground(Void... contexts) {
 			ApiEndpoint.Builder endpointBuilder = new ApiEndpoint.Builder(
