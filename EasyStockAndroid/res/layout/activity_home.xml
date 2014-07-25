@@ -8,7 +8,11 @@
     tools:context="epic.easystock.HomeActivity"
     tools:ignore="MergeRootFrame" >
 
-
+<RelativeLayout
+     android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" >
     <TextView
         android:id="@+id/FancyPantry"
         android:layout_width="wrap_content"
@@ -19,6 +23,8 @@
         android:textColor="@color/Gold"
         android:textSize="40sp" />
     
+    
+       
      <Button
         android:id="@+id/my_pantries"
         android:layout_width="140dp"
@@ -75,7 +81,7 @@
 
 
    
-
+</RelativeLayout>
     
 
 </RelativeLayout>
