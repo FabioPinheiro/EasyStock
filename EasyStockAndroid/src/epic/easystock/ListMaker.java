@@ -20,7 +20,6 @@ import epic.easystock.apiEndpoint.ApiEndpoint;
 import epic.easystock.apiEndpoint.model.CollectionResponseProduct;
 import epic.easystock.apiEndpoint.model.Product;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ListMaker.
  */

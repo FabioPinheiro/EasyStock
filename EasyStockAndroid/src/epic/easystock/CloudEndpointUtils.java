@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Common utilities for working with Cloud Endpoints.
  * 
@@ -31,12 +32,14 @@ public class CloudEndpointUtils {
    * http://developers.google.com/eclipse/docs/cloud_endpoints for more
    * information.
    */
+  /** The Constant LOCAL_ANDROID_RUN. */
   protected static final boolean LOCAL_ANDROID_RUN = false;
 
   /*
    * The root URL of where your DevAppServer is running (if you're running the
    * DevAppServer locally).
    */
+  /** The Constant LOCAL_APP_ENGINE_SERVER_URL. */
   protected static final String LOCAL_APP_ENGINE_SERVER_URL = "http://localhost:8888/";
 
   /*
@@ -47,14 +50,15 @@ public class CloudEndpointUtils {
    * http://developer.android.com/tools/devices/emulator.html#networkaddresses
    * for more information.
    */
+  /** The Constant LOCAL_APP_ENGINE_SERVER_URL_FOR_ANDROID. */
   protected static final String LOCAL_APP_ENGINE_SERVER_URL_FOR_ANDROID = "http://10.0.2.2:8888";
 
   /**
    * Updates the Google client builder to connect the appropriate server based
    * on whether LOCAL_ANDROID_RUN is true or false.
-   * 
-   * @param builder
-   *            Google client builder
+   *
+   * @param <B> the generic type
+   * @param builder            Google client builder
    * @return same Google client builder
    */
   public static <B extends AbstractGoogleClient.Builder> B updateBuilder(
